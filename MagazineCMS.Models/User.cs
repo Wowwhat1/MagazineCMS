@@ -10,21 +10,6 @@ namespace MagazineCMS.Models
 {
     public class User : IdentityUser
     {
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
-        [MaxLength(100)]
-        public string Username { get; set; }
-
-        [Required]
-        [MaxLength(100)]
-        public string Email { get; set; }
-
-        [Required]
-        [MaxLength(100)]
-        public string Password { get; set; }
-
         [Required]
         [MaxLength(100)]
         public string Firstname { get; set; }
@@ -37,11 +22,9 @@ namespace MagazineCMS.Models
         public string AvatarUrl { get; set; } // Add the AvatarUrl property
 
         // Foreign keys
-        public int Role_Id { get; set; }
         public int Faculty_Id { get; set; }
 
         // Navigation properties
-        public Role Role { get; set; }
         public Faculty Faculty { get; set; }
     }
 }

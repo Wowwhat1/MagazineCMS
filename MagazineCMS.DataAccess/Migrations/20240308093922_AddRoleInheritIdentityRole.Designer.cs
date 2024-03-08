@@ -4,6 +4,7 @@ using MagazineCMS.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308093922_AddRoleInheritIdentityRole")]
+    partial class AddRoleInheritIdentityRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +51,11 @@ namespace MagazineCMS.DataAccess.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -64,6 +72,10 @@ namespace MagazineCMS.DataAccess.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -246,6 +258,13 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MagazineCMS.Models.Role", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.HasDiscriminator().HasValue("Role");
+                });
+
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -271,7 +290,15 @@ namespace MagazineCMS.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Role_Id")
+                        .HasColumnType("int");
+
                     b.HasIndex("FacultyId");
+
+                    b.HasIndex("RoleId");
 
                     b.HasDiscriminator().HasValue("User");
                 });
@@ -335,12 +362,23 @@ namespace MagazineCMS.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MagazineCMS.Models.Role", "Role")
+                        .WithMany("UsersWithThisRole")
+                        .HasForeignKey("RoleId");
+
                     b.Navigation("Faculty");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
                     b.Navigation("UsersInThisFaculty");
+                });
+
+            modelBuilder.Entity("MagazineCMS.Models.Role", b =>
+                {
+                    b.Navigation("UsersWithThisRole");
                 });
 #pragma warning restore 612, 618
         }

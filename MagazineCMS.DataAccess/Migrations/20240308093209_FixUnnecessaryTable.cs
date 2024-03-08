@@ -5,29 +5,13 @@
 namespace MagazineCMS.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class ExtendIdentityUser : Migration
+    public partial class FixUnnecessaryTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.RenameColumn(
-                name: "UserName",
-                table: "AspNetUsers",
-                newName: "Username");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "AspNetUsers",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(256)",
-                oldMaxLength: 256,
-                oldNullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "AvatarUrl",
@@ -70,13 +54,6 @@ namespace MagazineCMS.DataAccess.Migrations
                 maxLength: 100,
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "Password",
-                table: "AspNetUsers",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: true);
-
             migrationBuilder.AddColumn<int>(
                 name: "RoleId",
                 table: "AspNetUsers",
@@ -87,13 +64,6 @@ namespace MagazineCMS.DataAccess.Migrations
                 name: "Role_Id",
                 table: "AspNetUsers",
                 type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserName",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
                 nullable: true);
 
             migrationBuilder.CreateIndex(
@@ -167,36 +137,12 @@ namespace MagazineCMS.DataAccess.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "Password",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
                 name: "RoleId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
                 name: "Role_Id",
                 table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "UserName",
-                table: "AspNetUsers");
-
-            migrationBuilder.RenameColumn(
-                name: "Username",
-                table: "AspNetUsers",
-                newName: "UserName");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserName",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(100)",
-                oldMaxLength: 100,
-                oldNullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Users",
