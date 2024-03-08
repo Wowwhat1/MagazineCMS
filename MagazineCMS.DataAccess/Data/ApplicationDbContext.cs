@@ -17,5 +17,17 @@ namespace MagazineCMS.DataAccess.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuidlder)
+        {
+            base.OnModelCreating(modelBuidlder);
+
+            modelBuidlder.Entity<Faculty>().HasData(
+                new Faculty { Id = 1, Name="All"},
+                new Faculty { Id = 2, Name="Computing"},
+                new Faculty { Id = 3, Name="Business"},
+                new Faculty { Id = 4, Name="Design"}
+                );
+        }
     }
 }

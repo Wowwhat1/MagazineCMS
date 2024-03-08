@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MagazineCMS.Models\MagazineCMS.Models.csproj" />
+    <ProjectReference Include="..\MagazineCMS.Utility\MagazineCMS.Utility.csproj" />
   </ItemGroup>
 
 </Project>
