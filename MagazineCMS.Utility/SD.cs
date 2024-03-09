@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MagazineCMS.Utility
 {
-    public class SD
+    public static class SD
     {
         public const string Role_Student = "Student";
         public const string Role_Coordinator = "Coordinator";
