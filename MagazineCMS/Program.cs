@@ -5,6 +5,8 @@ using MagazineCMS.Models;
 using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using MagazineCMS.DataAccess.DBInitializer;
+using MagazineCMS.DataAccess.Repository.IRepository;
+using MagazineCMS.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 // Add scoped
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
