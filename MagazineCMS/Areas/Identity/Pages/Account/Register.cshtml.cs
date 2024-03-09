@@ -117,7 +117,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
             public string? Lastname { get; set; }
 
             public string? AvatarUrl { get; set; } // Add the AvatarUrl 
-            public string? FacultyId { get; set; }
+            public int? FacultyId { get; set; }
             public IEnumerable<SelectListItem> FacultyList { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
             public string? Role { get; set; }
@@ -158,6 +158,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                 user.Firstname = Input.Firstname;
                 user.Lastname = Input.Lastname;
                 user.AvatarUrl = Input.AvatarUrl;
+                user.FacultyId = (int)Input.FacultyId;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

@@ -5,25 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using MagazineCMS.DataAccess.Data;
 using MagazineCMS.DataAccess.Repository.IRepository;
+using MagazineCMS.Models;
 
 namespace MagazineCMS.DataAccess.Repository
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private ApplicationDbContext _db;
-        public IFacultyRepository Faculty { get; private set; } 
-        public IUserRepository User { get; private set; }
 
-        public UnitOfWork(ApplicationDbContext db)
+        public UserRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
-            Faculty = new FacultyRepository(_db);
-            User = new UserRepository(_db);
         }
 
-        public void Save()
+        public void Update(User obj)
         {
-            _db.SaveChanges();
+            _db.Users.Update(obj);
         }
     }
 }

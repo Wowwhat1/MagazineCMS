@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MagazineCMS.Models;
 
 namespace MagazineCMS.DataAccess.Repository.IRepository
 {
-    public interface IUnitOfWork
+    public interface IUserRepository : IRepository<User>
     {
-        IFacultyRepository Faculty { get; }
-        IUserRepository User { get; }
-
-        void Save();
+        void Update(User obj);
     }
 }
