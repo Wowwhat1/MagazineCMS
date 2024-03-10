@@ -19,5 +19,17 @@ namespace MagazineCMS.Areas.Admin.Controllers
             IEnumerable<User> usersList = _unitOfWork.User.GetAll(includeProperties: "Faculty");
             return View(usersList);
         }
+
+
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<User> usersList = _unitOfWork.User.GetAll(includeProperties: "Faculty").ToList();
+            return Json(new { data = usersList });
+        }
+
+        #endregion
     }
 }
