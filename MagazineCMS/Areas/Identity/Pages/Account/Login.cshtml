@@ -6,15 +6,14 @@
 }
 <body class="body-background-img">
     <div class="container">
-        <form class="form-signin">
+        <div class="form-signin">
             <h1 class="title-main space-hold">Well come to MagazineCMS</h1>
             <div>
                 <div>
                     <section>
-                        <form id="account" method="post">
+                        <form id="account" method="post" asp-route-returnUrl="@Model.ReturnUrl">
                             <h2 class="marginal-text marginal-space">Sign in to continue</h2>
 
-                    
                             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                             <div class="space-hold">
                                 <input asp-for="Input.Email" class="input-form" autocomplete="username" aria-required="true" placeholder="Email" />
@@ -50,7 +49,7 @@
                     </section>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </body>
 
