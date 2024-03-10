@@ -14,17 +14,20 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MagazineCMS.Utility;
 
 namespace MagazineCMS.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager; 
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager; 
             _logger = logger;
         }
 
@@ -115,7 +118,17 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _userManager.GetUserAsync(User); // Access the logged-in user
+
+                    // Check for admin role
+                    if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" }); // Redirect to admin page
+                    }
+                    else
+                    {
+                        return LocalRedirect(returnUrl); // Redirect to regular user page or ReturnUrl
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
