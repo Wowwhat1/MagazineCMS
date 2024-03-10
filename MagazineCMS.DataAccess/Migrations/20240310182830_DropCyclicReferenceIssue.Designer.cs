@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240310164159_MigrateToAnotherDatabase")]
-    partial class MigrateToAnotherDatabase
+    [Migration("20240310182830_DropCyclicReferenceIssue")]
+    partial class DropCyclicReferenceIssue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -350,13 +350,11 @@ namespace MagazineCMS.DataAccess.Migrations
 
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
-                    b.HasOne("MagazineCMS.Models.Faculty", "Faculty")
+                    b.HasOne("MagazineCMS.Models.Faculty", null)
                         .WithMany("UsersInThisFaculty")
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>

@@ -22,10 +22,7 @@ namespace MagazineCMS.Models
         [MaxLength(255)] // Adjust the maximum length as needed
         public string? AvatarUrl { get; set; } // Add the AvatarUrl 
 
+        [ForeignKey("Falcuty")]
         public int FacultyId { get; set; }
-
-        [ForeignKey("FacultyId")]
-        public Faculty? Faculty { get; set; }
     }
-        
 }

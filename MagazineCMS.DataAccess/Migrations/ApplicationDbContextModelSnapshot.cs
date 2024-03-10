@@ -347,13 +347,11 @@ namespace MagazineCMS.DataAccess.Migrations
 
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
-                    b.HasOne("MagazineCMS.Models.Faculty", "Faculty")
+                    b.HasOne("MagazineCMS.Models.Faculty", null)
                         .WithMany("UsersInThisFaculty")
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
