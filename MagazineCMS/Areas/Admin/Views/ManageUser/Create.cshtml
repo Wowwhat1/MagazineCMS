@@ -1,0 +1,66 @@
+﻿@model UserVM
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Create User</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="User.Id" hidden />
+            <input asp-for="User.AvatarUrl" hidden />
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="User.Firstname" class="form-control border-0 shadow" />
+                            <label asp-for="User.Firstname" class="ms-2"></label>
+                            <span asp-validation-for="User.Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="User.Lastname" class="form-control border-0 shadow" />
+                            <label asp-for="User.Lastname" class="ms-2"></label>
+                            <span asp-validation-for="User.Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="User.Email" class="form-control border-0 shadow" />
+                            <label asp-for="User.Email" class="ms-2"></label>
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Password" class="form-control border-0 shadow" />
+                            <label asp-for="Password" class="ms-2"></label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.Role" asp-items="@Model.RoleList" class="form-select border-0 shadow">
+                                <option disabled selected>--Select Category--</option>
+                            </select>
+                            <label asp-for="Role" class="ms-2"></label>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select asp-for="User.FacultyId" asp-items="@Model.FacultyList" class="form-select">
+                                <option disabled selected>-Select Faculty-</option>
+                            </select>
+                        </div>
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+                                <button type="submit" class="btn btn-primary form-control">Create</button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-controller="ManageUser" asp-action="Index" class="btn btn-outline-primary border  form-control">
+                                    Back to List
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+        </form>
+    </div>
+</div>
