@@ -16,6 +16,6 @@ namespace MagazineCMS.Models
         public string Name { get; set; }
 
         // Navigation property for Users in this faculty
-        public ICollection<User> UsersInThisFaculty { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

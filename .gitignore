@@ -363,4 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Appsetting json, customize for each dev
-appsettings.json
+MagazineCMS/appsettings.json
+/MagazineCMS/appsettings.json

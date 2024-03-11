@@ -23,9 +23,10 @@ namespace MagazineCMS.Models
         public string? AvatarUrl { get; set; } // Add the AvatarUrl 
 
         public int FacultyId { get; set; }
-
         [ForeignKey("FacultyId")]
-        public Faculty? Faculty { get; set; }
+        public Faculty Faculty { get; set; }
+
+        [NotMapped]
+        public string Role { get; set; }
     }
-        
 }
