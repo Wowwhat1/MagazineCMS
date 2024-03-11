@@ -347,16 +347,18 @@ namespace MagazineCMS.DataAccess.Migrations
 
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
-                    b.HasOne("MagazineCMS.Models.Faculty", null)
-                        .WithMany("UsersInThisFaculty")
+                    b.HasOne("MagazineCMS.Models.Faculty", "Faculty")
+                        .WithMany("Users")
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
-                    b.Navigation("UsersInThisFaculty");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MagazineCMS.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class DropCyclicReferenceIssue : Migration
+    public partial class AddDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
