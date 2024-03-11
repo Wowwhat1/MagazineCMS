@@ -5,7 +5,7 @@
 namespace MagazineCMS.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddSeedDB : Migration
+    public partial class AddFieldRoleInUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

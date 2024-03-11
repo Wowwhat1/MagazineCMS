@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240308094502_EditUserTable")]
-    partial class EditUserTable
+    [Migration("20240311090538_AddFieldRoleInUser")]
+    partial class AddFieldRoleInUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,28 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Faculties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "All"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Computing"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Business"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Design"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -254,14 +276,10 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("AvatarUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("FacultyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Faculty_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Firstname")
@@ -333,7 +351,7 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
                     b.HasOne("MagazineCMS.Models.Faculty", "Faculty")
-                        .WithMany("UsersInThisFaculty")
+                        .WithMany("Users")
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -343,7 +361,7 @@ namespace MagazineCMS.DataAccess.Migrations
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
-                    b.Navigation("UsersInThisFaculty");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

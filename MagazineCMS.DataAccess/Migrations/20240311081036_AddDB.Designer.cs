@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240308160637_AddSeedDB")]
-    partial class AddSeedDB
+    [Migration("20240311081036_AddDB")]
+    partial class AddDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -351,7 +351,7 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.User", b =>
                 {
                     b.HasOne("MagazineCMS.Models.Faculty", "Faculty")
-                        .WithMany("UsersInThisFaculty")
+                        .WithMany("Users")
                         .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -361,7 +361,7 @@ namespace MagazineCMS.DataAccess.Migrations
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
-                    b.Navigation("UsersInThisFaculty");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

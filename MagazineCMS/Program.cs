@@ -7,11 +7,18 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using MagazineCMS.DataAccess.DBInitializer;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.DataAccess.Repository;
+using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
