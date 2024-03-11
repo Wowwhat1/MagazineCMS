@@ -36,14 +36,14 @@
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-floating py-2 col-12">
-                            <select asp-for="@Model.Role" asp-items="@Model.RoleList" class="form-select border-0 shadow">
+                            <select asp-for="@Model.User.Role" asp-items="@Model.RoleList" class="form-select border-0 shadow">
                                 <option disabled selected>--Select Category--</option>
                             </select>
                             <label asp-for="Role" class="ms-2"></label>
                             <span asp-validation-for="Role" class="text-danger"></span>
                         </div>
                         <div class="form-floating mb-3">
-                            <select asp-for="User.FacultyId" asp-items="@Model.FacultyList" class="form-select">
+                            <select asp-for="@Model.User.FacultyId" asp-items="@Model.FacultyList" class="form-select">
                                 <option disabled selected>-Select Faculty-</option>
                             </select>
                         </div>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MagazineCMS.Models.ViewModels
@@ -18,8 +19,11 @@ namespace MagazineCMS.Models.ViewModels
         [Display(Name = "Password")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Please select a role.")]
+        [ValidateNever]
         public string Role { get; set; }
+        [ValidateNever]
         public IEnumerable<SelectListItem> RoleList { get; set; }
+        [ValidateNever]
         public IEnumerable<SelectListItem> FacultyList { get; set; }
     }
 }

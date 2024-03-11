@@ -54,10 +54,13 @@ namespace MagazineCMS.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var user = userVM.User;
-                var result = _userManager.CreateAsync(user, userVM.Password);
-                _userManager.AddToRoleAsync(user, userVM.Role);
+                user.AvatarUrl = SD.Default_Avatar;
+                _unitOfWork.User.Add(userVM.User);
+                _unitOfWork.Save();
+                _userManager.CreateAsync(userVM.User, userVM.Password);
+                _userManager.AddToRoleAsync(userVM.User, userVM.Role);
             }
-            return View();
+            return Redirect("Index");
         }
 
         public IActionResult Edit(int? id)
