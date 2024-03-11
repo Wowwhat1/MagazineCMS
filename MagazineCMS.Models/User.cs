@@ -25,5 +25,8 @@ namespace MagazineCMS.Models
         public int FacultyId { get; set; }
         [ForeignKey("FacultyId")]
         public Faculty Faculty { get; set; }
+
+        [NotMapped]
+        public string Role { get; set; }
     }
 }
