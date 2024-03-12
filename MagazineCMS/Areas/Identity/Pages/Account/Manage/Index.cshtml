@@ -41,8 +41,8 @@
             </div>
             <!-- Avatar upload field -->
             <div class="form-floating mb-3">
-                <input type="file" id="avatarUpload" name="avatarUpload" class="form-control" />
-                <label for="avatarUpload" class="form-label">Upload your avatar</label>
+                <input asp-for="Input.AvatarFile" type="file" class="form-control" />
+                <label asp-for="Input.AvatarFile" class="form-label"></label>
                 <span asp-validation-for="Input.AvatarUrl" class="text-danger"></span>
             </div>
 

@@ -5,9 +5,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using MagazineCMS.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,15 +20,16 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly string _uploadsDirectory; // Directory to save uploaded avatars
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _uploadsDirectory = @"image\avatar\"; // Set the path to your uploads directory
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -83,7 +86,6 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 AvatarUrl = user.AvatarUrl
-
             };
         }
 
@@ -124,45 +126,23 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-
             // Handle avatar file upload
             if (Input.AvatarFile != null && Input.AvatarFile.Length > 0)
             {
                 string fileName = $"{Guid.NewGuid()}{Path.GetExtension(Input.AvatarFile.FileName)}"; // Generate a unique filename
-                string filePath = Path.Combine(_uploadsDirectory, fileName);
+                string filePath = @"\image\avatar\" + fileName;
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine(wwwRootPath + filePath), FileMode.Create))
                 {
-                    await Input.AvatarFile.CopyToAsync(fileStream);
+                    Input.AvatarFile.CopyTo(fileStream);
                 }
-                // Set the avatar URL to the path where the file is saved
+
                 user.AvatarUrl = filePath; // You may need to store a relative path or a URL depending on your setup
             }
-            /*if (true)
-            {
-                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(Input.AvatarFile.FileName)}"; // Generate a unique filename
-                string filePath = Path.Combine(_uploadsDirectory, fileName);
-                System.Diagnostics.Debug.WriteLine("File Path: " + filePath);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await Input.AvatarFile.CopyToAsync(fileStream);
-                }
-
-                *//*string basePath = "C:\\Users\\hp\\source\\repos\\MagazineCMS\\MagazineCMS";
-                string relativePath = Path.Combine(basePath, Input.AvatarUrl);*/
-            /*user.AvatarUrl = relativePath;*//*
-            // Set the avatar URL to the path where the file is saved
-            user.AvatarUrl = filePath; // You may need to store a relative path or a URL depending on your setup
-        }*/
-
-
-
-
 
             user.Firstname = Input.Firstname;
             user.Lastname = Input.Lastname;
-
-            
 
             await _userManager.UpdateAsync(user);
 
