@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Shared\_NotificationPartial.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
@@ -40,10 +36,6 @@
   <ItemGroup>
     <Folder Include="Areas\Coordinator\Controllers\" />
     <Folder Include="Areas\Manager\Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Shared\_NotificationPartial.cshtml" />
   </ItemGroup>
 
 </Project>
