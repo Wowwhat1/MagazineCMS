@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MagazineCMS.DataAccess.Data;
@@ -21,6 +22,12 @@ namespace MagazineCMS.DataAccess.Repository
         public void Update(Faculty obj)
         {
             _db.Faculties.Update(obj);
+        }
+
+
+        public override IEnumerable<Faculty> GetAll(Expression<Func<Faculty, bool>>? filter, string? includeProperties = null)
+        {
+            return _db.Faculties.Skip(1).ToList();
         }
     }
 }

@@ -21,6 +21,44 @@ body {
   margin-bottom: 60px;
 }
 
+/*----------------Add account------------------*/
+
+.form-create-account {
+    width: 100%;
+    max-width: 2400px;
+    padding: 20px;
+    margin: auto;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.bold-black-text {
+    font-weight: bold;
+    color: black;
+    font-size: 15px;
+}
+
+#register-account {
+    background-color: #020058;
+    border-color: #020058;
+}
+
+    #register-account:hover {
+        background-color: #00B4D8;
+        border-color: #00B4D8;
+    }
+
+#close-form {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+    #close-form:hover {
+        background-color: #808080;
+        border-color: #808080;
+    }
+  
 /*----------------Login form------------------*/
 * {
     font-family: 'Poppins', sans-serif;
@@ -169,4 +207,3 @@ body {
     .deep-blue-btn:hover {
         background-color: #00B4D8;
     }
-}

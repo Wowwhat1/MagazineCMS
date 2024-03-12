@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body>
     <header>
@@ -34,6 +35,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_NotificationPartial" />
             @RenderBody()
         </main>
     </div>

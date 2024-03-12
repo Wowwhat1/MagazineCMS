@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace MagazineCMS.Models
 
         public int FacultyId { get; set; }
         [ForeignKey("FacultyId")]
+        [ValidateNever]
         public Faculty Faculty { get; set; }
 
         [NotMapped]
