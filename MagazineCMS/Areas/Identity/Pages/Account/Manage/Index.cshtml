@@ -13,7 +13,10 @@
         @if (!string.IsNullOrEmpty(Model.Input.AvatarUrl))
         {
             <img src="@Model.Input.AvatarUrl" alt="Avatar" width="150" height="150" />
-        }
+        } else
+		{
+			<img src="/image/avatar/default.png" alt="Avatar" width="150" height="150" />
+		}
 
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>

@@ -68,7 +68,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
             // Add a property to hold the uploaded avatar file
             [Display(Name = "Avatar")]
             public IFormFile AvatarFile { get; set; }
-            //public string AvatarUrl { get; set; }
+            public string AvatarUrl { get; set; }
         }
 
         private async Task LoadAsync(User user)
@@ -82,7 +82,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
-                //AvatarUrl = user.AvatarUrl
+                AvatarUrl = user.AvatarUrl
 
             };
         }

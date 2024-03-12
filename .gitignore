@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Appsetting json, customize for each dev
 MagazineCMS/appsettings.json
 /MagazineCMS/appsettings.json
+/MagazineCMS/appsettings.json
