@@ -4,8 +4,10 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using MagazineCMS.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,6 +18,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly string _uploadsDirectory; // Directory to save uploaded avatars
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
@@ -23,6 +26,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _uploadsDirectory = @"image\avatar\"; // Set the path to your uploads directory
         }
 
         /// <summary>
@@ -58,24 +62,34 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
+
+            // Add a property to hold the uploaded avatar file
+            [Display(Name = "Avatar")]
+            public IFormFile AvatarFile { get; set; }
+            //public string AvatarUrl { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(User user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Username = userName;
-
+            
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                //AvatarUrl = user.AvatarUrl
+
             };
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            User user = (User)await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -87,7 +101,7 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            User user = (User)await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -109,6 +123,48 @@ namespace MagazineCMS.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+
+            // Handle avatar file upload
+            if (Input.AvatarFile != null && Input.AvatarFile.Length > 0)
+            {
+                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(Input.AvatarFile.FileName)}"; // Generate a unique filename
+                string filePath = Path.Combine(_uploadsDirectory, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.AvatarFile.CopyToAsync(fileStream);
+                }
+                // Set the avatar URL to the path where the file is saved
+                user.AvatarUrl = filePath; // You may need to store a relative path or a URL depending on your setup
+            }
+            /*if (true)
+            {
+                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(Input.AvatarFile.FileName)}"; // Generate a unique filename
+                string filePath = Path.Combine(_uploadsDirectory, fileName);
+                System.Diagnostics.Debug.WriteLine("File Path: " + filePath);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.AvatarFile.CopyToAsync(fileStream);
+                }
+
+                *//*string basePath = "C:\\Users\\hp\\source\\repos\\MagazineCMS\\MagazineCMS";
+                string relativePath = Path.Combine(basePath, Input.AvatarUrl);*/
+            /*user.AvatarUrl = relativePath;*//*
+            // Set the avatar URL to the path where the file is saved
+            user.AvatarUrl = filePath; // You may need to store a relative path or a URL depending on your setup
+        }*/
+
+
+
+
+
+            user.Firstname = Input.Firstname;
+            user.Lastname = Input.Lastname;
+
+            
+
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
