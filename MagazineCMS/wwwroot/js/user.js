@@ -12,7 +12,7 @@ function loadDataTable() {
             { "data": "lastname", "width": "15%" },
             { "data": "avatarUrl", "width": "15%" },
             { "data": "faculty.name", "width": "15%" },
-            { "data": "role", "width": "30%" },
+            { "data": "role", "width": "15%" },
         ]
     });
 }
