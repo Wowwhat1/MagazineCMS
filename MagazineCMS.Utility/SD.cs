@@ -13,6 +13,6 @@ namespace MagazineCMS.Utility
         public const string Role_Manager = "Manager";
         public const string Role_Admin = "Admin";
 
-        public const string Default_Avatar = "~/iamge/avatar/default-avatar.png";
+        public const string Default_Avatar = "/image/avatar/default-avatar.png";
     }
 }
