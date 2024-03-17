@@ -167,71 +167,78 @@
                 </div>
 
             </div>
+        
+    
+            <!-- Footer -->
+            @if (!Context.Request.Path.Value.Contains("Identity/Account/Login"))
+            {
+                <footer style="background: #bde0fe; flex-shrink: 0;" class="sticky-footer">
+                    <div>
+                        <div class="copyright">
+                            <table>
+                                <tr class="title-main-footer">
+                                    <th style="padding-left: 20px;">
+                                        Contact:
+                                    </th>
+                                    <th>
+                                        Admin
+                                    </th>
+                                    <th>
+                                        Manager
+                                    </th>
+                                </tr>
+                                <tr class="marginal-text-footer">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Phone: 012 1102 2201
+                                    </th>
+                                    <th>
+                                        Phone: 012 2234 4953
+                                    </th>
+                                </tr>
+                                <tr class="marginal-text-footer">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Email: <a href="mailto:admin@gmail.com" style="text-decoration: none">admin@gmail.com</a>
+                                    </th>
+                                    <th>
+                                        Email: <a href="mailto:manager@gmail.com" style="text-decoration: none">manager@gmail.com</a>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </footer>
+            }
         </div>
     </div>
-
-        <footer class="footer-form">
-            <div>
-            <table>
-                <tr class="title-main-footer">
-                    <th>
-                        Contact:
-                    </th>
-                    <th>
-                        Admin
-                    </th>
-                    <th>
-                        Manager
-                    </th>
-                </tr>
-                <tr class="marginal-text-footer">
-                    <th>
-
-                    </th>
-                    <th>
-                        Phone: 012 1102 2201
-                    </th>
-                    <th>
-                        Phone: 012 2234 4953
-                    </th>
-                </tr>
-                <tr class="marginal-text-footer">
-                    <th>
-
-                    </th>
-                    <th>
-                        Email: admin@gmail.com
-                    </th>
-                    <th>
-                        Email: manager@gmail.com
-                    </th>
-                </tr>
-            </table>
-        </div>
-    </footer>
-
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
-
-    <script src="~/lib/startbootstrap-admin/vendor/jquery/jquery.min.js"></script>
-
-    <script src="~/lib/startbootstrap-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="~/lib/startbootstrap-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="~/lib/startbootstrap-admin/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="~/lib/startbootstrap-admin/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="~/lib/startbootstrap-admin/js/demo/datatables-demo.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+
+<script src="~/lib/startbootstrap-admin/vendor/jquery/jquery.min.js"></script>
+
+<script src="~/lib/startbootstrap-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="~/lib/startbootstrap-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="~/lib/startbootstrap-admin/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="~/lib/startbootstrap-admin/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="~/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="~/lib/startbootstrap-admin/js/demo/datatables-demo.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
 </html>

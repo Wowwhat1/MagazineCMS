@@ -14,11 +14,13 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /*-----------------Header---------------------*/
@@ -34,25 +36,35 @@ body {
 }
 
 /*-----------------Footer---------------------*/
-.footer-form {
-    background: #0077b6;
+/*.footer-form {
+    background: #bde0fe;
     bottom: 0px;
     position: absolute;
     width: 100%;
-    z-index: 2;
-}
+    z-index: 1;
+}*/
 
 .title-main-footer {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 13px;
-    color: white;
+    color: black;
 }
+
+    .title-main-footer th {
+        padding-left: 18px;
+        padding-top: 2px;
+    }
 
 .marginal-text-footer {
     font-weight: normal;
     font-size: 11px;
-    color: white;
+    color: black;
 }
+
+    .marginal-text-footer th {
+        padding-left: 18px;
+        color: black;
+    }
 
 /*-----------------Menu---------------------*/
 
@@ -94,6 +106,7 @@ body {
 /*----------------Login form------------------*/
 * {
     font-family: 'Poppins', sans-serif;
+    font-weight: normal;
 }
 
 .body-background-img {
