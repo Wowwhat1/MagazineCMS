@@ -1,4 +1,4 @@
-var dataTable;
+﻿var dataTable;
 
 $(document).ready(function () {
     loadDataTable();
@@ -15,17 +15,53 @@ function loadDataTable() {
             { "data": "faculty.name", "width": "10%" },
             { "data": "role", "width": "5%" },
             {
-                data: "id",
+                data: { id: "id", lockoutEnd: "lockoutEnd" },
                 "render": function (data) {
-                    return `
-                    <div class="btn-group d-flex justify-content-center align-items-center" role="group" style="">
-                        <a href="/admin/manageuser/edit?id=${data}" class="btn btn-outline-warning mx-2 rounded"> <i class="bi bi-pencil-square"></i>Edit</a>               
-                        <a onClick=Delete('/admin/product/delete/${data}') class="btn btn-outline-danger mx-2 rounded"> <i class="bi bi-trash-fill"></i> Delete</a>
-                    </div>
+                    var today = new Date().getTime();
+                    var lockout = new Date(data.lockoutEnd).getTime();
+
+                    if (lockout > today) {
+                        return `
+                        <div class="text-center">
+                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                    <i class="bi bi-lock-fill"></i>  Lock
+                                </a> 
+                                <a href="/admin/manageuser/edit?userId=${data.id}" class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
+                                     <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                        </div>
                     `
+                    }
+                    else {
+                        return `
+                        <div class="text-center">
+                              <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                                    <i class="bi bi-unlock-fill"></i>  UnLock
+                                </a>
+                                <a href="/admin/manageuser/edit?userId=${data.id}" class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
+                                     <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                        </div>
+                    `
+                    }
                 },
-                "width": "10%"
+                "width": "25%"
             }
         ]
+    });
+}
+
+function LockUnlock(id) {
+    $.ajax({
+        type: "POST",
+        url: '/Admin/ManageUser/LockUnlock',
+        data: JSON.stringify(id),
+        contentType: "application/json",
+        success: function (data) {
+            if (data.success) {
+                toastr.success(data.message);
+                dataTable.ajax.reload();
+            }
+        }
     });
 }

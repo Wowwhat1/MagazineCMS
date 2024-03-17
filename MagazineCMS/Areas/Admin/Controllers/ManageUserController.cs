@@ -138,6 +138,40 @@ namespace MagazineCMS.Areas.Admin.Controllers
             return Json(new { data = usersList });
         }
 
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string id)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" });
+            }
+
+            if (user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.UtcNow)
+            {
+                // User is currently locked and we need to unlock them
+                user.LockoutEnd = null;
+            }
+            else
+            {
+                // User is not locked, so lock them
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(10);
+            }
+
+            var result = _userManager.UpdateAsync(user).Result;
+
+            if (result.Succeeded)
+            {
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Operation Successful" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+        }
+
         #endregion
     }
 }
