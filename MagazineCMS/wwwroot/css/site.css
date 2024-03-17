@@ -35,6 +35,10 @@ body {
     padding-left: 20px;
 }
 
+#wrapper #content-wrapper {
+    background-color: #ced4da;
+}
+
 /*-----------------Footer---------------------*/
 /*.footer-form {
     background: #bde0fe;
@@ -43,7 +47,6 @@ body {
     width: 100%;
     z-index: 1;
 }*/
-
 .title-main-footer {
     font-weight: normal;
     font-size: 13px;
