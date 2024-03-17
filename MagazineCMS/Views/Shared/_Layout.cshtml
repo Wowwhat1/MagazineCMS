@@ -11,9 +11,9 @@
     <title>@ViewData["Title"] - MagazineCMS</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
     <link href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
 </head>
 <body id="page-top">
@@ -34,7 +34,7 @@
                     <div class="sidebar-brand-text mx-3">Magazine CMS</div>
                 </a>
 
-            
+
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
@@ -111,9 +111,9 @@
                         </a>
                     </li>
                 }
-            
+
             </ul>
-        } 
+        }
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -130,7 +130,7 @@
                                 <img src="/image/Magazine.whitelogo.png" alt="logo" width="170">
                             </a>
                         </div>
-                    
+
                     }
 
                     <!-- Sidebar Toggle (Topbar) -->
@@ -146,9 +146,9 @@
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             @if (SignInManager.IsSignedIn(User))
-            {
+                            {
                                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-bell" aria-hidden="true"></i>
                                     <!-- Counter - Alerts -->
                                     @* <span class="badge badge-danger badge-counter">•</span> *@
@@ -166,8 +166,8 @@
                 </div>
 
             </div>
-        
-    
+
+
             <!-- Footer -->
             @if (!Context.Request.Path.Value.Contains("Identity/Account/Login"))
             {
