@@ -1,6 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
+﻿
 
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -66,26 +64,38 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            public string Code { get; set; }
+            //[Required]
+            //public string Code { get; set; }
 
         }
 
-        public IActionResult OnGet(string code = null)
+        //public IActionResult OnGet(string code = null)
+        //{
+        //    if (code == null)
+        //    {
+        //        return BadRequest("A code must be supplied for password reset.");
+        //    }
+        //    else
+        //    {
+        //        Input = new InputModel
+        //        {
+        //            Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)) //utf8 mã hóa kí tự
+        //        };
+        //        return Page();
+        //    }
+        //}
+
+        public void OnGet(string email)
         {
-            if (code == null)
-            {
-                return BadRequest("A code must be supplied for password reset.");
-            }
-            else
+            if (!string.IsNullOrEmpty(email))
             {
                 Input = new InputModel
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    Email = email
                 };
-                return Page();
             }
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -101,7 +111,10 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            var newPassword = Input.Password; // Lấy mật khẩu mới từ form đăng ký
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user); // Tạo token mới
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword); // Thiết lập mật khẩu mới
+
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
@@ -113,5 +126,6 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
             }
             return Page();
         }
+
     }
 }

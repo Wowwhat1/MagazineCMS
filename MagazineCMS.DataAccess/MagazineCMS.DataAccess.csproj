@@ -21,4 +21,8 @@
     <ProjectReference Include="..\MagazineCMS.Utility\MagazineCMS.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
