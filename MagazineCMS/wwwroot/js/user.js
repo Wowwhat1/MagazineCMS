@@ -52,16 +52,31 @@ function loadDataTable() {
 }
 
 function LockUnlock(id) {
-    $.ajax({
-        type: "POST",
-        url: '/Admin/ManageUser/LockUnlock',
-        data: JSON.stringify(id),
-        contentType: "application/json",
-        success: function (data) {
-            if (data.success) {
-                toastr.success(data.message);
-                dataTable.ajax.reload();
-            }
+    // Display SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to perform this action.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed, make the AJAX call
+            $.ajax({
+                type: "POST",
+                url: '/Admin/ManageUser/LockUnlock',
+                data: JSON.stringify(id),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        dataTable.ajax.reload();
+                    }
+                }
+            });
         }
     });
 }
+
