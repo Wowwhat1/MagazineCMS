@@ -33,6 +33,5 @@ namespace MagazineCMS.Models
         [ValidateNever]
         public Semester Semester { get; set; }
 
-        public ICollection<Contribution> Contributions { get; set;}
     }
 }

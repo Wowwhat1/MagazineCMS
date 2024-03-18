@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240318110117_AddModelSemester_Magazine_Contribution_Document_Feedback")]
+    [Migration("20240318115950_AddModelSemester_Magazine_Contribution_Document_Feedback")]
     partial class AddModelSemester_Magazine_Contribution_Document_Feedback
     {
         /// <inheritdoc />
@@ -475,7 +475,7 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Contribution", b =>
                 {
                     b.HasOne("MagazineCMS.Models.Magazine", "Magazine")
-                        .WithMany("Contributions")
+                        .WithMany()
                         .HasForeignKey("MagazineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -510,7 +510,7 @@ namespace MagazineCMS.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MagazineCMS.Models.User", "CoordinatorUser")
+                    b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -518,7 +518,7 @@ namespace MagazineCMS.DataAccess.Migrations
 
                     b.Navigation("Contribution");
 
-                    b.Navigation("CoordinatorUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Magazine", b =>
@@ -610,11 +610,6 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("MagazineCMS.Models.Magazine", b =>
-                {
-                    b.Navigation("Contributions");
                 });
 #pragma warning restore 612, 618
         }

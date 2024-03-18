@@ -472,15 +472,15 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Contribution", b =>
                 {
                     b.HasOne("MagazineCMS.Models.Magazine", "Magazine")
-                        .WithMany("Contributions")
+                        .WithMany()
                         .HasForeignKey("MagazineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Magazine");
@@ -507,7 +507,7 @@ namespace MagazineCMS.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MagazineCMS.Models.User", "CoordinatorUser")
+                    b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -515,7 +515,7 @@ namespace MagazineCMS.DataAccess.Migrations
 
                     b.Navigation("Contribution");
 
-                    b.Navigation("CoordinatorUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Magazine", b =>
@@ -607,11 +607,6 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("MagazineCMS.Models.Magazine", b =>
-                {
-                    b.Navigation("Contributions");
                 });
 #pragma warning restore 612, 618
         }

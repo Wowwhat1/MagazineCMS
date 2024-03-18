@@ -21,7 +21,7 @@ namespace MagazineCMS.Models
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         [ValidateNever]
-        public User CoordinatorUser { get; set; }
+        public User User { get; set; }
 
         public int ContributionId { get; set; }
         [ForeignKey("ContributionId")]
