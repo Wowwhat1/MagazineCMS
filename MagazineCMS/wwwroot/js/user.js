@@ -23,26 +23,25 @@ function loadDataTable() {
                     if (lockout > today) {
                         return `
                         <div class="text-center">
-                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
-                                    <i class="bi bi-lock-fill"></i>  Lock
-                                </a> 
-                                <a href="/admin/manageuser/edit?userId=${data.id}" class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
-                                     <i class="bi bi-pencil-square"></i> Edit
-                                </a>
+                            <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                <i class="bi bi-lock-fill"></i>  Lock
+                            </a> 
+                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                <i class="bi bi-trash-fill"></i> Delete
+                            </button>
                         </div>
-                    `
-                    }
-                    else {
+                    `;
+                    } else {
                         return `
                         <div class="text-center">
-                              <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:100px;">
-                                    <i class="bi bi-unlock-fill"></i>  UnLock
-                                </a>
-                                <a href="/admin/manageuser/edit?userId=${data.id}" class="btn btn-danger text-white" style="cursor:pointer; width:150px;">
-                                     <i class="bi bi-pencil-square"></i> Edit
-                                </a>
+                            <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                                <i class="bi bi-unlock-fill"></i>  UnLock
+                            </a>
+                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                <i class="bi bi-trash-fill"></i> Delete
+                            </button>
                         </div>
-                    `
+                    `;
                     }
                 },
                 "width": "25%"
@@ -80,3 +79,50 @@ function LockUnlock(id) {
     });
 }
 
+function deleteUser(userId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Send DELETE request on confirmation
+            fetch(`/admin/manageuser/deleteUser/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            data.message,
+                            'success'
+                        );
+                        // Reload the DataTable after successful deletion
+                        dataTable.ajax.reload();
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            data.message,
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    Swal.fire(
+                        'Error!',
+                        "An error occurred during deletion",
+                        'error'
+                    );
+                });
+        }
+    });
+}

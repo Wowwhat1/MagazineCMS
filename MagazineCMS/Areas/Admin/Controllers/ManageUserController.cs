@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MagazineCMS.Areas.Identity.Pages.Account;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MagazineCMS.Areas.Admin.Controllers
 {
@@ -169,6 +170,35 @@ namespace MagazineCMS.Areas.Admin.Controllers
             else
             {
                 return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("User ID is required");
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Delete the user
+            var deleteResult = await _userManager.DeleteAsync(user);
+
+            if (deleteResult.Succeeded)
+            {
+                _unitOfWork.Save();
+                return Ok(new { success = true, message = "User deleted successfully" });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = "Error while deleting user" });
             }
         }
 
