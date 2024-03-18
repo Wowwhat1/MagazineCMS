@@ -4,50 +4,60 @@
 @{
     ViewData["Title"] = "Login";
 }
-<body class="body-background-img">
-    <div class="container">
-        <div class="form-signin">
-            <h1 class="title-main space-hold">Well come to MagazineCMS</h1>
-            <div>
-                <div>
-                    <section>
-                        <form id="account" method="post" asp-route-returnUrl="@Model.ReturnUrl">
-                            <h2 class="marginal-text marginal-space">Sign in to continue</h2>
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                            <div class="space-hold">
-                                <input asp-for="Input.Email" class="input-form" autocomplete="username" aria-required="true" placeholder="Email" />
-                                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            </div>
-                            <div class="space-hold">
-                                <input asp-for="Input.Password" class="input-form" autocomplete="current-password" aria-required="true" placeholder="Password" />
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            </div>
+<body id="page-top">
+    <div id="wrapper">
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
 
-                            <div>
-                                <label asp-for="Input.RememberMe" class="form-label space-hold">
-                                    <input asp-for="Input.RememberMe" />
-                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                </label>
-                            </div>
+                <br />
 
-                            <div class="center">
-                                <button class="deep-blue-btn bold-white-text" id="login-submit" type="submit">Sign in</button>
-                            </div>
-                            <div class="space-hold">
-                                <p class="marginal-text">
-                                    You don't have account yet? <a class="text-link" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register here</a>
-                                </p>
-                                <p class="marginal-text">
-                                    Forgot password? <a class="text-link" id="forgot-password" asp-page="./ForgotPassword">Get here</a>
-                                </p>
-                                @* <p>
-                                    <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                                </p> *@
-                            </div>
-                        </form>
-                    </section>
+                <div class="container">
+                    <div class="form-signin">
+                        <h1 class="title-main space-hold">Well come to MagazineCMS</h1>
+                        <section>
+                            <form id="account" method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                                <h2 class="marginal-text marginal-space">Sign in to continue</h2>
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                <div class="space-hold">
+                                    <input asp-for="Input.Email" class="input-form" autocomplete="username" aria-required="true" placeholder="Email" />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </div>
+                                <div class="space-hold">
+                                    <input asp-for="Input.Password" class="input-form" autocomplete="current-password" aria-required="true" placeholder="Password" />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+
+                                <div>
+                                    <label asp-for="Input.RememberMe" class="form-label space-hold">
+                                        <input asp-for="Input.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+
+                                <div class="center">
+                                    <button class="deep-blue-btn bold-white-text" id="login-submit" type="submit">Sign in</button>
+                                </div>
+                                <div class="space-hold">
+                                    <p class="marginal-text">
+                                        You don't have account yet? <a class="text-link" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register here</a>
+                                    </p>
+                                    <p class="marginal-text">
+                                        Forgot password? <a class="text-link" id="forgot-password" asp-page="./ForgotPassword">Get here</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
                 </div>
+
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
             </div>
         </div>
     </div>

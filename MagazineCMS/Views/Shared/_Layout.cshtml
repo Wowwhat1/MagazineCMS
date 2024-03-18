@@ -1,58 +1,243 @@
 ﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MagazineCMS</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" media="all" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-
-  
-
-
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+    <link href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MagazineCMS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Student" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Student" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            <partial name="_NotificationPartial" />
-            @RenderBody()
-        </main>
-    </div>
+<body id="page-top">
 
-    @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MagazineCMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+                <!-- Sidebar - Brand -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <i class="fas fa-laugh-wink"></i>
+                    </div>
+                    <div class="sidebar-brand-text mx-3">Magazine CMS</div>
+                </a>
+
+
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            <i class="fa fa-tachometer" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ManageUser" asp-action="Index">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage Account</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ManagePeriod" asp-action="Index">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage Period</span>
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Manager"))
+                {
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Manager" asp-controller="ManageTopic" asp-action="Index">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage Topic</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Manager" asp-controller="ManageDepartment" asp-action="Index">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage Department</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Manager" asp-controller="ManageAccount" asp-action="Index">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage Account</span>
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Student"))
+                {
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Student" asp-controller="Home" asp-action="Index">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider my-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="Student" asp-controller="Home" asp-action="Privacy">
+                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                            <span>Your Post</span>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        }
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    @if (!SignInManager.IsSignedIn(User))
+                    {
+                        <div>
+                            <a asp-area="Student" asp-controller="Home" asp-action="Index">
+                                <img src="/image/Magazine.whitelogo.png" alt="logo" width="170">
+                            </a>
+                        </div>
+
+                    }
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-bell" aria-hidden="true"></i>
+                                    <!-- Counter - Alerts -->
+                                    @* <span class="badge badge-danger badge-counter">•</span> *@
+                                </a>
+                            }
+                        </li>
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </nav>
+
+                <div class="content">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            @if (!Context.Request.Path.Value.Contains("Identity/Account/Login"))
+            {
+                <footer class="sticky-footer bg-white">
+                    <div style="margin-left: 35%;">
+                        <div class="copyright">
+                            <table>
+                                <tr class="title-main-footer">
+                                    <th style="padding-left: 20px;">
+                                        Contact:
+                                    </th>
+                                    <th>
+                                        Admin
+                                    </th>
+                                    <th>
+                                        Manager
+                                    </th>
+                                </tr>
+                                <tr class="marginal-text-footer">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Phone: 012 1102 2201
+                                    </th>
+                                    <th>
+                                        Phone: 012 2234 4953
+                                    </th>
+                                </tr>
+                                <tr class="marginal-text-footer">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Email: <a href="mailto:admin@gmail.com" style="text-decoration: none">admin@gmail.com</a>
+                                    </th>
+                                    <th>
+                                        Email: <a href="mailto:manager@gmail.com" style="text-decoration: none">manager@gmail.com</a>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </footer>
+            }
         </div>
-    </footer> *@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
 </body>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+
+<script src="~/lib/startbootstrap-admin/vendor/jquery/jquery.min.js"></script>
+
+<script src="~/lib/startbootstrap-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="~/lib/startbootstrap-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="~/lib/startbootstrap-admin/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="~/lib/startbootstrap-admin/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="~/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="~/lib/startbootstrap-admin/js/demo/datatables-demo.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
 </html>

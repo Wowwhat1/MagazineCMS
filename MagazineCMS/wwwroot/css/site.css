@@ -1,5 +1,6 @@
-html {
-  font-size: 14px;
+@font-face {
+    font-family: 'Poppins';
+    src: url('Poppins-Regular.ttf');
 }
 
 @media (min-width: 768px) {
@@ -14,12 +15,98 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+/*-----------------Header---------------------*/
+
+.header-form {
+    background: #D9D9D9;
+    z-index: 2;
+}
+
+.logo {
+    width: 140px;
+    padding-left: 20px;
+}
+
+#wrapper #content-wrapper {
+    background-color: #ced4da;
+}
+
+/*-----------------Footer---------------------*/
+/*.footer-form {
+    background: #bde0fe;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}*/
+.title-main-footer {
+    font-weight: normal;
+    font-size: 13px;
+    color: black;
+}
+
+    .title-main-footer th {
+        padding-left: 18px;
+        padding-top: 2px;
+    }
+
+.marginal-text-footer {
+    font-weight: normal;
+    font-size: 11px;
+    color: black;
+}
+
+    .marginal-text-footer th {
+        padding-left: 18px;
+        color: black;
+    }
+
+/*-----------------Menu---------------------*/
+
+.navbar_menu {
+    position: fixed;
+    overflow-y: auto;
+    background: #D9D9D9;
+    width: 13%;
+    left: -12%;
+    padding: 10px;
+    padding-top: 70px;
+    top: 0;
+    bottom: 0;
+    font-size: 16px;
+    transition: left 0.3s;
+    z-index: 1;
+}
+
+    .navbar_menu:hover {
+        left: 0;
+    }
+
+    .navbar_menu a {
+        display: block;
+        margin: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        background: #D9D9D9;
+        text-decoration: none;
+        color: black;
+    }
+
+        .navbar_menu a:hover {
+            background: #23219A;
+            text-decoration: none;
+            color: white;
+        }
 
 /*----------------Add account------------------*/
 .form-create-account {
@@ -61,6 +148,7 @@ body {
 /*----------------Login form------------------*/
 * {
     font-family: 'Poppins', sans-serif;
+    font-weight: normal;
 }
 
 .body-background-img {
@@ -228,9 +316,9 @@ body {
         box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
     }
 
-    .card .card-header {
-        font-weight: 500;
-    }
+        .card .card-header {
+            font-weight: 500;
+        }
 
     .card-header:first-child {
         border-radius: 0.35rem 0.35rem 0 0;
@@ -280,4 +368,18 @@ body {
     }
 
 
-  
+    .table-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dataTables_filter {
+        display: flex !important;
+        justify-content: flex-end !important;
+    }
+    .dataTables_paginate {
+        margin-top: 1rem;
+    }
+}
