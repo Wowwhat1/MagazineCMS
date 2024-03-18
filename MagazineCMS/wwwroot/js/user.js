@@ -8,12 +8,12 @@ function loadDataTable() {
     dataTable = $('#user-table').DataTable({
         "ajax": { url: '/admin/manageuser/getall' },
         "columns": [
-            { "data": "firstname", "width": "15%" },
-            { "data": "lastname", "width": "15%" },
-            { "data": "avatarUrl", "width": "15%" },
-            { "data": "email", "width": "10%" },
-            { "data": "faculty.name", "width": "10%" },
-            { "data": "role", "width": "5%" },
+            { "data": "firstname", "width": "15%", "className": "table-cell" },
+            { "data": "lastname", "width": "15%", "className": "table-cell" },
+            { "data": "avatarUrl", "width": "15%", "className": "table-cell" },
+            { "data": "email", "width": "10%", "className": "table-cell" },
+            { "data": "faculty.name", "width": "10%", "className": "table-cell" },
+            { "data": "role", "width": "5%", "className": "table-cell" },
             {
                 data: { id: "id", lockoutEnd: "lockoutEnd" },
                 "render": function (data) {
@@ -44,7 +44,8 @@ function loadDataTable() {
                     `;
                     }
                 },
-                "width": "25%"
+                "width": "10%",
+                "className": "table-cell"
             }
         ]
     });
@@ -125,4 +126,22 @@ function deleteUser(userId) {
                 });
         }
     });
+}
+
+
+    //CSS to shorten data when it's too long
+    var css = '.table-cell { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }',
+        head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
+
+    head.appendChild(style);
+
+    style.type = 'text/css';
+    if (style.styleSheet) {
+        // This is required for IE8 and below.
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
+
 }
