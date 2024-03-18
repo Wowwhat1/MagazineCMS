@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 
 namespace MagazineCMS.Models
 {
-    public class Faculty
+    public class Semester
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
-
-        // Navigation property for Users in this faculty
-        public ICollection<User> Users { get; set; }
+        [Required]
+        [Display(Name = "Start Date")]
+        public DateTime StartDate { get; set; }
+        [Required]
+        [Display(Name = "End Date")]
+        public DateTime EndDate { get; set; }
     }
 }

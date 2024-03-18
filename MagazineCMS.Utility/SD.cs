@@ -14,5 +14,13 @@ namespace MagazineCMS.Utility
         public const string Role_Admin = "Admin";
 
         public const string Default_Avatar = "/image/avatar/default-avatar.png";
+
+        public const string Status_Pending = "Pending";
+        public const string Status_Approved = "Approved";
+        public const string Status_Rejected = "Rejected";
+        public const string Status_Submitted = "Submitted";
+
+        public const string Document_Type_Word = "Word";
+        public const string Document_Type_Image = "Image";
     }
 }

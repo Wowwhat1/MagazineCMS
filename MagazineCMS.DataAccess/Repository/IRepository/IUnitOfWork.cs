@@ -10,6 +10,11 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     {
         IFacultyRepository Faculty { get; }
         IUserRepository User { get; }
+        ISemesterRepository Semester { get; }
+        IMagazineRepository Magazine { get; }
+        IContributionRepository Contribution { get; }
+        IDocumentRepository Document { get; }
+        IFeedbackRepository Feedback { get; }
 
         void Save();
     }
