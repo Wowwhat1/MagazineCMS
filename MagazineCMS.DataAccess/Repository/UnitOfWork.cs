@@ -13,12 +13,22 @@ namespace MagazineCMS.DataAccess.Repository
         private ApplicationDbContext _db;
         public IFacultyRepository Faculty { get; private set; } 
         public IUserRepository User { get; private set; }
+        public ISemesterRepository Semester { get; private set; }
+        public IMagazineRepository Magazine { get; private set; }
+        public IContributionRepository Contribution { get; private set; }
+        public IDocumentRepository Document { get; private set; }
+        public IFeedbackRepository Feedback { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Faculty = new FacultyRepository(_db);
             User = new UserRepository(_db);
+            Semester = new SemesterRepository(_db);
+            Magazine = new MagazineRepository(_db);
+            Contribution = new ContributionRepository(_db);
+            Document = new DocumentRepository(_db);
+            Feedback = new FeedbackRepository(_db);
         }
 
         public void Save()
