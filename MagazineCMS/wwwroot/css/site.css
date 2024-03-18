@@ -374,3 +374,12 @@ body {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    .dataTables_filter {
+        display: flex !important;
+        justify-content: flex-end !important;
+    }
+    .dataTables_paginate {
+        margin-top: 1rem;
+    }
+}
