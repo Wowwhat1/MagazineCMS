@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
     <link href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body id="page-top">
 
@@ -161,6 +162,7 @@
 
                 <div class="content">
                     <main role="main" class="pb-3">
+                        <partial name="_NotificationPartial" />
                         @RenderBody()
                     </main>
                 </div>
@@ -238,20 +240,8 @@
 
 <!-- Page level custom scripts -->
 <script src="~/lib/startbootstrap-admin/js/demo/datatables-demo.js"></script>
-@await RenderSectionAsync("Scripts", required: false)
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MagazineCMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/g28lhnxtlihu4l4a381gw7tz47voznshwbi10lmsvlekrfme/tinymce/6/tinymce.min.js" referrerpolicy="origin">
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+@await RenderSectionAsync("Scripts", required: false)
 </html>
