@@ -1,46 +1,36 @@
 ﻿@model List<User>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
-</head>
+<div class="container-fluild mx-4">
+    <h1 class="h3 mb-2 text-gray-800">User Management</h1>
+    <p class="mb-4">This is user tables</p>
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2 class="text-white py-2">User List</h2>
-            </div>
-        </div>
-    </div>
-    <div class="card-body p-4">
-        <div class="row pb-3">
-            <div class="col-6">
-            </div>
-            <div class="col-6 text-end">
+<!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">User Data Table</h6>
+            <div class="col-6 d-flex justify-content-end">
                 <a asp-controller="ManageUser" asp-action="Create" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i>  Create New Account
                 </a>
             </div>
         </div>
-
-        <table id="user-table"  class="table table-bordered table-striped" style="overflow-x: auto; width:100%;">
-            <thead>
-                <tr>
-                    <th>First name</th>
-                    <th>Last name</th>
-                    <th>Avatar</th>
-                    <th>Email</th>
-                    <th>Faculty</th>
-                    <th>Role</th>
-                    <th></th
-                </tr>
-            </thead>
-        </table>
+        <div class="card-body">
+            <div class="">
+                <table id="user-table" class="table table-bordered table-hover table-striped" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Avatar</th>
+                            <th>Email</th>
+                            <th>Faculty</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
