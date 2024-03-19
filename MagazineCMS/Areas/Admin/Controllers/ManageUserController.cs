@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MagazineCMS.Areas.Identity.Pages.Account;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MagazineCMS.Areas.Admin.Controllers
 {
@@ -136,6 +137,69 @@ namespace MagazineCMS.Areas.Admin.Controllers
                 user.Role = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
             }
             return Json(new { data = usersList });
+        }
+
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string id)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found" });
+            }
+
+            if (user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.UtcNow)
+            {
+                // User is currently locked and we need to unlock them
+                user.LockoutEnd = null;
+            }
+            else
+            {
+                // User is not locked, so lock them
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(10);
+            }
+
+            var result = _userManager.UpdateAsync(user).Result;
+
+            if (result.Succeeded)
+            {
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Operation Successful" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("User ID is required");
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Delete the user
+            var deleteResult = await _userManager.DeleteAsync(user);
+
+            if (deleteResult.Succeeded)
+            {
+                _unitOfWork.Save();
+                return Ok(new { success = true, message = "User deleted successfully" });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = "Error while deleting user" });
+            }
         }
 
         #endregion

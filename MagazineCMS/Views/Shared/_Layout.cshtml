@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
     <link href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body id="page-top">
 
@@ -40,76 +41,15 @@
 
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                            <i class="fa fa-tachometer" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Admin" asp-controller="ManageUser" asp-action="Index">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage Account</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Admin" asp-controller="ManagePeriod" asp-action="Index">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage Period</span>
-                        </a>
-                    </li>
+                    <partial name="_SidebarAdminPartial" />
                 }
                 @if (User.IsInRole("Manager"))
                 {
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Manager" asp-controller="ManageTopic" asp-action="Index">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage Topic</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Manager" asp-controller="ManageDepartment" asp-action="Index">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage Department</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Manager" asp-controller="ManageAccount" asp-action="Index">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage Account</span>
-                        </a>
-                    </li>
+                    <partial name="_SidebarManagerPartial" />
                 }
                 @if (User.IsInRole("Student"))
                 {
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Student" asp-controller="Home" asp-action="Index">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0">
-
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="Student" asp-controller="Home" asp-action="Privacy">
-                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
-                            <span>Your Post</span>
-                        </a>
-                    </li>
+                    <partial name="_SidebarStudentPartial" />
                 }
 
             </ul>
@@ -164,6 +104,7 @@
 
                 <div class="content">
                     <main role="main" class="pb-3">
+                        <partial name="_NotificationPartial" />
                         @RenderBody()
                     </main>
                 </div>
@@ -241,6 +182,8 @@
 
 <!-- Page level custom scripts -->
 <script src="~/lib/startbootstrap-admin/js/demo/datatables-demo.js"></script>
-@await RenderSectionAsync("Scripts", required: false)
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+@await RenderSectionAsync("Scripts", required: false)
 </html>

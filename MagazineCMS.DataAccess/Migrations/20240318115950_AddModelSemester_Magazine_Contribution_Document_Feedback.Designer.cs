@@ -4,6 +4,7 @@ using MagazineCMS.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318115950_AddModelSemester_Magazine_Contribution_Document_Feedback")]
+    partial class AddModelSemester_Magazine_Contribution_Document_Feedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,17 +58,6 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Contributions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            MagazineId = 1,
-                            Status = "Pending",
-                            SubmissionDate = new DateTime(2024, 3, 18, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6091),
-                            Title = "The Future of AI",
-                            UserId = "StudentID1"
-                        });
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Document", b =>
@@ -92,15 +84,6 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasIndex("ContributionId");
 
                     b.ToTable("Documents");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ContributionId = 1,
-                            DocumentUrl = "~/contributions/StudentID1/File.docx",
-                            Type = "Word"
-                        });
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>
@@ -208,28 +191,6 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasIndex("SemesterId");
 
                     b.ToTable("Magazines");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
-                            EndDate = new DateTime(2024, 3, 25, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6054),
-                            FacultyId = 2,
-                            Name = "Computing Magazine - Spring 2024",
-                            SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 11, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6031)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Welcome",
-                            EndDate = new DateTime(2024, 3, 25, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6060),
-                            FacultyId = 3,
-                            Name = "Business Magazine - Spring 2024",
-                            SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 11, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6059)
-                        });
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Semester", b =>
@@ -516,13 +477,13 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasOne("MagazineCMS.Models.Magazine", "Magazine")
                         .WithMany()
                         .HasForeignKey("MagazineId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Magazine");
