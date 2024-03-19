@@ -41,6 +41,13 @@ body {
     background-color: #ced4da;
 }
 
+.topbar .nav-item .nav-link {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+}
+
 /*-----------------Footer---------------------*/
 /*.footer-form {
     background: #bde0fe;
