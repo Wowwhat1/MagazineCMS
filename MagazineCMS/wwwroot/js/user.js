@@ -23,10 +23,10 @@ function loadDataTable() {
                     if (lockout > today) {
                         return `
                         <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                            <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-lock-fill"></i>  Lock
                             </a> 
-                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </div>
@@ -34,10 +34,10 @@ function loadDataTable() {
                     } else {
                         return `
                         <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                            <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-unlock-fill"></i>  UnLock
                             </a>
-                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </div>
