@@ -15,8 +15,8 @@ function loadDataTable() {
                 "width": "12%",
                 "className": "table-cell",
                 "render": function (data) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    var date = new Date();
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
                 }
             },
             {
@@ -24,8 +24,8 @@ function loadDataTable() {
                 "width": "12%",
                 "className": "table-cell",
                 "render": function (data) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    var date = new Date();
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
                 }
             },
             { "data": "faculty.name", "width": "15%", "className": "table-cell" },
