@@ -14,10 +14,12 @@ namespace MagazineCMS.Areas.Manager.Controllers
     public class ManageTopicController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<ManageTopicController> _logger;
 
-        public ManageTopicController(IUnitOfWork unitOfWork)
+        public ManageTopicController(IUnitOfWork unitOfWork, ILogger<ManageTopicController> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -80,7 +82,62 @@ namespace MagazineCMS.Areas.Manager.Controllers
             }
         }
 
-        private MagazineVM CreateMagazineVM()
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var magazine = _unitOfWork.Magazine.Get(u => u.Id ==id);
+            if (magazine == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new MagazineVM
+            {
+                Magazine = magazine
+            };
+
+            return View(viewModel);
+        }
+
+        // POST: ManageTopic/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate")] Magazine magazine)
+        {
+            if (id != magazine.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _unitOfWork.Magazine.Update(magazine);
+                    _unitOfWork.Save();
+                    TempData["msg"] = "Topic updated successfully.";
+                }
+                catch
+                {
+                    TempData["war"] = "Failed to update topic.";
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            var viewModel = new MagazineVM
+            {
+                Magazine = magazine
+            };
+
+            return View(viewModel);
+        }
+    
+
+    private MagazineVM CreateMagazineVM()
         {
             MagazineVM magazineVM = new MagazineVM()
             {
@@ -116,28 +173,32 @@ namespace MagazineCMS.Areas.Manager.Controllers
             return Json(new { data = magazineList, closedMagazines, openMagazines });
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteMagazine(int id)
+
+        [HttpDelete, ActionName("deleteMagazine")]
+        public IActionResult DeletePOST(int? id)
         {
-
-
-            var magazine = await _unitOfWork.Magazine.GetByIdAsync(id);
-
-            if (magazine == null)
+            _logger.LogError("Error occurred while deleting magazine" + id);
+            try
             {
-                return NotFound("Magazine not found");
-            }
+                if (id == null)
+                {
+                    return BadRequest();
+                }
 
-            // Delete the magazine
-            var deleteResult = await _unitOfWork.Magazine.DeleteAsync(magazine);
+                Magazine obj = _unitOfWork.Magazine.Get(u => u.Id == id);
 
-            if (deleteResult.Succeeded)
-            {
+                if (obj == null)
+                {
+                    return NotFound();
+                }
+
+                _unitOfWork.Magazine.Remove(obj);
                 _unitOfWork.Save();
                 return Ok(new { success = true, message = "Magazine deleted successfully" });
             }
-            else
+            catch (Exception ex)
             {
+
                 return BadRequest(new { success = false, message = "Error while deleting magazine" });
             }
         }

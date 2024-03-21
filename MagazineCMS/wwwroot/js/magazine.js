@@ -31,7 +31,7 @@ function loadDataTable() {
             { "data": "faculty.name", "width": "15%", "className": "table-cell" },
             { "data": "semester.name", "width": "15%", "className": "table-cell" },
             {
-                data: { id: "id", lockoutEnd: "lockoutEnd" },
+                data: { id: "id", update: "update" },
                 "render": function (data) {
                    /* var today = new Date().getTime();
                     var lockout = new Date(data.lockoutEnd).getTime();
@@ -50,9 +50,9 @@ function loadDataTable() {
                     } else {*/
                         return `
                         <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
+                            <button onclick=update('${data.id}') class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-lock-fill"></i>  Edit
-                            </a> 
+                            </button> 
                             <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
@@ -84,6 +84,8 @@ function loadDataTable() {
 
 
 function deleteMagazine(magazineId) {
+    console.log(magazineId);
+    
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -101,8 +103,11 @@ function deleteMagazine(magazineId) {
                     'Content-Type': 'application/json'
                 }
             })
+                
                 .then(response => response.json())
+                
                 .then(data => {
+                    console.log(data);
                     if (data.success) {
                         Swal.fire(
                             'Deleted!',

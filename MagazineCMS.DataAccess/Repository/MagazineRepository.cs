@@ -39,21 +39,6 @@ namespace MagazineCMS.DataAccess.Repository
             }
         }
 
-        public async Task<DeleteResult> DeleteAsync(Magazine magazine)
-        {
-            try
-            {
-                _db.Magazines.Remove(magazine);
-                await _db.SaveChangesAsync();
-                return new DeleteResult { Succeeded = true };
-            }
-            catch (Exception ex)
-            {
-                return new DeleteResult { Succeeded = false, ErrorMessage = $"Error while deleting magazine: {ex.Message}" };
-            }
-        }
-
-
 
     }
 }
