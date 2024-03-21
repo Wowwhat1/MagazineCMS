@@ -13,5 +13,8 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
         void Update(Magazine obj);
 
         Task<IdentityResult> CreateAsync(Magazine magazine);
+        Task<Magazine> GetByIdAsync(int id);
+        Task<DeleteResult> DeleteAsync(Magazine magazine);
+
     }
 }

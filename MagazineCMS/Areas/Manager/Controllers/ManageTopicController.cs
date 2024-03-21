@@ -6,6 +6,7 @@ using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagazineCMS.Areas.Manager.Controllers
 {
@@ -114,6 +115,37 @@ namespace MagazineCMS.Areas.Manager.Controllers
 
             return Json(new { data = magazineList, closedMagazines, openMagazines });
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMagazine(int id)
+        {
+
+
+            var magazine = await _unitOfWork.Magazine.GetByIdAsync(id);
+
+            if (magazine == null)
+            {
+                return NotFound("Magazine not found");
+            }
+
+            // Delete the magazine
+            var deleteResult = await _unitOfWork.Magazine.DeleteAsync(magazine);
+
+            if (deleteResult.Succeeded)
+            {
+                _unitOfWork.Save();
+                return Ok(new { success = true, message = "Magazine deleted successfully" });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = "Error while deleting magazine" });
+            }
+        }
+
+
+
+
+
 
         #endregion
     }

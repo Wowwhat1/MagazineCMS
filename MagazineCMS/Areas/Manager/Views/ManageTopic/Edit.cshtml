@@ -1,0 +1,81 @@
+﻿@model MagazineCMS.Models.ViewModels.MagazineVM
+@{
+    ViewData["Title"] = "Update Topic";
+}
+
+<div class="form-update-topic">
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <h2>Update topic</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h5>Topic</h5>
+                    <div>
+                        <input asp-for="Magazine.Name" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="Magazine.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Description</h5>
+                    <div>
+                        <input asp-for="Magazine.Description" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="Magazine.Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h5>Open date</h5>
+                    <div class="col">
+                        <input asp-for="Magazine.StartDate" class="form-control" aria-required="true" placeholder="" disabled/>
+                        <span asp-validation-for="Magazine.StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Close date</h5>
+                    <div>
+                        <input asp-for="Magazine.EndDate" class="form-control" aria-required="true" placeholder="" disabled/>
+                        <span asp-validation-for="Magazine.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @if (TempData["msg"] != null)
+            {
+                <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <span class="text-success">@TempData["msg"]</span>
+                    </div>
+                </div>
+            }
+            @if (TempData["war"] != null)
+            {
+                <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <span class="text-danger">@TempData["war"]</span>
+                    </div>
+                </div>
+            }
+
+            <div class="row mb-3 justify-content-end">
+                <div class="col-auto">
+                    <button id="update-topic" type="submit" class="btn btn-lg btn-primary">Update Topic</button>
+                </div>
+                <div class="col-auto">
+                    <button id="close-form" type="button" class="btn btn-lg btn-secondary">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
