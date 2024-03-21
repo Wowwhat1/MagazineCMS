@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MagazineCMS.DataAccess.Data;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagazineCMS.DataAccess.Repository
 {
@@ -18,7 +19,6 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db = db;
         }
-
         public void Update(Document obj)
         {
             _db.Documents.Update(obj);

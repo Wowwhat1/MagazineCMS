@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
     font-family: 'Poppins';
     src: url('Poppins-Regular.ttf');
 }
@@ -382,4 +382,5 @@ body {
     .dataTables_paginate {
         margin-top: 1rem;
     }
+
 }

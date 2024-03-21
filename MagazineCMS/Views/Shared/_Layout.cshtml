@@ -51,6 +51,10 @@
                 {
                     <partial name="_SidebarStudentPartial" />
                 }
+                @if (User.IsInRole("Coordinator"))
+                {
+                    <partial name="_SidebarCoordinatorPartial" />
+                }
 
             </ul>
         }

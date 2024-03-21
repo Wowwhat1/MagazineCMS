@@ -1,0 +1,129 @@
+﻿                                
+ @model MagazineCMS.Models.Contribution
+ @using MagazineCMS.Utility
+
+<div class="container-fluid mx-4">
+    <div class="row">
+        <!-- Left content -->
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Contribution")">Contributions</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Details</li>
+                </ol>
+            </nav>
+
+            <h1 class="h2 mb-2 text-gray-800">
+                Contribution Details
+            </h1>
+            <h1>@Model.Title</h1>
+            <p>
+                Status:
+                @if (Model.Status == SD.Status_Pending)
+                {
+                    <span class="badge badge-warning">@Model.Status</span>
+                }
+                else if (Model.Status == SD.Status_Approved)
+                {
+                    <span class="badge badge-success">@Model.Status</span>
+                }
+                else if (Model.Status == SD.Status_Rejected)
+                {
+                    <span class="badge badge-danger">@Model.Status</span>
+                }
+                else if (Model.Status == SD.Status_Submitted)
+                {
+                    <span class="badge badge-primary">@Model.Status</span>
+                }
+            </p>
+            <p>Submission Date: @Model.SubmissionDate</p>
+
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <p class="card-text">Submitted by: @($"{Model.User.Firstname} {Model.User.Lastname}")</p>
+                    <p class="card-text">Magazine: @Model.Magazine.Name</p>
+                    <p class="card-text">
+                        Status:
+                        @if (Model.Status == SD.Status_Pending)
+                        {
+                            <span class="badge badge-warning">@Model.Status</span>
+                        }
+                        else if (Model.Status == SD.Status_Approved)
+                        {
+                            <span class="badge badge-success">@Model.Status</span>
+                        }
+                        else if (Model.Status == SD.Status_Rejected)
+                        {
+                            <span class="badge badge-danger">@Model.Status</span>
+                        }
+                        else if (Model.Status == SD.Status_Submitted)
+                        {
+                            <span class="badge badge-primary">@Model.Status</span>
+                        }
+                    </p>
+                    <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
+                    <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+
+            <hr />
+            <h3>Add Feedback</h3>
+            <form asp-action="AddFeedback" asp-controller="Contribution" method="post">
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                </div>
+                <input type="hidden" name="contributionId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!-- Right side for Feedback and Status update -->
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Status update -->
+                    <h3>Update Status</h3>
+                    <form asp-action="UpdateStatus" asp-controller="Contribution" method="post">
+                        <div class="form-group">
+                            <label for="status">New Status:</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="@SD.Status_Pending">Pending</option>
+                                <option value="@SD.Status_Approved">Approved</option>
+                                <option value="@SD.Status_Rejected">Rejected</option>
+                                <option value="@SD.Status_Submitted">Submitted</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="contributionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+            {
+                <div class="card shadow mt-4">
+                    <div class="card-body">
+                        <h3>All Feedback</h3>
+                        <ul>
+                            @foreach (var feedback in Model.Feedbacks)
+                            {
+                                <li>
+                                    <p>@feedback.Comment</p>
+                                    @if (feedback.User != null)
+                                    {
+                                        <p>Submitted by: @(feedback.User.Firstname) @(feedback.User.Lastname)</p>
+                                    }
+                                    <p>Feedback Date: @feedback.FeedbackDate.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                                    <!-- Add option to reply to feedback if needed -->
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

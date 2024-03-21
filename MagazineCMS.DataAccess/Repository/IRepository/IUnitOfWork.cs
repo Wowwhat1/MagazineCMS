@@ -17,5 +17,7 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
         IFeedbackRepository Feedback { get; }
 
         void Save();
+        Task<int> SaveAsync();
+
     }
 }
