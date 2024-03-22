@@ -10,7 +10,7 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
 {
     public interface IMagazineRepository : IRepository<Magazine>
     {
-        void Update(Magazine obj);
+        void Update(Magazine obj, int Id);
 
         Task<IdentityResult> CreateAsync(Magazine magazine);
 

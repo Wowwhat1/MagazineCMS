@@ -8,6 +8,7 @@ using MagazineCMS.DataAccess.Data;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagazineCMS.DataAccess.Repository
 {
@@ -20,9 +21,13 @@ namespace MagazineCMS.DataAccess.Repository
             _db = db;
         }
 
-        public void Update(Magazine obj)
+        public void Update(Magazine obj, int Id)
         {
-            _db.Magazines.Update(obj);
+            _db.Magazines.Where(m => m.Id == Id).ExecuteUpdate(setter => setter.SetProperty(m => m.Name, obj.Name)
+            .SetProperty(m => m.Description, obj.Description).SetProperty(m => m.StartDate, obj.StartDate)
+            .SetProperty(m => m.EndDate, obj.EndDate)
+            .SetProperty(m => m.FacultyId, obj.FacultyId)
+            .SetProperty(m => m.SemesterId, obj.SemesterId));
         }
 
         public async Task<IdentityResult> CreateAsync(Magazine magazine)

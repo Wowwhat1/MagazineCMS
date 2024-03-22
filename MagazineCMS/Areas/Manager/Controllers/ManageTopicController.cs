@@ -81,8 +81,8 @@ namespace MagazineCMS.Areas.Manager.Controllers
                     $"Ensure that '{nameof(Magazine)}' is not an abstract class and has a parameterless constructor, or alternatively ");
             }
         }
-
-        public IActionResult Edit(int? id)
+        [HttpGet]
+        public IActionResult updateMagazine(int? id)
         {
             if (id == null)
             {
@@ -95,46 +95,71 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 return NotFound();
             }
 
-            var viewModel = new MagazineVM
+            var Magazine = new MagazineVM
             {
-                Magazine = magazine
+                Magazine = magazine,
+                FacultyList = _unitOfWork.Faculty
+                .GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                SemesterList = _unitOfWork.Semester
+                    .GetAll().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }),
             };
 
-            return View(viewModel);
+            return View("Edit",Magazine);
         }
 
-        // POST: ManageTopic/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate")] Magazine magazine)
+        public IActionResult Edit([Bind("Id,Name,Description,StartDate,EndDate,FacultyId,SemesterId")] Magazine magazine)
         {
-            if (id != magazine.Id)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _unitOfWork.Magazine.Update(magazine);
+                    _logger.LogInformation(magazine.Name);
+                    _logger.LogInformation(magazine.Id.ToString());
+                    _unitOfWork.Magazine.Update(magazine,magazine.Id);
                     _unitOfWork.Save();
-                    TempData["msg"] = "Topic updated successfully.";
+                    TempData["Success"] = "Topic updated successfully";
+                    return RedirectToAction("Index");
                 }
                 catch
                 {
-                    TempData["war"] = "Failed to update topic.";
+                    TempData["Error"] = "Failed to update topic.";
+                    return BadRequest(new { success = false, message = "Error while updating magazine" });
                 }
-                return RedirectToAction(nameof(Index));
+               
             }
 
-            var viewModel = new MagazineVM
+            var Magazine = new MagazineVM
             {
-                Magazine = magazine
+                Magazine = _unitOfWork.Magazine.Get(u => u.Id == magazine.Id),
+                FacultyList = _unitOfWork.Faculty
+                .GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                SemesterList = _unitOfWork.Semester
+                    .GetAll().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }),
             };
 
-            return View(viewModel);
+            return View("Index");
         }
+
     
 
     private MagazineVM CreateMagazineVM()

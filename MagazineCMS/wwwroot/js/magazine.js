@@ -31,7 +31,7 @@ function loadDataTable() {
             { "data": "faculty.name", "width": "15%", "className": "table-cell" },
             { "data": "semester.name", "width": "15%", "className": "table-cell" },
             {
-                data: { id: "id", update: "update" },
+                data: { id: "id" },
                 "render": function (data) {
                    /* var today = new Date().getTime();
                     var lockout = new Date(data.lockoutEnd).getTime();
@@ -50,7 +50,7 @@ function loadDataTable() {
                     } else {*/
                         return `
                         <div class="text-center">
-                            <button onclick=update('${data.id}') class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
+                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-lock-fill"></i>  Edit
                             </button> 
                             <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
@@ -82,6 +82,10 @@ function loadDataTable() {
     }
 }
 
+function updateMagazine(magazineId) {
+    console.log(magazineId);
+    location.href = "https://localhost:7276/Manager/ManageTopic/updateMagazine/" + magazineId;
+}
 
 function deleteMagazine(magazineId) {
     console.log(magazineId);
