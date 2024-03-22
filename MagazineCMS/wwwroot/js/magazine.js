@@ -4,28 +4,29 @@ $(document).ready(function () {
     loadDataTable();
 });
 
+//Display table magazine
 function loadDataTable() {
     dataTable = $('#magazine-table').DataTable({
-        "ajax": { url: '/manager/managetopic/getall' },
+        "ajax": { url: '/manager/managemagazine/getall' },
         "columns": [
-            { "data": "name", "width": "20%", "className": "table-cell" },
+            { "data": "name", "width": "25%", "className": "table-cell" },
             { "data": "description", "width": "25%", "className": "table-cell" },
             {
-                "data": "startdate",
+                "data": "startDate",
                 "width": "12%",
                 "className": "table-cell",
                 "render": function (data) {
-                    var date = new Date();
-                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
+                    var date = new Date(data);
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
                 }
             },
             {
-                "data": "enddate",
+                "data": "endDate",
                 "width": "12%",
                 "className": "table-cell",
                 "render": function (data) {
-                    var date = new Date();
-                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
+                    var date = new Date(data);
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
                 }
             },
             { "data": "faculty.name", "width": "15%", "className": "table-cell" },
@@ -36,7 +37,7 @@ function loadDataTable() {
                     
                         return `
                         <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
+                            <a onclick=LockUnlock('${data.id}') class="btn btn-info text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-lock-fill"></i>  Edit
                             </a> 
                             <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
@@ -49,6 +50,22 @@ function loadDataTable() {
                 "className": "table-cell"
             }
         ]
+    });
+
+    $('#SemesterId').change(function () {
+        var semesterId = $(this).val();
+        $.ajax({
+            url: '/manager/managemagazine/getsemester/' + semesterId,
+            method: 'GET',
+            success: function (data) {
+                console.log(data.data);
+                var startDate = new Date(data.data).toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                var endDate = new Date(data.data).toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                $('#startDate').text(startDate);
+                $('#endDate').text(endDate);
+                
+            }
+        });
     });
 
     //CSS to shorten data when it's too long

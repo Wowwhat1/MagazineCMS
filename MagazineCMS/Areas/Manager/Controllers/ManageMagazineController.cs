@@ -6,17 +6,20 @@ using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class ManageTopicController : Controller
+    public class ManageMagazineController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<Magazine> _repository;
 
-        public ManageTopicController(IUnitOfWork unitOfWork)
+        public ManageMagazineController(IUnitOfWork unitOfWork, IRepository<Magazine> repository)
         {
             _unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
         public IActionResult Index()
@@ -32,39 +35,40 @@ namespace MagazineCMS.Areas.Manager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(MagazineVM magazineVM)
+public async Task<IActionResult> Create(MagazineVM magazineVM)
+{
+    if (ModelState.IsValid)
+    {
+        var magazine = CreateMagazine();
+
+        magazine.Name = magazineVM.Magazine.Name;
+        magazine.Description = magazineVM.Magazine.Description;
+        magazine.StartDate = magazineVM.Magazine.StartDate;
+        magazine.EndDate = magazineVM.Magazine.EndDate;
+        magazine.FacultyId = (int)magazineVM.Magazine.FacultyId;
+        magazine.SemesterId = (int)magazineVM.Magazine.SemesterId;
+
+        var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
+
+        if (magazine.StartDate >= semester.StartDate && magazine.EndDate <= semester.EndDate)
         {
-            if (ModelState.IsValid)
-            {
-                var magazine = CreateMagazine();
+            _unitOfWork.Magazine.Add(entity: magazine);
+            _unitOfWork.Save();
 
-                magazine.Name = magazineVM.Magazine.Name;
-                magazine.Description = magazineVM.Magazine.Description;
-                magazine.StartDate = magazineVM.Magazine.StartDate;
-                magazine.EndDate = magazineVM.Magazine.EndDate;
-                magazine.FacultyId = (int)magazineVM.Magazine.FacultyId;
-                magazine.SemesterId = (int)magazineVM.Magazine.SemesterId;
-
-                var result = await _unitOfWork.Magazine.CreateAsync(magazine);
-
-                if (result.Succeeded)
-                {
-                    TempData["Success"] = "Topic created successfully";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            MagazineVM newMagazineVM = CreateMagazineVM();
-            newMagazineVM.Magazine = magazineVM.Magazine;
-            TempData["Error"] = "Error creating magazine";
-            return View(newMagazineVM);
+            TempData["Success"] = "Magazine created successfully";
+            return RedirectToAction("Index");
         }
+        else
+        {
+            ModelState.AddModelError(string.Empty, "The Magazine's StartDate must be greater than the Semester's StartDate and the Magazine's EndDate must be less than the Semester's EndDate.");
+        }
+    }
+
+    MagazineVM newMagazineVM = CreateMagazineVM();
+    newMagazineVM.Magazine = magazineVM.Magazine;
+    TempData["Error"] = "Error creating magazine";
+    return View(newMagazineVM);
+}
 
         private Magazine CreateMagazine()
         {
@@ -113,6 +117,16 @@ namespace MagazineCMS.Areas.Manager.Controllers
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
 
             return Json(new { data = magazineList, closedMagazines, openMagazines });
+        }
+
+        [HttpGet]
+        public IActionResult GetSemester()
+        {
+            List<Semester> semestersList = _unitOfWork.Semester.GetAll().ToList();
+            List<Semester> closedSemester = semestersList.Where(m => m.EndDate <= DateTime.Now).ToList();
+            List<Semester> openSemester = semestersList.Where(m => m.EndDate > DateTime.Now).ToList();
+
+            return Json(new { data = semestersList, closedSemester, openSemester });
         }
 
         #endregion

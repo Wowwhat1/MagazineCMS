@@ -1,20 +1,16 @@
 ﻿@model List<Magazine>
 
-@{
-    ViewData["Title"] = "TopicTable";
-}
-
 <div class="container-fluild mx-4">
-    <h1 class="h3 mb-2 text-gray-800">Topic Management</h1>
-    <p class="mb-4">This is topic tables</p>
+    <h1 class="h3 mb-2 text-gray-800">Magazine Management</h1>
+    <p class="mb-4">This is magazine tables</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Topic Table</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Magazine Table</h6>
             <div class="col-6 d-flex justify-content-end">
-                <a asp-controller="ManageTopic" asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i>  Create New Topic
+                <a asp-controller="ManageMagazine" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>  Create New Magazine
                 </a>
             </div>
         </div>

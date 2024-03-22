@@ -24,19 +24,5 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db.Magazines.Update(obj);
         }
-
-        public async Task<IdentityResult> CreateAsync(Magazine magazine)
-        {
-            try
-            {
-                _db.Magazines.Add(magazine);
-                await _db.SaveChangesAsync();
-                return IdentityResult.Success;
-            }
-            catch (Exception ex)
-            {
-                return IdentityResult.Failed(new IdentityError { Description = $"Error while creating magazine: {ex.Message}" });
-            }
-        }
     }
 }
