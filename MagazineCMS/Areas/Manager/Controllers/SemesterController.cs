@@ -21,13 +21,13 @@ namespace MagazineCMS.Areas.Manager.Controllers
         }
 
 
-        #region API CALL
+        #region API CALLS
 
         [HttpGet]
         public IActionResult GetAll()
         {
             List<Semester> semesterList = _unitOfWork.Semester.GetAll().ToList();
-            return Json(new { semesterList });
+            return Json(new { data = semesterList });
         }
 
         #endregion
