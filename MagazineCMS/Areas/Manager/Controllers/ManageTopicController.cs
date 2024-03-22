@@ -15,11 +15,13 @@ namespace MagazineCMS.Areas.Manager.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ManageTopicController> _logger;
+        //private readonly IRepository<Magazine> _repository;
 
         public ManageTopicController(IUnitOfWork unitOfWork, ILogger<ManageTopicController> logger)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            //_repository = repository;
         }
 
         public IActionResult Index()
@@ -127,7 +129,6 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 {
                     _logger.LogInformation(magazine.Name);
                     _logger.LogInformation(magazine.Id.ToString());
-                    _unitOfWork.Magazine.Update(magazine,magazine.Id);
                     _unitOfWork.Save();
                     TempData["Success"] = "Topic updated successfully";
                     return RedirectToAction("Index");
