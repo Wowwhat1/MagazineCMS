@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MagazineCMS.DataAccess.Data;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MagazineCMS.DataAccess.Repository
 {
@@ -22,6 +23,20 @@ namespace MagazineCMS.DataAccess.Repository
         public void Update(Magazine obj)
         {
             _db.Magazines.Update(obj);
+        }
+
+        public async Task<IdentityResult> CreateAsync(Magazine magazine)
+        {
+            try
+            {
+                _db.Magazines.Add(magazine);
+                await _db.SaveChangesAsync();
+                return IdentityResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = $"Error while creating magazine: {ex.Message}" });
+            }
         }
     }
 }
