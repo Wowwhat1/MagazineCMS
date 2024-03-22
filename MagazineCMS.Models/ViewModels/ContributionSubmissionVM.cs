@@ -13,7 +13,6 @@ namespace MagazineCMS.Models.ViewModels
     {
         [Required(ErrorMessage = "Please select at least one file.")]
         [Display(Name = "Files")]
-        [ValidateNever]
         public List<IFormFile> Files { get; set; }
     }
 }

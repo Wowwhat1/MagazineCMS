@@ -39,12 +39,53 @@ namespace MagazineCMS.Areas.Student.Controllers
 
         public IActionResult Details(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var magazine = _unitOfWork.Magazine.Get(x => x.Id == id, includeProperties: "Faculty,Semester");
-            return View(magazine);
+            // Fetch conmodel: tribution history for the current user and selected magazine
+            var contributions = _unitOfWork.Contribution.GetAll(
+                filter: c => c.UserId == userId && c.MagazineId == id,
+                includeProperties: "Documents");
+
+            // Pass both magazine and contributions to the view
+            var tuple = new Tuple<Magazine, IEnumerable<Contribution>>(magazine, contributions);
+            return View(tuple);
         }
 
+        //[HttpPost]
+        //public IActionResult UpdateContribution(int contributionId)
+        //{
+        //    try
+        //    {
+        //        // Retrieve the contribution from the database
+        //        var contribution = _unitOfWork.Contribution.Get(contributionId);
+
+        //        // Check if the contribution exists
+        //        if (contribution == null)
+        //        {
+        //            TempData["Error"] = "Contribution not found.";
+        //            return RedirectToAction("Index");
+        //        }
+
+        //        // Perform the update operation (example: changing status from "Pending" to "Approved")
+        //        contribution.Status = "Approved"; // Change this according to your update logic
+
+        //        // Update the contribution in the database
+        //        _unitOfWork.Contribution.Update(contribution);
+        //        _unitOfWork.Save();
+
+        //        TempData["Success"] = "Contribution updated successfully.";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["Error"] = $"An error occurred while updating the contribution: {ex.Message}";
+        //    }
+
+        //    return RedirectToAction("Index");
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model)
+        public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model, int magazineId)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +115,36 @@ namespace MagazineCMS.Areas.Student.Controllers
                         {
                             await file.CopyToAsync(stream);
                         }
+
+                        var contribution = new Contribution
+                        {
+                            Title = fileName, // Set the title to the file name for now
+                            Status = "Pending", // Set the status to pending
+                            SubmissionDate = DateTime.Now,
+                            UserId = userId,
+                            MagazineId = magazineId 
+                        };
+
+                        // Add the contribution to the database context
+                        _unitOfWork.Contribution.Add(contribution);
+
+                        // Save changes to the database
+                        _unitOfWork.Save();
+
+                        // Create a new Document entity
+                        var document = new Document
+                        {
+                            Type = "Uploaded",
+                            DocumentUrl = fileName,
+                            // Set ContributionId to the Id of the contribution being submitted
+                            ContributionId = contribution.Id
+                        };
+
+                        // Add the document to the database context
+                        _unitOfWork.Document.Add(document);
+
+                        // Save changes to the database
+                        _unitOfWork.Save();
                     }
 
                     TempData["Success"] = "Documents uploaded successfully.";
