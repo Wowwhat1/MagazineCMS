@@ -35,5 +35,9 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db.SaveChanges();
         }
+        public async Task<int> SaveAsync()
+        {
+            return await _db.SaveChangesAsync();
+        }
     }
 }
