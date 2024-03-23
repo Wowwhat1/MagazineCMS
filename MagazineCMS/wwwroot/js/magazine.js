@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $('#magazine-table').DataTable({
-        "ajax": { url: '/manager/managetopic/getall' },
+        "ajax": { url: '/manager/managemagazine/getall' },
         "columns": [
             { "data": "name", "width": "20%", "className": "table-cell" },
             { "data": "description", "width": "25%", "className": "table-cell" },
@@ -84,7 +84,7 @@ function loadDataTable() {
 
 function updateMagazine(magazineId) {
     console.log(magazineId);
-    location.href = "https://localhost:7276/Manager/ManageTopic/updateMagazine/" + magazineId;
+    location.href = "https://localhost:7276/Manager/ManageMagazine/updateMagazine/" + magazineId;
 }
 
 function deleteMagazine(magazineId) {
@@ -101,7 +101,7 @@ function deleteMagazine(magazineId) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request on confirmation
-            fetch(`/manager/managetopic/deleteMagazine/${magazineId}`, {
+            fetch(`/manager/managemagazine/deleteMagazine/${magazineId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

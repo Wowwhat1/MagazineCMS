@@ -12,8 +12,5 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     {
         void Update(Magazine obj);
 
-        Task<IdentityResult> CreateAsync(Magazine magazine);
-
-
     }
 }

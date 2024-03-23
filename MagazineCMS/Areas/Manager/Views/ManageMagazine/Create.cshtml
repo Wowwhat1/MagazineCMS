@@ -15,15 +15,15 @@
                 <div class="col">
                     <h5>Topic</h5>
                     <div>
-                        <input asp-for="Magazine.Name" class="form-control" aria-required="true" placeholder="" />
-                        <span asp-validation-for="Magazine.Name" class="text-danger"></span>
+                        <input asp-for="@Model.Magazine.Name" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col">
                     <h5>Description</h5>
                     <div>
-                        <input asp-for="Magazine.Description" class="form-control" aria-required="true" placeholder="" />
-                        <span asp-validation-for="Magazine.Description" class="text-danger"></span>
+                        <input asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -32,15 +32,15 @@
                 <div class="col">
                     <h5>Open date</h5>
                     <div class="col">
-                        <input asp-for="Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
-                        <span asp-validation-for="Magazine.StartDate" class="text-danger"></span>
+                        <input asp-for="@Model.Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.StartDate" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col">
                     <h5>Close date</h5>
                     <div>
-                        <input asp-for="Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
-                        <span asp-validation-for="Magazine.EndDate" class="text-danger"></span>
+                        <input asp-for="@Model.Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.EndDate" class="text-danger"></span>
                     </div>
                 </div>
             </div>

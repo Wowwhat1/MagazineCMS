@@ -11,17 +11,13 @@ using Microsoft.EntityFrameworkCore;
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class ManageTopicController : Controller
+    public class ManageMagazineController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<ManageTopicController> _logger;
-        //private readonly IRepository<Magazine> _repository;
 
-        public ManageTopicController(IUnitOfWork unitOfWork, ILogger<ManageTopicController> logger)
+        public ManageMagazineController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _logger = logger;
-            //_repository = repository;
         }
 
         public IActionResult Index()
@@ -50,20 +46,21 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 magazine.FacultyId = (int)magazineVM.Magazine.FacultyId;
                 magazine.SemesterId = (int)magazineVM.Magazine.SemesterId;
 
-                var result = await _unitOfWork.Magazine.CreateAsync(magazine);
+                var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
 
-                if (result.Succeeded)
+                if (magazine.StartDate >= semester.StartDate && magazine.EndDate <= semester.EndDate)
                 {
-                    TempData["Success"] = "Topic created successfully";
+                    _unitOfWork.Magazine.Add(entity: magazine);
+                    _unitOfWork.Save();
+
+                    TempData["Success"] = "Magazine created successfully";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    ModelState.AddModelError(string.Empty, "The Magazine's StartDate must be greater than the Semester's StartDate and the Magazine's EndDate must be less than the Semester's EndDate.");
                 }
+
             }
             MagazineVM newMagazineVM = CreateMagazineVM();
             newMagazineVM.Magazine = magazineVM.Magazine;
@@ -127,15 +124,14 @@ namespace MagazineCMS.Areas.Manager.Controllers
             {
                 try
                 {
-                    _logger.LogInformation(magazine.Name);
-                    _logger.LogInformation(magazine.Id.ToString());
+                    _unitOfWork.Magazine.Update(magazine);
                     _unitOfWork.Save();
-                    TempData["Success"] = "Topic updated successfully";
+                    TempData["Success"] = "Magazine updated successfully";
                     return RedirectToAction("Index");
                 }
                 catch
                 {
-                    TempData["Error"] = "Failed to update topic.";
+                    TempData["Error"] = "Failed to update magazine.";
                     return BadRequest(new { success = false, message = "Error while updating magazine" });
                 }
                
@@ -203,7 +199,7 @@ namespace MagazineCMS.Areas.Manager.Controllers
         [HttpDelete, ActionName("deleteMagazine")]
         public IActionResult DeletePOST(int? id)
         {
-            _logger.LogError("Error occurred while deleting magazine" + id);
+            //_logger.LogError("Error occurred while deleting magazine" + id);
             try
             {
                 if (id == null)
