@@ -31,5 +31,6 @@ namespace MagazineCMS.Models
 
         [ValidateNever]
         public List<Document> Documents { get; set; }
+        public List<Feedback> Feedbacks { get; set; }
     }
 }
