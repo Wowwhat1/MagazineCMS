@@ -52,19 +52,20 @@ function loadDataTable() {
         ]
     });
 
-    $('#SemesterId').change(function () {
-        var semesterId = $(this).val();
-        $.ajax({
-            url: '/manager/managemagazine/getsemester/' + semesterId,
-            method: 'GET',
-            success: function (data) {
-                console.log(data.data);
-                var startDate = new Date(data.data).toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
-                var endDate = new Date(data.data).toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
-                $('#startDate').text(startDate);
-                $('#endDate').text(endDate);
-                
-            }
+    $(document).ready(function () {
+        $('#SemesterId').change(function () {
+            var semesterId = $(this).val();
+            $.ajax({
+                url: '/manager/managemagazine/getsemester',
+                type: 'GET',
+                success: function (data) {
+                    var semester = data.data.find(s => s.id == semesterId);
+                    if (semester) {
+                        $('#startDate').text(semester.startDate.substring(0, 10));
+                        $('#endDate').text(semester.endDate.substring(0, 10));
+                    }
+                }
+            });
         });
     });
 
