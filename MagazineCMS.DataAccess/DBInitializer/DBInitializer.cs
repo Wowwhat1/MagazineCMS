@@ -153,7 +153,7 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 };
 
                 _db.Magazines.AddRange(magazines);
-                _db.SaveChanges();
+                    _db.SaveChanges();
             }
 
             if (!_db.Contributions.Any())

@@ -1,0 +1,38 @@
+﻿@model List<MagazineCMS.Models.Contribution>
+
+<div class="container-fluid mx-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contributions</li>
+        </ol>
+    </nav>
+
+    <h1 class="h2 mb-4 text-gray-800">List of Contributions</h1>
+
+    @if (Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var contribution in Model)
+            {
+                <div class="col">
+                    <a href="@Url.Action("Details", "Contribution", new { id = contribution.Id })" class="text-decoration-none">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">@contribution.Title</h5>
+                                <p class="card-text mb-0"><strong>Submitted by:</strong> @($"{contribution.User.Firstname} {contribution.User.Lastname}")</p>
+                                <p class="card-text mb-0"><strong>Magazine:</strong> @contribution.Magazine.Name</p>
+                                <p class="card-text mb-0"><strong>Status:</strong> @contribution.Status</p>
+                                <p class="card-text"><strong>Submission Date:</strong> @contribution.SubmissionDate.ToShortDateString()</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No contributions found.</p>
+    }
+</div>
