@@ -13,18 +13,7 @@ namespace MagazineCMS.Models.ViewModels
     public class MagazineVM
     {
         public Magazine Magazine { get; set; }
-        [Required]
-        [ValidateNever]
-        public string Name { get; set; }
-        [Required]
-        [ValidateNever]
-        public string Description { get; set; }
-        [Required]
-        [ValidateNever]
-        public DateTime StartDate { get; set; }
-        [Required]
-        [ValidateNever]
-        public DateTime EndDate { get; set; }
+
         [ValidateNever]
         public IEnumerable<SelectListItem> FacultyList { get; set; }
         [ValidateNever]
