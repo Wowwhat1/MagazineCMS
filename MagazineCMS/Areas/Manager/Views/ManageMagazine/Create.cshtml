@@ -1,0 +1,82 @@
+﻿@model MagazineCMS.Models.ViewModels.MagazineVM
+@{
+    ViewData["Title"] = "Add Topic";
+}
+
+
+<div class="form-create-account">
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <h2>Add topic</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h5>Topic</h5>
+                    <div>
+                        <input asp-for="@Model.Magazine.Name" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Description</h5>
+                    <div>
+                        <input asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h5>Open date</h5>
+                    <div class="col">
+                        <input asp-for="@Model.Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Close date</h5>
+                    <div>
+                        <input asp-for="@Model.Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
+                        <span asp-validation-for="@Model.Magazine.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h5>Faculty</h5>
+                    <div class="input-group mb-3">
+                        <select asp-for="@Model.Magazine.FacultyId" asp-items="@Model.FacultyList" class="form-select border-0 shadow">
+                            <option disabled selected>--Select Faculty--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Semester</h5>
+                    <div class="input-group mb-3">
+                        <select asp-for="@Model.Magazine.SemesterId" asp-items="@Model.SemesterList" class="form-select border-0 shadow">
+                            <option disabled selected>--Select Semester--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3 justify-content-end">
+                <div class="col-auto">
+                    <button id="create-topic" type="submit" class="btn btn-lg btn-primary">Create Topic</button>
+                </div>
+                <div class="col-auto">
+                    <button id="close-form" type="button" class="btn btn-lg btn-secondary">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

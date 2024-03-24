@@ -1,47 +1,50 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using MagazineCMS.Areas.Identity.Pages.Account.Manage
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
+    @if (SignInManager.IsSignedIn(User))
+    {
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.Identity.Name</span>
-                @* @if (!string.IsNullOrEmpty(Model.Input.AvatarUrl))
+
+                @* @if (!string.IsNullOrEmpty(User.))
                 {
-                    <img class="img-profile rounded-circle" src="@Model.Input.AvatarUrl">
+                    <img src="@User.AvatarUrl" class="rounded-circle" alt="User Avatar" />
                 }
                 else
                 { *@
                     <i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i>
                 @* } *@
-                
+
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
-                
-                    <a id="manage" class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                        <i class="fa fa-user fa-2x" aria-hidden="true"></i> User
-                    </a>
+
+                <a id="manage" class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                    <i class="fa fa-user fa-lg" aria-hidden="true"></i> <p style="padding-left: 14px; padding-top: 15px;">User</p>
+                </a>
                 <div class="dropdown-divider"></div>
-                    <a id="manage" class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i> Logout
-                    </a>
+                <a id="manage" class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> <p style="padding-left: 10px; padding-top: 15px;">Logout</p>
+                </a>
             </div>
         </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+
 </ul>

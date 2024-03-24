@@ -5,44 +5,60 @@ $(document).ready(function () {
 });
 
 function loadDataTable() {
-    dataTable = $('#user-table').DataTable({
-        "ajax": { url: '/admin/manageuser/getall' },
+    dataTable = $('#magazine-table').DataTable({
+        "ajax": { url: '/manager/managemagazine/getall' },
         "columns": [
-            { "data": "firstname", "width": "15%", "className": "table-cell" },
-            { "data": "lastname", "width": "15%", "className": "table-cell" },
-            { "data": "avatarUrl", "width": "15%", "className": "table-cell" },
-            { "data": "email", "width": "10%", "className": "table-cell" },
-            { "data": "faculty.name", "width": "10%", "className": "table-cell" },
-            { "data": "role", "width": "5%", "className": "table-cell" },
+            { "data": "name", "width": "20%", "className": "table-cell" },
+            { "data": "description", "width": "25%", "className": "table-cell" },
             {
-                data: { id: "id", lockoutEnd: "lockoutEnd" },
+                "data": "startdate",
+                "width": "12%",
+                "className": "table-cell",
                 "render": function (data) {
-                    var today = new Date().getTime();
+                    var date = new Date();
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
+                }
+            },
+            {
+                "data": "enddate",
+                "width": "12%",
+                "className": "table-cell",
+                "render": function (data) {
+                    var date = new Date();
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit'});
+                }
+            },
+            { "data": "faculty.name", "width": "15%", "className": "table-cell" },
+            { "data": "semester.name", "width": "15%", "className": "table-cell" },
+            {
+                data: { id: "id" },
+                "render": function (data) {
+                   /* var today = new Date().getTime();
                     var lockout = new Date(data.lockoutEnd).getTime();
 
                     if (lockout > today) {
                         return `
                         <div class="text-center">
                             <a onclick=LockUnlock('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-lock-fill"></i>  Lock
+                                <i class="bi bi-lock-fill"></i>  Edit
                             </a> 
-                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
+                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </div>
                     `;
-                    } else {
+                    } else {*/
                         return `
                         <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-success text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-unlock-fill"></i>  UnLock
-                            </a>
-                            <button onclick=deleteUser('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
+                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
+                                <i class="bi bi-lock-fill"></i>  Edit
+                            </button> 
+                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </div>
                     `;
-                    }
+                    //}
                 },
                 "width": "10%",
                 "className": "table-cell"
@@ -66,36 +82,14 @@ function loadDataTable() {
     }
 }
 
-function LockUnlock(id) {
-    // Display SweetAlert confirmation dialog
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'You are about to perform this action.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, proceed!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // User confirmed, make the AJAX call
-            $.ajax({
-                type: "POST",
-                url: '/Admin/ManageUser/LockUnlock',
-                data: JSON.stringify(id),
-                contentType: "application/json",
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        dataTable.ajax.reload();
-                    }
-                }
-            });
-        }
-    });
+function updateMagazine(magazineId) {
+    console.log(magazineId);
+    location.href = "https://localhost:7276/Manager/ManageMagazine/updateMagazine/" + magazineId;
 }
 
-function deleteUser(userId) {
+function deleteMagazine(magazineId) {
+    console.log(magazineId);
+    
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -107,14 +101,17 @@ function deleteUser(userId) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request on confirmation
-            fetch(`/admin/manageuser/deleteUser/${userId}`, {
+            fetch(`/manager/managemagazine/deleteMagazine/${magazineId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
+                
                 .then(response => response.json())
+                
                 .then(data => {
+                    console.log(data);
                     if (data.success) {
                         Swal.fire(
                             'Deleted!',

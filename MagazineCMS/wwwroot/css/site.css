@@ -41,6 +41,13 @@ body {
     background-color: #ced4da;
 }
 
+.topbar .nav-item .nav-link {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+}
+
 /*-----------------Footer---------------------*/
 /*.footer-form {
     background: #bde0fe;
@@ -374,82 +381,5 @@ body {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-
-    .dataTables_filter {
-        display: flex !important;
-        justify-content: flex-end !important;
-    }
-    .dataTables_paginate {
-        margin-top: 1rem;
-    }
 }
-
-/*----------------Faculty Form------------------*/
-
-
-/* Table Style */
-    .table-container {
-        font-family: Arial, sans-serif;
-        border-collapse: collapse;
-        width: 80%;
-        border: 1px solid #dddddd;
-        border-radius: 8px;
-        overflow: hidden;
-        margin: 0 auto; 
-    }
-
-    .table-container th, .table-container td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #dddddd;
-    }
-
-    .table-container th {
-        background-color: #f2f2f2;
-    }
-
-    .table-container tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    .table-container tbody tr:hover {
-        background-color: #f2f2f2;
-    }
-
-    .table-container th:last-child, .table-container td:last-child {
-        text-align: center;
-    }
-
-    .btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .btn-info {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .btn-info:hover {
-        background-color: #45a049;
-    }
-
-    .btn-danger {
-        background-color: #f44336;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background-color: #d32f2f;
-    }
-
-    .btn-primary {
-        background-color: #2196F3;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #1e87dc;
-    }
+  

@@ -1,0 +1,43 @@
+﻿@model List<Magazine>
+
+@{
+    ViewData["Title"] = "TopicTable";
+}
+
+<div class="container-fluild mx-4">
+    <h1 class="h3 mb-2 text-gray-800">Topic Management</h1>
+    <p class="mb-4">This is topic tables</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Topic Table</h6>
+            <div class="col-6 d-flex justify-content-end">
+                <a asp-controller="ManageMagazine" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>  Create New Topic
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="">
+                <table id="magazine-table" class="table table-bordered table-hover table-striped" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Faculty</th>
+                            <th>Semester</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/magazine.js"></script>
+}
