@@ -25,6 +25,13 @@ namespace MagazineCMS.Areas.Manager.Controllers
         #region API CALLS
 
         [HttpGet]
+        public IActionResult GetById(int id)
+        {
+            Semester semester = _unitOfWork.Semester.Get(s=> s.Id == id);
+            return Json(new { data = semester });
+        }
+
+        [HttpGet]
         public IActionResult GetAll()
         {
             List<Semester> semesterList = _unitOfWork.Semester.GetAll().ToList();
@@ -51,6 +58,25 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 return View(semester);
             }
             return View(semester);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteById(int id)
+        {
+            Semester semester = _unitOfWork.Semester.Get(s => s.Id == id);
+            Magazine canDelete = _unitOfWork.Magazine.Get(Magazine => Magazine.SemesterId == id);
+            if (semester == null)
+            {
+                return BadRequest(new { success = false, message = "Error while deleting semester" });
+            }
+            else if (canDelete != null)
+            {
+                return BadRequest(new { success = false, message = "The Semester is being used by a magazine" });
+            }
+            _unitOfWork.Semester.Remove(semester);
+            _unitOfWork.Save();
+            return Ok(new { success = true, message = "Delete semester: \"" + semester.Name + "\" successful" });
+
         }
 
         #endregion

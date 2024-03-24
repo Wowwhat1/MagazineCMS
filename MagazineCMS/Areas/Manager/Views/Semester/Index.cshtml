@@ -4,20 +4,15 @@
 
      <!-- Page Heading -->
      <h1 class="h3 mb-2 text-gray-800">Semester Tables</h1>
-     <p class="mb-4">
-         DataTables is a third party plugin that is used to generate the demo table below.
-         For more information about DataTables, please visit the <a target="_blank"
-                                                                    href="https://datatables.net">official DataTables documentation</a>.
-     </p>
 
-     <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    <button type="button" class="btn btn-outline-primary my-4 btn-lg" data-toggle="modal" data-target="#modalCenter">
         Create Semester
-     </button>
+    </button>
 
      <!-- DataTales Example -->
      <div class="card shadow mb-4">
          <div class="card-header py-3">
-             <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
          </div>
          <div class="card-body">
              <div class="table-responsive">
@@ -39,12 +34,20 @@
  </div>
  <!-- /.container-fluid -->
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <form id="createSemesterForm" method="post">
+        <form id="semesterForm" method="post">
+        <input asp-for="Id" id="semesterId" class="form-control" aria-required="true" placeholder="" type="hidden"/>
         <div class="modal-content" style="width: 550px">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Create Semester</h5>
+                @if(Model?.Id != 0)
+                {
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Semester</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Create Semester</h5>
+                }
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -54,8 +57,8 @@
                     <div class="col">
                         <h5>Name</h5>
                         <div>
-                            <input asp-for="Name" id="name" class="form-control" aria-required="true" placeholder="" />
-                            <span asp-validation-for="Name" id="nameValidation" class="text-danger"></span>
+                            <input asp-for="Name" id="semesterName" class="form-control" aria-required="true" placeholder="" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -63,13 +66,13 @@
                     <div class="row">
                             <div class="col" style="margin-left: 12px;">
                                 <h5>Open date</h5>
-                                <input asp-for="StartDate" id="startDate" class="form-control" aria-required="true" placeholder="" style="width: 230px" />
-                                <span asp-validation-for="StartDate" id="startDateValidation" class="text-danger"></span>
+                                <input asp-for="StartDate" id="semesterStartDate" class="form-control" aria-required="true" placeholder="" style="width: 230px" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
                             </div>
                             <div class="col">
                                 <h5>Close date</h5>
-                                <input asp-for="EndDate" id="endDate" class="form-control" aria-required="true" placeholder="" style="width: 230px" />
-                                <span asp-validation-for="EndDate" id="endDateValidation" class="text-danger"></span>
+                                <input asp-for="EndDate" id="semesterEndDate" class="form-control" aria-required="true" placeholder="" style="width: 230px" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
                             </div>
                     </div>
                 </div>
@@ -85,5 +88,5 @@
 
  @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-     <script src="~/js/semester.js"></script>
+    <script src="~/js/semester.js"></script>
  }
