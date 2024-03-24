@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace MagazineCMS.Areas.Coordinator.Controllers
@@ -15,18 +16,20 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ContributionController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment)
+        public ContributionController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
             var contributions = _unitOfWork.Contribution.GetAll(includeProperties: "User,Magazine").ToList();
             return View(contributions);
         }
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var contribution = _unitOfWork.Contribution.Get(x => x.Id == id, includeProperties: "User,Magazine,Documents,Feedbacks");
             var listDocument = _unitOfWork.Document.GetAll(d => d.ContributionId == contribution.Id
@@ -36,8 +39,13 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             contribution.Feedbacks = _unitOfWork.Feedback.GetAll(f => f.ContributionId == id).ToList();
             foreach (var feedback in contribution.Feedbacks)
             {
-                feedback.User = _unitOfWork.User.Get(u => u.Id == feedback.UserId);
+                var user = await _userManager.FindByIdAsync(feedback.UserId);
+                if (user != null)
+                {
+                    feedback.User = new User { UserName = user.UserName };
+                }
             }
+
             return View(contribution);
         }
 
@@ -77,10 +85,11 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     var documents = new List<Document>();
 
                     // Save each file in the user's folder and database
+                    // Save each file in the user's folder and database
                     foreach (var file in model.Files)
                     {
                         // Generate a unique file name
-                        var fileName = $"{Guid.NewGuid().ToString()}_{file.FileName}";
+                        var fileName = $"{Path.GetFileName(file.FileName)}";
 
                         // Combine the user's folder path with the file name
                         var filePath = Path.Combine(userFolderPath, fileName);
@@ -101,6 +110,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                         // Add the document to the list
                         documents.Add(document);
                     }
+
 
                     // Save documents to the database
                     foreach (var document in documents)
@@ -129,6 +139,27 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult DownloadDocument(int documentId)
+        {
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
+            {
+                // Lấy đường dẫn tệp
+                var filePath = document.DocumentUrl;
+
+                // Kiểm tra xem tệp tồn tại trước khi tải xuống
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Trả về tệp để tải xuống
+                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    var fileName = Path.GetFileName(filePath);
+                    return File(fileBytes, "application/octet-stream", fileName);
+                }
+            }
+            // Nếu không tìm thấy tệp, trả về NotFound
+            return NotFound();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddFeedback(FeedbackVM feedbackVM)

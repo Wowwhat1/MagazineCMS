@@ -22,25 +22,7 @@
             </h1>
             <h1>@Model.Title</h1>
             <!-- Hiển thị trạng thái và ngày nộp -->
-            <p>
-                Status:
-                @if (Model.Status == SD.Status_Pending)
-                {
-                    <span class="badge badge-warning">@Model.Status</span>
-                }
-                else if (Model.Status == SD.Status_Approved)
-                {
-                    <span class="badge badge-success">@Model.Status</span>
-                }
-                else if (Model.Status == SD.Status_Rejected)
-                {
-                    <span class="badge badge-danger">@Model.Status</span>
-                }
-                else if (Model.Status == SD.Status_Submitted)
-                {
-                    <span class="badge badge-primary">@Model.Status</span>
-                }
-            </p>
+
             <p>Submission Date: @Model.SubmissionDate</p>
 
             <!-- Hiển thị thông tin của đóng góp -->
@@ -51,11 +33,7 @@
                     <p class="card-text">Magazine: @Model.Magazine.Name</p>
                     <p class="card-text">
                         Status:
-                        @if (Model.Status == SD.Status_Pending)
-                        {
-                            <span class="badge badge-warning">@Model.Status</span>
-                        }
-                        else if (Model.Status == SD.Status_Approved)
+                        @if (Model.Status == SD.Status_Approved)
                         {
                             <span class="badge badge-success">@Model.Status</span>
                         }
@@ -63,25 +41,33 @@
                         {
                             <span class="badge badge-danger">@Model.Status</span>
                         }
-                        else if (Model.Status == SD.Status_Submitted)
-                        {
-                            <span class="badge badge-primary">@Model.Status</span>
-                        }
                     </p>
                     <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
                     <p class="card-text">Descriptions: @Model.Magazine.Description</p>
                     @if (Model.Documents != null && Model.Documents.Any())
                     {
-                        <h6>File Submissions:</h6>
-                        <ul>
-                            @foreach (var document in Model.Documents)
-                            {
-                                <li>
-                                    <span>@Model.User.Firstname @Model.User.Lastname:</span> <a href="@Url.Content(document.DocumentUrl)" target="_blank">@document.DocumentUrl</a>
-                                </li>
-                            }
-                        </ul>
+                        <div class="card shadow mt-4">
+                            <div class="card-body">
+                                <h3>File Submissions: </h3>
+                                <ul>
+                                    @foreach (var document in Model.Documents)
+                                    {
+                                        <li>
+                                            <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
+                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                            {
+                                                <span>@Model.User.Firstname @Model.User.Lastname:</span>
+                                                <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                </a>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
                     }
+
 
                     <!-- Nút quay lại danh sách -->
                     <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
@@ -89,24 +75,83 @@
             </div>
 
             <!-- Hiển thị danh sách các tệp đã được tải lên -->
+            <!-- Hiển thị danh sách các tệp đã được tải lên -->
             @if (Model.Documents != null && Model.Documents.Any())
             {
                 <div class="card shadow mt-4">
                     <div class="card-body">
-                        <h3>Uploaded Documents</h3>
+                        <p>
+                            Status:
+                            @if (Model.Status == SD.Status_Approved)
+                            {
+                                <span class="badge badge-success">@Model.Status</span>
+                            }
+                            else if (Model.Status == SD.Status_Rejected)
+                            {
+                                <span class="badge badge-danger">@Model.Status</span>
+                            }
+                        </p>
+                        <h3>Annotate:</h3>
                         <ul>
                             @foreach (var document in Model.Documents)
                             {
                                 <li>
-                                    <!-- Hiển thị tên tệp và tạo liên kết để tải xuống -->
-                                    <a href="@Url.Content(document.DocumentUrl)" target="_blank">@document.DocumentUrl</a>
+                                    <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
+                                    @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                    {
+                                        <span>@Model.User.Firstname @Model.User.Lastname:</span>
+                                        <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                            @System.IO.Path.GetFileName(document.DocumentUrl)
+                                        </a>
+                                    }
                                 </li>
                             }
-
                         </ul>
+
+                        <p>
+                            Graded by:
+
+                            @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+                            {
+                                @foreach (var feedback in Model.Feedbacks)
+                                {
+
+                                    <span>@feedback.User.UserName</span>
+
+                                    <br />
+
+                                }
+                            }
+                            else
+                            {
+                            <p>No graded.</p>
+                            }
+                        </p>
+                        <h3>Feedbacks</h3>
+
+                        @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var feedback in Model.Feedbacks)
+                                {
+                                    <li class="list-group-item">
+                                        <div style="white-space: pre-line;">
+                                            <span class="font-weight-bold">Comment:</span> <span>@feedback.Comment</span><br />
+                                            <span class="float-right">@feedback.FeedbackDate.ToString("HH:mm dd/MM/yyyy")</span>
+
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>No feedback available.</p>
+                        }
                     </div>
                 </div>
             }
+
         </div>
 
         <!-- Right side for Feedback and Status update -->
@@ -119,10 +164,8 @@
                         <div class="form-group">
                             <label for="status">New Status:</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="@SD.Status_Pending">Pending</option>
                                 <option value="@SD.Status_Approved">Approved</option>
                                 <option value="@SD.Status_Rejected">Rejected</option>
-                                <option value="@SD.Status_Submitted">Submitted</option>
                             </select>
                         </div>
                         <input type="hidden" name="contributionId" value="@Model.Id" />
@@ -156,35 +199,8 @@
                     </form>
                 </div>
             </div>
-            <div class="card shadow mt-4">
-                <div class="card-body">
-                    <h3>Feedbacks</h3>
-
-                    @if (Model.Feedbacks != null && Model.Feedbacks.Any())
-                    {
-                        <ul class="list-group">
-                            @foreach (var feedback in Model.Feedbacks)
-                            {
-                                <li class="list-group-item">
-                                    <div>
-                                        <span class="font-weight-bold">User ID:</span> <span>@feedback.UserId</span><br />
-                                        <span class="font-weight-bold">Comment:</span> <span>@feedback.Comment</span><br />
-                                        <span class="float-right">@feedback.FeedbackDate.ToString("MM/dd/yyyy HH:mm:ss")</span>
-
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p>No feedback available.</p>
-                    }
-
-
-                </div>
-            </div>
         </div>
     </div>
+
 
 
