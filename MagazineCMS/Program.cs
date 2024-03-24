@@ -26,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).
     AddEntityFrameworkStores<ApplicationDbContext>().
     AddDefaultTokenProviders();
+builder.Services.AddScoped<IRepository<Magazine>, MagazineRepository>();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 // Add scoped

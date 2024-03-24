@@ -195,34 +195,14 @@ namespace MagazineCMS.Areas.Manager.Controllers
             return Json(new { data = magazineList, closedMagazines, openMagazines });
         }
 
-
-        [HttpDelete, ActionName("deleteMagazine")]
-        public IActionResult DeletePOST(int? id)
+        [HttpGet]
+        public IActionResult GetSemester()
         {
-            //_logger.LogError("Error occurred while deleting magazine" + id);
-            try
-            {
-                if (id == null)
-                {
-                    return BadRequest();
-                }
+            List<Semester> semestersList = _unitOfWork.Semester.GetAll().ToList();
+            List<Semester> closedSemester = semestersList.Where(m => m.EndDate <= DateTime.Now).ToList();
+            List<Semester> openSemester = semestersList.Where(m => m.EndDate > DateTime.Now).ToList();
 
-                Magazine obj = _unitOfWork.Magazine.Get(u => u.Id == id);
-
-                if (obj == null)
-                {
-                    return NotFound();
-                }
-
-                _unitOfWork.Magazine.Remove(obj);
-                _unitOfWork.Save();
-                return Ok(new { success = true, message = "Magazine deleted successfully" });
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new { success = false, message = "Error while deleting magazine" });
-            }
+            return Json(new { data = semestersList, closedSemester, openSemester });
         }
 
 

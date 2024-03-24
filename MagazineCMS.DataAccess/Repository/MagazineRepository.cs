@@ -25,7 +25,5 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db.Magazines.Update(obj);
         }
-
-        
     }
 }
