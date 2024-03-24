@@ -112,86 +112,86 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _userManager.AddToRoleAsync(userDB, SD.Role_Student).GetAwaiter().GetResult();
             }
 
-            //if (!_db.Semesters.Any())
-            //{
-            //    var semesters = new List<Semester>
-            //    {
-            //        new Semester { Id = 1, Name="Spring Term 2024", StartDate = new DateTime(2024,1,15, 0, 0, 0), EndDate = new DateTime(2024, 4,5)},
-            //        new Semester { Id = 2, Name="Summer Term 2024", StartDate = new DateTime(2024,4,22, 0, 0, 0), EndDate = new DateTime(2024, 7,19)},
-            //        new Semester { Id = 3, Name="Autumn Term 2024", StartDate = new DateTime(2024,9,25, 0, 0, 0), EndDate = new DateTime(2024, 12,15)}
-            //    };
+            if (!_db.Semesters.Any())
+            {
+                var semesters = new List<Semester>
+                {
+                    new Semester { Id = 1, Name="Spring Term 2024", StartDate = new DateTime(2024,1,15, 0, 0, 0), EndDate = new DateTime(2024, 4,5)},
+                    new Semester { Id = 2, Name="Summer Term 2024", StartDate = new DateTime(2024,4,22, 0, 0, 0), EndDate = new DateTime(2024, 7,19)},
+                    new Semester { Id = 3, Name="Autumn Term 2024", StartDate = new DateTime(2024,9,25, 0, 0, 0), EndDate = new DateTime(2024, 12,15)}
+                };
 
-            //    _db.Semesters.AddRange(semesters);
-            //    _db.SaveChanges();
-            //}
+                _db.Semesters.AddRange(semesters);
+                _db.SaveChanges();
+            }
             
-            //if (!_db.Magazines.Any())
-            //{
-            //    // create some magazines
-            //    var magazines = new List<Magazine>
-            //    {
-            //         new Magazine
-            //    {
-            //           Id = 1,
-            //           Name = "Computing Magazine - Spring 2024",
-            //           Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
-            //           StartDate = DateTime.Now.AddDays(-7),
-            //           EndDate = DateTime.Now.AddDays(7),
-            //           FacultyId = 2,
-            //           SemesterId = 1
-            //   },
-            //       new Magazine
-            //       {
-            //           Id = 2,
-            //           Name = "Business Magazine - Spring 2024",
-            //           Description = "Welcome",
-            //           StartDate = DateTime.Now.AddDays(-7),
-            //           EndDate = DateTime.Now.AddDays(7),
-            //           FacultyId = 3,
-            //           SemesterId = 1
-            //       }
-            //    };
+            if (!_db.Magazines.Any())
+            {
+                // create some magazines
+                var magazines = new List<Magazine>
+                {
+                     new Magazine
+                {
+                       Id = 1,
+                       Name = "Computing Magazine - Spring 2024",
+                       Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
+                       StartDate = DateTime.Now.AddDays(-7),
+                       EndDate = DateTime.Now.AddDays(7),
+                       FacultyId = 2,
+                       SemesterId = 1
+               },
+                   new Magazine
+                   {
+                       Id = 2,
+                       Name = "Business Magazine - Spring 2024",
+                       Description = "Welcome",
+                       StartDate = DateTime.Now.AddDays(-7),
+                       EndDate = DateTime.Now.AddDays(7),
+                       FacultyId = 3,
+                       SemesterId = 1
+                   }
+                };
 
-            //    _db.Magazines.AddRange(magazines);
-            //    _db.SaveChanges();
-            //}
+                _db.Magazines.AddRange(magazines);
+                    _db.SaveChanges();
+            }
 
-            //if (!_db.Contributions.Any())
-            //{
-            //    // create some contributions
-            //    var contributions = new List<Contribution>
-            //    {
-            //        new Contribution
-            //        {
-            //            Id = 1,
-            //            Title = "The Future of AI",
-            //            Status = SD.Status_Pending,
-            //            SubmissionDate = DateTime.Now,
-            //            UserId = "StudentID1",
-            //            MagazineId = 1
-            //        }
-            //    };
+            if (!_db.Contributions.Any())
+            {
+                // create some contributions
+                var contributions = new List<Contribution>
+                {
+                    new Contribution
+                    {
+                        Id = 1,
+                        Title = "The Future of AI",
+                        Status = SD.Status_Pending,
+                        SubmissionDate = DateTime.Now,
+                        UserId = "StudentID1",
+                        MagazineId = 1
+                    }
+                };
 
-            //    _db.Contributions.AddRange(contributions);
-            //    _db.SaveChanges();
-            //}
+                _db.Contributions.AddRange(contributions);
+                _db.SaveChanges();
+            }
 
-            //if (!_db.Documents.Any())
-            //{
-            //    // create some documents
-            //    var documents = new List<Document>
-            //    {
-            //        new Document
-            //        {
-            //            Id = 1,
-            //            Type = SD.Document_Type_Word,
-            //            DocumentUrl = "~/contributions/StudentID1/File.doc",
-            //            ContributionId = 1
-            //        }
-            //    };
-            //    _db.Documents.AddRange(documents);
-            //    _db.SaveChanges();
-            //}
+            if (!_db.Documents.Any())
+            {
+                // create some documents
+                var documents = new List<Document>
+                {
+                    new Document
+                    {
+                        Id = 1,
+                        Type = SD.Document_Type_Word,
+                        DocumentUrl = "~/contributions/StudentID1/File.doc",
+                        ContributionId = 1
+                    }
+                };
+                _db.Documents.AddRange(documents);
+                _db.SaveChanges();
+            }
         }
 
     }
