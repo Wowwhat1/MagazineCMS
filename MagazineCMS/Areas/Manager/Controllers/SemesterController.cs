@@ -21,6 +21,7 @@ namespace MagazineCMS.Areas.Manager.Controllers
         }
 
 
+
         #region API CALLS
 
         [HttpGet]
@@ -28,6 +29,28 @@ namespace MagazineCMS.Areas.Manager.Controllers
         {
             List<Semester> semesterList = _unitOfWork.Semester.GetAll().ToList();
             return Json(new { data = semesterList });
+        }
+
+        [HttpPost]
+        public IActionResult Index(Semester semester)
+        {
+            if (ModelState.IsValid)
+            {
+                if (semester.Id == 0)
+                {
+                    _unitOfWork.Semester.Add(semester);
+                    TempData["success"] = "Semester created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Semester.Update(semester);
+                    TempData["success"] = "Semester updated successfully";
+                }
+                _unitOfWork.Save();
+
+                return View(semester);
+            }
+            return View(semester);
         }
 
         #endregion
