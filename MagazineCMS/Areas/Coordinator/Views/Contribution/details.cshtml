@@ -1,0 +1,206 @@
+﻿@model MagazineCMS.Models.Contribution
+ @using MagazineCMS.Utility
+
+
+<div class="container-fluid mx-4">
+    <div class="row">
+        <!-- Left content -->
+        <div class="col-lg-8">
+            <!-- Phần hiển thị thông tin chi tiết của đóng góp -->
+            <nav aria-label="breadcrumb">
+                <!-- Breadcrumb -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Contribution")">Contributions</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Details</li>
+                </ol>
+            </nav>
+
+            <!-- Tiêu đề của đóng góp -->
+            <h1 class="h2 mb-2 text-gray-800">
+                Contribution Details
+            </h1>
+            <h1>@Model.Title</h1>
+            <!-- Hiển thị trạng thái và ngày nộp -->
+
+            <p>Submission Date: @Model.SubmissionDate</p>
+
+            <!-- Hiển thị thông tin của đóng góp -->
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <p class="card-text">Submitted by: @($"{Model.User.Firstname} {Model.User.Lastname}")</p>
+                    <p class="card-text">Magazine: @Model.Magazine.Name</p>
+                    <p class="card-text">
+                        Status:
+                        @if (Model.Status == SD.Status_Approved)
+                        {
+                            <span class="badge badge-success">@Model.Status</span>
+                        }
+                        else if (Model.Status == SD.Status_Rejected)
+                        {
+                            <span class="badge badge-danger">@Model.Status</span>
+                        }
+                    </p>
+                    <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
+                    <p class="card-text">Descriptions: @Model.Magazine.Description</p>
+                    @if (Model.Documents != null && Model.Documents.Any())
+                    {
+                        <div class="card shadow mt-4">
+                            <div class="card-body">
+                                <h3>File Submissions: </h3>
+                                <ul>
+                                    @foreach (var document in Model.Documents)
+                                    {
+                                        <li>
+                                            <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
+                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                            {
+                                                <span>@Model.User.Firstname @Model.User.Lastname:</span>
+                                                <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                </a>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+
+                    <!-- Nút quay lại danh sách -->
+                    <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+
+            <!-- Hiển thị danh sách các tệp đã được tải lên -->
+            <!-- Hiển thị danh sách các tệp đã được tải lên -->
+            @if (Model.Documents != null && Model.Documents.Any())
+            {
+                <div class="card shadow mt-4">
+                    <div class="card-body">
+                        <p>
+                            Status:
+                            @if (Model.Status == SD.Status_Approved)
+                            {
+                                <span class="badge badge-success">@Model.Status</span>
+                            }
+                            else if (Model.Status == SD.Status_Rejected)
+                            {
+                                <span class="badge badge-danger">@Model.Status</span>
+                            }
+                        </p>
+                        <h3>Annotate:</h3>
+                        <ul>
+                            @foreach (var document in Model.Documents)
+                            {
+                                <li>
+                                    <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
+                                    @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                    {
+                                        <span>@Model.User.Firstname @Model.User.Lastname:</span>
+                                        <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                            @System.IO.Path.GetFileName(document.DocumentUrl)
+                                        </a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+
+                        <p>
+                            Graded by:
+
+                            @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+                            {
+                                @foreach (var feedback in Model.Feedbacks)
+                                {
+
+                                    <span>@feedback.User.UserName</span>
+
+                                    <br />
+
+                                }
+                            }
+                            else
+                            {
+                            <p>No graded.</p>
+                            }
+                        </p>
+                        <h3>Feedbacks</h3>
+
+                        @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var feedback in Model.Feedbacks)
+                                {
+                                    <li class="list-group-item">
+                                        <div style="white-space: pre-line;">
+                                            <span class="font-weight-bold">Comment:</span> <span>@feedback.Comment</span><br />
+                                            <span class="float-right">@feedback.FeedbackDate.ToString("HH:mm dd/MM/yyyy")</span>
+
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>No feedback available.</p>
+                        }
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <!-- Right side for Feedback and Status update -->
+        <div class="col-lg-4">
+            <!-- Form cập nhật trạng thái -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3>Update Status</h3>
+                    <form asp-action="UpdateStatus" asp-controller="Contribution" method="post">
+                        <div class="form-group">
+                            <label for="status">New Status:</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="@SD.Status_Approved">Approved</option>
+                                <option value="@SD.Status_Rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="contributionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h3>Upload Documents</h3>
+                    <form method="post" enctype="multipart/form-data" action="@Url.Action("SubmitDocuments", "Contribution")">
+                        <div class="form-group">
+                            <label for="files">Choose File(s)</label>
+                            <input type="file" class="form-control-file" id="files" name="Files" multiple required>
+                        </div>
+                        <input type="hidden" name="contributionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h3>Add Feedback</h3>
+                    <form asp-action="AddFeedback" asp-controller="Contribution" method="post">
+                        <div class="form-group">
+                            <label for="comment">Comment:</label>
+                            <textarea class="form-control" id="comment" name="Comment" rows="3" required></textarea>
+                        </div>
+                        <input type="hidden" name="contributionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
