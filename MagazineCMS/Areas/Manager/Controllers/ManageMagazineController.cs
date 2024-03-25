@@ -14,12 +14,10 @@ namespace MagazineCMS.Areas.Manager.Controllers
     public class ManageMagazineController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<Magazine> _repository;
 
-        public ManageMagazineController(IUnitOfWork unitOfWork, IRepository<Magazine> repository)
+        public ManageMagazineController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _repository = repository;
         }
 
         public IActionResult Index()
@@ -35,40 +33,40 @@ namespace MagazineCMS.Areas.Manager.Controllers
         }
 
         [HttpPost]
-public async Task<IActionResult> Create(MagazineVM magazineVM)
-{
-    if (ModelState.IsValid)
-    {
-        var magazine = CreateMagazine();
-
-        magazine.Name = magazineVM.Magazine.Name;
-        magazine.Description = magazineVM.Magazine.Description;
-        magazine.StartDate = magazineVM.Magazine.StartDate;
-        magazine.EndDate = magazineVM.Magazine.EndDate;
-        magazine.FacultyId = (int)magazineVM.Magazine.FacultyId;
-        magazine.SemesterId = (int)magazineVM.Magazine.SemesterId;
-
-        var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
-
-        if (magazine.StartDate >= semester.StartDate && magazine.EndDate <= semester.EndDate)
+        public async Task<IActionResult> Create(MagazineVM magazineVM)
         {
-            _unitOfWork.Magazine.Add(entity: magazine);
-            _unitOfWork.Save();
+            if (ModelState.IsValid)
+            {
+                var magazine = CreateMagazine();
 
-            TempData["Success"] = "Magazine created successfully";
-            return RedirectToAction("Index");
-        }
-        else
-        {
-            ModelState.AddModelError(string.Empty, "The Magazine's StartDate must be greater than the Semester's StartDate and the Magazine's EndDate must be less than the Semester's EndDate.");
-        }
-    }
+                magazine.Name = magazineVM.Magazine.Name;
+                magazine.Description = magazineVM.Magazine.Description;
+                magazine.StartDate = magazineVM.Magazine.StartDate;
+                magazine.EndDate = magazineVM.Magazine.EndDate;
+                magazine.FacultyId = (int)magazineVM.Magazine.FacultyId;
+                magazine.SemesterId = (int)magazineVM.Magazine.SemesterId;
 
-    MagazineVM newMagazineVM = CreateMagazineVM();
-    newMagazineVM.Magazine = magazineVM.Magazine;
-    TempData["Error"] = "Error creating magazine";
-    return View(newMagazineVM);
-}
+                var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
+
+                if (magazine.StartDate >= semester.StartDate && magazine.EndDate <= semester.EndDate)
+                {
+                    _unitOfWork.Magazine.Add(entity: magazine);
+                    _unitOfWork.Save();
+
+                    TempData["Success"] = "Magazine created successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "The Magazine's StartDate must be greater than the Semester's StartDate and the Magazine's EndDate must be less than the Semester's EndDate.");
+                }
+
+            }
+            MagazineVM newMagazineVM = CreateMagazineVM();
+            newMagazineVM.Magazine = magazineVM.Magazine;
+            TempData["Error"] = "Error creating magazine";
+            return View(newMagazineVM);
+        }
 
         private Magazine CreateMagazine()
         {
@@ -82,8 +80,86 @@ public async Task<IActionResult> Create(MagazineVM magazineVM)
                     $"Ensure that '{nameof(Magazine)}' is not an abstract class and has a parameterless constructor, or alternatively ");
             }
         }
+        [HttpGet]
+        public IActionResult updateMagazine(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private MagazineVM CreateMagazineVM()
+            var magazine = _unitOfWork.Magazine.Get(u => u.Id ==id);
+            if (magazine == null)
+            {
+                return NotFound();
+            }
+
+            var Magazine = new MagazineVM
+            {
+                Magazine = magazine,
+                FacultyList = _unitOfWork.Faculty
+                .GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                SemesterList = _unitOfWork.Semester
+                    .GetAll().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }),
+            };
+
+            return View("Edit",Magazine);
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([Bind("Id,Name,Description,StartDate,EndDate,FacultyId,SemesterId")] Magazine magazine)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _unitOfWork.Magazine.Update(magazine);
+                    _unitOfWork.Save();
+                    TempData["Success"] = "Magazine updated successfully";
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    TempData["Error"] = "Failed to update magazine.";
+                    return BadRequest(new { success = false, message = "Error while updating magazine" });
+                }
+               
+            }
+
+            var Magazine = new MagazineVM
+            {
+                Magazine = _unitOfWork.Magazine.Get(u => u.Id == magazine.Id),
+                FacultyList = _unitOfWork.Faculty
+                .GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                SemesterList = _unitOfWork.Semester
+                    .GetAll().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }),
+            };
+
+            return View("Index");
+        }
+
+    
+
+    private MagazineVM CreateMagazineVM()
         {
             MagazineVM magazineVM = new MagazineVM()
             {
@@ -128,6 +204,11 @@ public async Task<IActionResult> Create(MagazineVM magazineVM)
 
             return Json(new { data = semestersList, closedSemester, openSemester });
         }
+
+
+
+
+
 
         #endregion
     }

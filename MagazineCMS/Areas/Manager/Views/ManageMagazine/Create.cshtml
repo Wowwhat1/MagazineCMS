@@ -1,4 +1,7 @@
 ﻿@model MagazineCMS.Models.ViewModels.MagazineVM
+@{
+    ViewData["Title"] = "Add Topic";
+}
 
 <div class="form-signin">
     <div class="modal-content" style="padding-left: 20px;">
@@ -10,30 +13,30 @@
 
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="modal-body">
-                    <div class="row mb-3">
+            <div class="row mb-3">
                         <div class="col-2">
                             <div class="row" style="padding-top: 10px;">
                                 <h5 style="padding-left: 10px;">Magazine</h5>
-                                <div>
+                    <div>
                                     <input asp-for="@Model.Magazine.Name" class="form-control" aria-required="true" placeholder=""
                                            style="width: 400px; height: 38px; padding-top: 20px;" />
-                                    <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
+                    </div>
+                </div>
                             <div class="row" style="padding-top: 10px;">
                                 <h5 style="padding-left: 10px;">Description</h5>
-                                <div>
+                    <div>
                                     <textarea id="tiny" asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder=""
                                               style="width: 400px; height: 180px;">
-                                    <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
+                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
                         </textarea>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+            </div>
                     </div>
 
 
-                    <div class="col">
+                <div class="col">
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Faculty</h5>
                             <div>
@@ -41,17 +44,17 @@
                                         asp-for="@Model.Magazine.FacultyId" asp-items="@Model.FacultyList" class="form-select border-1">
                                     <option disabled selected>--Select Faculty--</option>
                                 </select>
-                            </div>
-                        </div>
+                    </div>
+                </div>
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Semester</h5>
-                            <div>
+                    <div>
                                 <select style="width: 248px; height: 38px; border-radius: 5px; border-color:darkgrey" id="SemesterId"
                                         asp-for="@Model.Magazine.SemesterId" asp-items="@Model.SemesterList" class="form-select border-1">
                                     <option disabled selected>--Select Semester--</option>
                                 </select>
-                            </div>
-                        </div>
+                    </div>
+                </div>
 
                         <div class="row" style="padding-top: 10px;">
                             <table id="" class="table table-bordered table-hover table-striped" width="90%" cellspacing="0">
@@ -68,23 +71,23 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+            </div>
 
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Open date</h5>
                             <div style="width: 248px;">
                                 <input asp-for="@Model.Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
                                 <span asp-validation-for="@Model.Magazine.StartDate" class="text-danger"></span>
-                            </div>
-                        </div>
+                    </div>
+                </div>
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Close date</h5>
                             <div style="width: 248px;">
                                 <input asp-for="@Model.Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
                                 <span asp-validation-for="@Model.Magazine.EndDate" class="text-danger"></span>
-                            </div>
-                        </div>
                     </div>
+                </div>
+            </div>
 
                     
 
@@ -95,10 +98,12 @@
                                 <a asp-area="Manager" asp-controller="ManageMagazine" asp-action="Index" style="color: white;">Close</a>
                             </button>
                         </div>
-                    </div>
+                </div>
+                <div class="col-auto">
+                    <button id="close-form" type="button" class="btn btn-lg btn-secondary">Close</button>
                 </div>
             </div>
-            
+
 
         </form>
     </div>
