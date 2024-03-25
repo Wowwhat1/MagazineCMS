@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link href="/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-
 </head>
 <body id="page-top">
 
@@ -35,7 +34,7 @@
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div>
-                    <div class="sidebar-brand-text mx-3">Magazine CMS</div>
+                    <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
                 </a>
 
 
@@ -68,11 +67,12 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     @if (!SignInManager.IsSignedIn(User))
                     {
-                        <div>
-                            <a asp-area="Student" asp-controller="Home" asp-action="Index">
-                                <img src="/image/Magazine.whitelogo.png" alt="logo" width="170">
-                            </a>
-                        </div>
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index" style="text-decoration: none;">
+                            <div class="sidebar-brand-icon rotate-n-15">
+                                <i class="fas fa-laugh-wink"></i>
+                            </div>
+                            <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 22px;">Magazine CMS</div>
+                        </a>
 
                     }
 
