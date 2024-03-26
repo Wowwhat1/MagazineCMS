@@ -15,6 +15,5 @@ namespace MagazineCMS.Models.ViewModels
         [Display(Name = "Files")]
         [ValidateNever]
         public List<IFormFile> Files { get; set; }
-        public int ContributionId { get; set; }
     }
 }

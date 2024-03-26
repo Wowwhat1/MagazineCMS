@@ -112,18 +112,18 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _userManager.AddToRoleAsync(userDB, SD.Role_Student).GetAwaiter().GetResult();
             }
 
-            if (!_db.Semesters.Any())
-            {
-                var semesters = new List<Semester>
-                {
-                    new Semester { Id = 1, Name="Spring Term 2024", StartDate = new DateTime(2024,1,15, 0, 0, 0), EndDate = new DateTime(2024, 4,5)},
-                    new Semester { Id = 2, Name="Summer Term 2024", StartDate = new DateTime(2024,4,22, 0, 0, 0), EndDate = new DateTime(2024, 7,19)},
-                    new Semester { Id = 3, Name="Autumn Term 2024", StartDate = new DateTime(2024,9,25, 0, 0, 0), EndDate = new DateTime(2024, 12,15)}
-                };
+            //if (!_db.Semesters.Any())
+            //{
+            //    var semesters = new List<Semester>
+            //    {
+            //        new Semester { Id = 1, Name="Spring Term 2024", StartDate = new DateTime(2024,1,15, 0, 0, 0), EndDate = new DateTime(2024, 4,5)},
+            //        new Semester { Id = 2, Name="Summer Term 2024", StartDate = new DateTime(2024,4,22, 0, 0, 0), EndDate = new DateTime(2024, 7,19)},
+            //        new Semester { Id = 3, Name="Autumn Term 2024", StartDate = new DateTime(2024,9,25, 0, 0, 0), EndDate = new DateTime(2024, 12,15)}
+            //    };
 
-                _db.Semesters.AddRange(semesters);
-                _db.SaveChanges();
-            }
+            //    _db.Semesters.AddRange(semesters);
+            //    _db.SaveChanges();
+            //}
             
             if (!_db.Magazines.Any())
             {
