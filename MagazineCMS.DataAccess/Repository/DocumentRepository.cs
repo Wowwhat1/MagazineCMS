@@ -20,6 +20,7 @@ namespace MagazineCMS.DataAccess.Repository
             _db = db;
         }
 
+
         public void Update(Document obj)
         {
             _db.Documents.Update(obj);

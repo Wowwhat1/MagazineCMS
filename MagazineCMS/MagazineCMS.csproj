@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Manager\Controllers\" />
     <Folder Include="Areas\Coordinator\Controllers\" />
     <Folder Include="Areas\Manager\Controllers\" />
     <Folder Include="wwwroot\Documents\" />
