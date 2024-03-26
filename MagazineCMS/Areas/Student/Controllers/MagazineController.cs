@@ -55,25 +55,26 @@ namespace MagazineCMS.Areas.Student.Controllers
         [HttpGet]
         public IActionResult Download(int documentId)
         {
-            var document = _unitOfWork.Document.GetFirstOrDefault(d => d.Id == documentId);
-
-            if (document == null)
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
             {
-                return NotFound(); // Document not found
+                var fileName = document.DocumentUrl; // Assume DocumentUrl contains only the file name, not the full path
+
+                // Get the current user's ID
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId, fileName);
+
+                // Check if the file exists
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Return the file for download
+                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    return File(fileBytes, "application/octet-stream", fileName);
+                }
             }
-
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", document.DocumentUrl);
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound(); // File not found
-            }
-
-            // Read the file content into a byte array
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-
-            // Return the file as a byte array with the appropriate content type
-            return File(fileBytes, "application/octet-stream", document.DocumentUrl);
+            // If the file is not found, return NotFound
+            return NotFound();
         }
 
         [HttpPost]
@@ -155,12 +156,15 @@ namespace MagazineCMS.Areas.Student.Controllers
                 {
                     // Get the existing contribution
                     var contribution = _unitOfWork.Contribution.GetById(contributionId);
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                     if (contribution == null)
                     {
                         TempData["Error"] = "Contribution not found.";
                         return RedirectToAction("Index");
                     }
+
+                    var contributionFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
 
                     // Delete existing documents associated with the contribution
                     var existingDocuments = _unitOfWork.Document.GetAll(d => d.ContributionId == contributionId);
@@ -171,6 +175,14 @@ namespace MagazineCMS.Areas.Student.Controllers
                         {
                             System.IO.File.Delete(filePath);
                         }
+
+                        // Delete the file in the wwwroot/documents/StudentId folder
+                        var studentFilePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId, existingDocument.DocumentUrl);
+                        if (System.IO.File.Exists(studentFilePath))
+                        {
+                            System.IO.File.Delete(studentFilePath);
+                        }
+
                         _unitOfWork.Document.Remove(existingDocument);
                     }
 
@@ -194,7 +206,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                         _unitOfWork.Save();
 
                         // Save the file to the server
-                        var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", file.FileName);
+                        var filePath = Path.Combine(contributionFolderPath, file.FileName);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream);

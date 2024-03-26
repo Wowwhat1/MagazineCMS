@@ -114,8 +114,12 @@
                                         <!-- Display all files associated with the contribution -->
                                         @foreach (var document in contribution.Documents)
                                         {
-                                            <a href="#" onclick="downloadFile('@Url.Action("Download", "Magazine", new { documentId = document.Id })', '@document.DocumentUrl')">@document.DocumentUrl</a>
-                                            <br />
+                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                            {
+                                                <a href="@Url.Action("Download", "Magazine", new { documentId = document.Id })" target="_blank">
+                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                </a>
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -148,19 +152,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function downloadFile(url, fileName) {
-        fetch(url)
-            .then(response => response.blob())
-            .then(blob => {
-                const a = document.createElement('a');
-                a.href = window.URL.createObjectURL(blob);
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            })
-            .catch(error => console.error('Error downloading file:', error));
-    }
-</script>
