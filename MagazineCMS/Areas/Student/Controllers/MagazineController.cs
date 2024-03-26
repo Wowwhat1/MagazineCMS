@@ -52,37 +52,29 @@ namespace MagazineCMS.Areas.Student.Controllers
             return View(tuple);
         }
 
-        //[HttpPost]
-        //public IActionResult UpdateContribution(int contributionId)
-        //{
-        //    try
-        //    {
-        //        // Retrieve the contribution from the database
-        //        var contribution = _unitOfWork.Contribution.Get(contributionId);
+        [HttpGet]
+        public IActionResult Download(int documentId)
+        {
+            var document = _unitOfWork.Document.GetFirstOrDefault(d => d.Id == documentId);
 
-        //        // Check if the contribution exists
-        //        if (contribution == null)
-        //        {
-        //            TempData["Error"] = "Contribution not found.";
-        //            return RedirectToAction("Index");
-        //        }
+            if (document == null)
+            {
+                return NotFound(); // Document not found
+            }
 
-        //        // Perform the update operation (example: changing status from "Pending" to "Approved")
-        //        contribution.Status = "Approved"; // Change this according to your update logic
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", document.DocumentUrl);
 
-        //        // Update the contribution in the database
-        //        _unitOfWork.Contribution.Update(contribution);
-        //        _unitOfWork.Save();
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound(); // File not found
+            }
 
-        //        TempData["Success"] = "Contribution updated successfully.";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TempData["Error"] = $"An error occurred while updating the contribution: {ex.Message}";
-        //    }
+            // Read the file content into a byte array
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-        //    return RedirectToAction("Index");
-        //}
+            // Return the file as a byte array with the appropriate content type
+            return File(fileBytes, "application/octet-stream", document.DocumentUrl);
+        }
 
         [HttpPost]
         public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model, int magazineId)
@@ -94,49 +86,34 @@ namespace MagazineCMS.Areas.Student.Controllers
                     // Get the current user's ID
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    // Create a folder for the user if it doesn't exist
-                    var userFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
-                    if (!Directory.Exists(userFolderPath))
+                    // Create a contribution
+                    var contribution = new Contribution
                     {
-                        Directory.CreateDirectory(userFolderPath);
+                        Title = model.Files.FirstOrDefault()?.FileName ?? "Untitled",
+                        Status = "Pending", // Set the status to pending
+                        SubmissionDate = DateTime.Now,
+                        UserId = userId,
+                        MagazineId = magazineId
+                    };
+
+                    // Add the contribution to the database context
+                    _unitOfWork.Contribution.Add(contribution);
+                    _unitOfWork.Save();
+
+                    // Create a folder for the contribution if it doesn't exist
+                    var contributionFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
+                    if (!Directory.Exists(contributionFolderPath))
+                    {
+                        Directory.CreateDirectory(contributionFolderPath);
                     }
 
-                    // Save each file in the user's folder
+                    // Loop through each file and save it
                     foreach (var file in model.Files)
                     {
-                        // Generate a unique file name
-                        var fileName = $"{Guid.NewGuid().ToString()}_{file.FileName}";
-
-                        // Combine the user's folder path with the file name
-                        var filePath = Path.Combine(userFolderPath, fileName);
-
-                        // Copy the file to the destination path
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-
-                        var contribution = new Contribution
-                        {
-                            Title = fileName, // Set the title to the file name for now
-                            Status = "Pending", // Set the status to pending
-                            SubmissionDate = DateTime.Now,
-                            UserId = userId,
-                            MagazineId = magazineId 
-                        };
-
-                        // Add the contribution to the database context
-                        _unitOfWork.Contribution.Add(contribution);
-
-                        // Save changes to the database
-                        _unitOfWork.Save();
-
-                        // Create a new Document entity
                         var document = new Document
                         {
                             Type = "Uploaded",
-                            DocumentUrl = fileName,
-                            // Set ContributionId to the Id of the contribution being submitted
+                            DocumentUrl = file.FileName,
                             ContributionId = contribution.Id
                         };
 
@@ -145,9 +122,16 @@ namespace MagazineCMS.Areas.Student.Controllers
 
                         // Save changes to the database
                         _unitOfWork.Save();
+
+                        // Save the file to the server
+                        var filePath = Path.Combine(contributionFolderPath, file.FileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
                     }
 
-                    TempData["Success"] = "Documents uploaded successfully.";
+                    TempData["Success"] = "Contribution submitted successfully.";
                 }
                 catch (Exception ex)
                 {
@@ -161,6 +145,77 @@ namespace MagazineCMS.Areas.Student.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateContribution(int contributionId, IFormFile[] Files)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Get the existing contribution
+                    var contribution = _unitOfWork.Contribution.GetById(contributionId);
+
+                    if (contribution == null)
+                    {
+                        TempData["Error"] = "Contribution not found.";
+                        return RedirectToAction("Index");
+                    }
+
+                    // Delete existing documents associated with the contribution
+                    var existingDocuments = _unitOfWork.Document.GetAll(d => d.ContributionId == contributionId);
+                    foreach (var existingDocument in existingDocuments)
+                    {
+                        var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", existingDocument.DocumentUrl);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                        _unitOfWork.Document.Remove(existingDocument);
+                    }
+
+                    // Save changes to remove existing documents
+                    _unitOfWork.Save();
+
+                    // Save the new documents
+                    foreach (var file in Files)
+                    {
+                        var document = new Document
+                        {
+                            Type = "Uploaded",
+                            DocumentUrl = file.FileName,
+                            ContributionId = contribution.Id
+                        };
+
+                        // Add the document to the database context
+                        _unitOfWork.Document.Add(document);
+
+                        // Save changes to the database
+                        _unitOfWork.Save();
+
+                        // Save the file to the server
+                        var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", file.FileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+                    }
+
+                    TempData["Success"] = "Contribution updated successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = $"An error occurred: {ex.Message}";
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Invalid model state. Please check your inputs.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
         #region API CALLS
 

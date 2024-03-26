@@ -79,6 +79,8 @@
                                 <th>Title</th>
                                 <th>Submission Date</th>
                                 <th>Status</th>
+                                <th>Documents</th>
+                                <th>Update</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,10 +111,33 @@
                                         <span class="@statusBadge">@contribution.Status</span>
                                     </td>
                                     <td>
-                                        <form method="post" action="@Url.Action("UpdateContribution", "Magazine")">
-                                            <input type="hidden" name="ContributionId" value="@contribution.Id" />
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </form>
+                                        <!-- Display all files associated with the contribution -->
+                                        @foreach (var document in contribution.Documents)
+                                        {
+                                            <a href="#" onclick="downloadFile('@Url.Action("Download", "Magazine", new { documentId = document.Id })', '@document.DocumentUrl')">@document.DocumentUrl</a>
+                                            <br />
+                                        }
+                                    </td>
+                                    <td>
+                                    <td>
+                                        <!-- Update button -->
+                                            @if (contribution.Status == "Pending")
+                                            {
+                                            <form method="post" enctype="multipart/form-data" action="@Url.Action("UpdateContribution", "Magazine")">
+                                                <input type="hidden" name="ContributionId" value="@contribution.Id" />
+                                                <div class="form-group">
+                                                    <label for="updateDocuments">Upload New Document(s)</label>
+                                                    <input type="file" class="form-control-file" id="updateDocuments" name="Files" multiple required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </form>
+                                            }
+                                            else
+                                            {
+                                            <button class="btn btn-primary" disabled>Update</button>
+                                            }
+                                    </td>
+
                                     </td>
                                 </tr>
                             }
@@ -123,3 +148,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function downloadFile(url, fileName) {
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            })
+            .catch(error => console.error('Error downloading file:', error));
+    }
+</script>

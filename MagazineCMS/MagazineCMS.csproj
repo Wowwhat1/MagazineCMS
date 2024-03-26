@@ -36,6 +36,7 @@
   <ItemGroup>
     <Folder Include="Areas\Coordinator\Controllers\" />
     <Folder Include="Areas\Manager\Controllers\" />
+    <Folder Include="wwwroot\Documents\" />
     <Folder Include="wwwroot\image\avatar\" />
     <Folder Include="wwwroot\image\magazine\" />
   </ItemGroup>

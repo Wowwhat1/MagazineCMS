@@ -10,5 +10,6 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     public interface IContributionRepository : IRepository<Contribution>
     {
         void Update(Contribution obj);
+        Contribution GetById(int id);
     }
 }
