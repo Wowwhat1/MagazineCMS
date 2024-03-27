@@ -49,6 +49,13 @@ function loadDataTable() {
     });
 }
 
+function createSemester() {
+    // Reset the form
+    $('#semesterForm').trigger('reset');
+    $('#semesterFormTitle').text('Create Semester');
+    $('#modalCenter').modal('show');
+}
+
 function editSemester(id) {
     // Get the semester data by id using an AJAX request
     $.ajax({
@@ -63,6 +70,7 @@ function editSemester(id) {
             $('#semesterEndDate').val(data.endDate);
 
             // Show the edit modal
+            $('#semesterFormTitle').text('Edit Semester');
             $('#modalCenter').modal('show');
         },
         error: function (xhr, status, error) {
