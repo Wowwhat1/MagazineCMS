@@ -14,14 +14,3 @@ $(document).ready(function () {
         }
     });
 });
-
-//Add toggled into class sidebar when click
-//$(document).ready(function () {
-//    var currentUrl = window.location.href;
-//    $('.navbar-nav .nav-item a').each(function () {
-//        var linkUrl = this.href;
-//        if (currentUrl == linkUrl) {
-//            $(this).closest('.nav-item').addClass('toggled');
-//        }
-//    });
-//});
