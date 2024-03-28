@@ -89,20 +89,11 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-bell" aria-hidden="true"></i>
-                                    <!-- Counter - Alerts -->
-                                    @* <span class="badge badge-danger badge-counter">•</span> *@
-                                </a>
-                            }
-                        </li>
-
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <partial name="AlertPartial" />        
+                        }
+                        
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <partial name="_LoginPartial" />
