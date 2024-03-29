@@ -1,7 +1,7 @@
-﻿@model Magazine
+﻿@model Tuple<Magazine, IEnumerable<Contribution>>
 
 @{
-    TimeSpan remainingTime = Model.EndDate - DateTime.Now;
+    TimeSpan remainingTime = Model.Item1.EndDate - DateTime.Now;
     int days = (int)remainingTime.TotalDays;
     int hours = remainingTime.Hours;
     int minutes = remainingTime.Minutes;
@@ -9,7 +9,7 @@
 
 <div id="accordion" class="mx-4">
     <a href="@Url.Action("Index", "Magazine")">← Back to Magazine List</a>
-    <h1 class="h4 text-primary font-weight-bold my-2">@Model.Name</h1>
+    <h1 class="h4 text-primary font-weight-bold my-2">@Model.Item1.Name</h1>
     <div class="card">
         <div class="card-header" id="headingOne">
             <h5 class="mb-0">
@@ -23,17 +23,17 @@
             <div class="card-body">
                 <div class="d-flex" style="2">
                     <h1 class="h5 font-weight-bold my-2">Faculty: </h1>
-                    <div class="badge badge-primary align-self-baseline" style="height: 20px;">@Model.Faculty.Name</div>
+                    <div class="badge badge-primary align-self-baseline" style="height: 20px;">@Model.Item1.Faculty.Name</div>
                 </div>
                 <h1 class="h5 font-weight-bold my-2">Description</h1>
                 <div class="text-gray-900">
-                    @Model.Description
+                    @Model.Item1.Description
                 </div>
                 <h1 class="h5 font-weight-bold my-2">Time line</h1>
                 <div class="text-gray-900">
-                    Start date : @Model.StartDate.ToString("dddd, dd/MM/yyyy HH:mm") 
+                    Start date : @Model.Item1.StartDate.ToString("dddd, dd/MM/yyyy HH:mm") 
                     <br />
-                    Due date : @Model.EndDate.ToString("dddd, dd/MM/yyyy HH:mm")
+                    Due date : @Model.Item1.EndDate.ToString("dddd, dd/MM/yyyy HH:mm")
                     <br />
                     Time remaining : @($"{days} days {hours} hours {minutes} mins")
                 </div>
@@ -52,6 +52,7 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
                     <div class="form-group">
+                        <input type="hidden" name="MagazineId" value="@Model.Item1.Id" />
                         <label for="documents">Upload Document(s)</label>
                         <input type="file" class="form-control-file" id="documents" name="Files" multiple required>
                     </div>
@@ -64,13 +65,89 @@
         <div class="card-header" id="headingThree">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Collapsible Group Item #3
+                    Submission history
                 </button>
             </h5>
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                <h1 class="h5 font-weight-bold my-2">Contribution History</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Submission Date</th>
+                                <th>Status</th>
+                                <th>Documents</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contribution in Model.Item2)
+                            {
+                                <tr>
+                                    <td>@contribution.Title</td>
+                                    <td>@contribution.SubmissionDate.ToString("dddd, dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @{
+                                            string statusBadge = "";
+                                            switch (contribution.Status)
+                                            {
+                                                case "Pending":
+                                                    statusBadge = "badge bg-warning text-dark";
+                                                    break;
+                                                case "Approved":
+                                                    statusBadge = "badge bg-success";
+                                                    break;
+                                                case "Rejected":
+                                                    statusBadge = "badge bg-danger";
+                                                    break;
+                                                default:
+                                                    statusBadge = "badge bg-primary";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="@statusBadge">@contribution.Status</span>
+                                    </td>
+                                    <td>
+                                        <!-- Display all files associated with the contribution -->
+                                        @foreach (var document in contribution.Documents)
+                                        {
+                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                            {
+                                                <a href="@Url.Action("Download", "Magazine", new { documentId = document.Id })" target="_blank">
+                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                    <td>
+                                        <!-- Update button -->
+                                            @if (contribution.Status == "Pending")
+                                            {
+                                            <form method="post" enctype="multipart/form-data" action="@Url.Action("UpdateContribution", "Magazine")">
+                                                <input type="hidden" name="ContributionId" value="@contribution.Id" />
+                                                <div class="form-group">
+                                                    <label for="updateDocuments">Upload New Document(s)</label>
+                                                    <input type="file" class="form-control-file" id="updateDocuments" name="Files" multiple required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </form>
+                                            }
+                                            else
+                                            {
+                                            <button class="btn btn-primary" disabled>Update</button>
+                                            }
+                                    </td>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

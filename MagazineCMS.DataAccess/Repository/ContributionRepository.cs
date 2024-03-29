@@ -61,5 +61,10 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db.Contributions.Update(obj);
         }
+
+        public Contribution GetById(int id)
+        {
+            return _db.Contributions.FirstOrDefault(c => c.Id == id);
+        }
     }
 }

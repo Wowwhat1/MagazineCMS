@@ -5,7 +5,7 @@
      <!-- Page Heading -->
      <h1 class="h3 mb-2 text-gray-800">Semester Tables</h1>
 
-    <button type="button" class="btn btn-outline-primary my-4 btn-lg" data-toggle="modal" data-target="#modalCenter">
+    <button onclick="createSemester()" type="button" class="btn btn-outline-primary my-4 btn-lg" data-toggle="modal" data-target="#modalCenter">
         Create Semester
     </button>
 
@@ -40,14 +40,7 @@
         <input asp-for="Id" id="semesterId" class="form-control" aria-required="true" placeholder="" type="hidden"/>
         <div class="modal-content" style="width: 550px">
             <div class="modal-header">
-                @if(Model?.Id != 0)
-                {
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Semester</h5>
-                }
-                else
-                {
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Create Semester</h5>
-                }
+                <h5 class="modal-title" id="semesterFormTitle">Create Semester</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
