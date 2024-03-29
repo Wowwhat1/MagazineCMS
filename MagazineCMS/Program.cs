@@ -57,6 +57,10 @@ SeedDatabase();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "notification",
+    pattern: "{controller=Notification}/{action=Index}/{id?}"
+    );
     
 app.Run();
 

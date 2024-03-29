@@ -91,7 +91,7 @@
                     <ul class="navbar-nav ml-auto">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <partial name="AlertPartial" />        
+                            <partial name="_NotificationPartial" />        
                         }
                         
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -102,7 +102,7 @@
 
                 <div class="content">
                     <main role="main" class="pb-3">
-                        <partial name="_NotificationPartial" />
+                        <partial name="_AlertPartial" />
                         @RenderBody()
                     </main>
                 </div>

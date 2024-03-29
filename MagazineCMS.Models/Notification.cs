@@ -20,6 +20,8 @@ namespace MagazineCMS.Models
         public User RecipientUser { get; set; }
 
         // UserId of the user who trigger the notification
+
+        public string SenderUserName { get; set; }
         public List<string> UserIds { get; set; }
 
         public string Content { get; set; }
