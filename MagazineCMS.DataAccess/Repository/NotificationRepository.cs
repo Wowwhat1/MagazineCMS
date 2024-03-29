@@ -23,5 +23,17 @@ namespace MagazineCMS.DataAccess.Repository
         {
             _db.Notifications.Update(obj);
         }
+
+        public void Test(int facultyId, string roleName)
+        {
+            var query = from userRole in _db.UserRoles
+                        join user in _db.Users on userRole.UserId equals user.Id
+                        join role in _db.Roles on userRole.RoleId equals role.Id
+                        where user.FacultyId == facultyId && role.Name == roleName
+                        select new
+                        {
+                            UserId = user.Id,
+                        };
+        }
     }
 }

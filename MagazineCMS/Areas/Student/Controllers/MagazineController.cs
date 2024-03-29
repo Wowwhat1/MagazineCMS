@@ -6,7 +6,9 @@ using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
+using System.Data;
 using System.Security.Claims;
 
 namespace MagazineCMS.Areas.Student.Controllers
@@ -86,6 +88,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 {
                     // Get the current user's ID
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var userFacultyId = _unitOfWork.User.Get(x => x.Id == userId).FacultyId;
 
                     // Create a contribution
                     var contribution = new Contribution
@@ -132,6 +135,8 @@ namespace MagazineCMS.Areas.Student.Controllers
                             await file.CopyToAsync(stream);
                         }
                     }
+
+                    SubmitContributionNotificationAsync(userFacultyId, userId);
 
                     TempData["Success"] = "Contribution submitted successfully.";
                 }
@@ -229,6 +234,43 @@ namespace MagazineCMS.Areas.Student.Controllers
             return RedirectToAction("Index");
         }
 
+        public void SubmitContributionNotificationAsync(int facultyId, string userId)
+        {
+
+            var coordinators = _unitOfWork.User.GetUserByFacultyIdAndRole(facultyId, SD.Role_Coordinator);
+
+            foreach (var coordinator in coordinators)
+            {
+                var oldNotification = _unitOfWork.Notification.GetAll()
+                        .OrderByDescending(n => n.CreatedAt)
+                        .FirstOrDefault(n => n.RecipientUserId == coordinator.Id && n.Type == SD.Noti_Type_SubmitSingle);
+
+                if (oldNotification != null)
+                {
+                    oldNotification.UserIds.Add(userId);
+                    oldNotification.CreatedAt = DateTime.Now;
+                    _unitOfWork.Notification.Update(oldNotification);
+                }
+                else
+                {
+                    var notification = new Notification
+                    {
+                        RecipientUserId = coordinator.Id,
+                        UserIds = new List<string> { userId },
+                        Content = "submits a new contribution",
+                        Type = SD.Noti_Type_SubmitSingle,
+                        Url = "/#",
+                        CreatedAt = DateTime.Now,
+                        IsRead = false,
+                    };
+
+                    _unitOfWork.Notification.Add(notification);
+
+                }
+            }
+            _unitOfWork.Save();
+        }
+
         #region API CALLS
 
         [HttpGet]
@@ -242,6 +284,13 @@ namespace MagazineCMS.Areas.Student.Controllers
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
             
             return Json(new { closedMagazines, openMagazines });
+        }
+
+        [HttpGet]
+        public IActionResult GetNotification(string? userId)
+        {
+            var notifications = _unitOfWork.Notification.GetAll();
+            return Json( new { data = notifications });
         }
 
         #endregion
