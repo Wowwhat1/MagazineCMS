@@ -10,5 +10,6 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     public interface IUserRepository : IRepository<User>
     {
         void Update(User obj);
+        public IEnumerable<User> GetUserByFacultyIdAndRole(int facultyId, string roleName);
     }
 }

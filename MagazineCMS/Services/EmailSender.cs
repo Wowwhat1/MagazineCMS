@@ -7,10 +7,10 @@ namespace MagazineCMS.Services
 {
     public class EmailSender : IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string subject, string message, IEnumerable<string> coordinatorEmails)
         {
-            var mail = "chienhuynh234@gmail.com";
-            var password = "qWemNb123098!!??";
+            var mail = "chienhcgcd210012@fpt.edu.vn";
+            var password = "frac mgwm udmc lhqc";
 
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -18,12 +18,19 @@ namespace MagazineCMS.Services
                 Credentials = new NetworkCredential(mail, password)
             };
 
-            return client.SendMailAsync(
-                new MailMessage(from: mail,
-                                       to: email,
-                                       subject,
-                                       message
-                                       ));
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(mail),
+                Subject = subject,
+                Body = message
+            };
+
+            foreach (var coordinatorEmail in coordinatorEmails)
+            {
+                mailMessage.To.Add(coordinatorEmail);
+            }
+
+            return client.SendMailAsync(mailMessage);
         }
     }
 }
