@@ -1,12 +1,202 @@
-﻿@page
-
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<body>
+    <div class="container">
+        <h1 class="center">Dashboard</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="center">Number of Users in Faculty</h4>
+                <canvas id="userChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h4 class="center">Number of Magazines in Faculty</h4>
+                <canvas id="magazineChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="center">Number of Users in each Role</h4>
+                <canvas id="polarUserChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
 
-<h1>This is admin Dashboard</h1>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadChartData();
+            loadChartDataUser();
+        });
+
+        function loadChartData() {
+            $.ajax({
+                url: '/manager/faculty/getall',
+                type: 'GET',
+                success: function (response) {
+                    const data = response.data;
+                    const facultyNames = [];
+                    const userCounts = [];
+                    const magazineCounts = [];
+                    const userInfo = [];
+
+                    data.forEach(function (item) {
+                        facultyNames.push(item.faculty.name);
+                        userCounts.push(item.userCount);
+                        magazineCounts.push(item.magazineCount);
+                        userInfo.push(item.userInfo); 
+                    });
+
+
+                    createUserChart(facultyNames, userCounts);
+                    createMagazineChart(facultyNames, magazineCounts);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Error fetching faculty data:", errorThrown);
+                }
+            });
+        }
+
+        function createUserChart(labels, data) {
+            var ctx = document.getElementById('userChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Users',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        function createMagazineChart(labels, data) {
+            var ctx = document.getElementById('magazineChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Magazines',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        function loadChartDataUser() {
+            $.ajax({
+                url: '/admin/manageuser/getall',
+                type: 'GET',
+                success: function (response) {
+                    const data = response.data;
+                    const roles = [];
+                    const userCountsByRole = [];
+
+                    data.forEach(function (user) {
+                        const role = user.role;
+                        if (!roles.includes(role)) {
+                            roles.push(role);
+                            userCountsByRole.push(1);
+                        } else {
+                            const index = roles.indexOf(role);
+                            userCountsByRole[index]++;
+                        }
+                    });
+
+                    createRoleChart(roles, userCountsByRole);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Error fetching user data:", errorThrown);
+                }
+            });
+        }
+
+
+        function createRoleChart(labels, data) {
+            var ctx = document.getElementById('polarUserChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Users',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                var label = data.labels[tooltipItem.index] || '';
+                                var value = data.datasets[0].data[tooltipItem.index];
+                                return label + ': ' + value;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+     
+    </script>
+</body>
+</html>
