@@ -46,11 +46,14 @@ function showNotification() {
                     displayTime = days + ' day' + (days > 1 ? 's' : '') + ' ago';
                 }
 
+                var iconClass = notification.type == "Submit" ? "fa fa-file-text" : notification.Type == "Approval" ? "fa fa-check" : notification.Type == "Reject" ? "fa fa-minus" : "fa fa-info";
+                var color = notification.type == "Submit" ? "primary" : notification.Type == "Approval" ? "success" : notification.Type == "Reject" ? "danger" : "primary";
+
                 notificationElement.innerHTML = `
                 <a class="dropdown-item d-flex align-items-center" href="${notification.url}" onClick="markAsRead(${notification.id})">
                     <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fa fa-file-text text-white"></i>
+                        <div class="icon-circle bg-${color}">
+                            <i class="fa ${iconClass} text-white"></i>
                         </div>
                     </div>
                     <div>

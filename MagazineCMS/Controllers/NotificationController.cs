@@ -15,7 +15,7 @@ namespace MagazineCMS.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
 
-            var notifications = _unitOfWork.Notification.GetAll(n => n.RecipientUserId == userId);
+            var notifications = _unitOfWork.Notification.GetAll(n => n.RecipientUserId == userId).OrderByDescending(n => n.CreatedAt).ToList() ;
             foreach (var notification in notifications)
             {
                 var userIds = notification.UserIds;

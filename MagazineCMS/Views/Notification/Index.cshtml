@@ -8,58 +8,35 @@
     
     @foreach (var notification in Model)
     {
-        @if (notification.Type == "Submit")
-        {
-            <div class="col-xl-6 col-md-6 mb-4">
-                <a class="text-decoration-none" href="#">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="icon-circle bg-primary mr-3">
-                                    <i class="fa fa-file-text text-white"></i>
-                                </div>
-                                <div class="col mr-2">
-                                    <div class="text-sm font-weight-bold text-primary mb-1">
-                                        @notification.SenderUserName
-                                    </div>
-                                    <div class="text-sm mb-0 font-weight-normal text-gray-800">@notification.Content</div>
-                                    <div class="small text-gray-500">@notification.CreatedAt</div>
-                                </div>
-                                @if (notification.IsRead == false)
-                                {
-                                    <div>
-                                        <i class="fa fa-circle"></i>
-                                    </div>
-                                }
+
+        string iconClass = notification.Type == "Submit" ? "fa fa-file-text" : notification.Type == "Approval" ? "fa fa-check" : notification.Type == "Reject" ? "fa fa-minus" : "fa fa-info";
+        string color = notification.Type == "Submit" ? "primary" : notification.Type == "Approval" ? "success" : notification.Type == "Reject" ? "danger" : "primary";
+
+        <div class="col-xl-6 col-md-6 mb-4">
+            <a class="text-decoration-none" href="#">
+                <div class="card dropdown-item border-left-@color shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="icon-circle bg-@color mr-3">
+                                <i class="@iconClass text-white"></i>
                             </div>
+                            <div class="col mr-2">
+                                <div class="text-sm font-weight-bold text-primary mb-1">
+                                    @notification.SenderUserName
+                                </div>
+                                <div class="text-sm mb-0 font-weight-normal text-gray-800">@notification.Content</div>
+                                <div class="small text-gray-500">@notification.CreatedAt</div>
+                            </div>
+                            @if (notification.IsRead == false)
+                            {
+                                <div>
+                                    <i class="fa fa-circle text-primary"></i>
+                                </div>
+                            }
                         </div>
-                    </div>
-                </a>
-            </div>
-        }
-    }
-    <div class="col-xl-6 col-md-6 mb-4">
-        <a class="text-decoration-none" href="#">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="icon-circle bg-primary mr-3">
-                        <i class="fa fa-file-text text-white"></i>
-                    </div>
-                    <div class="col mr-2">
-                        <div class="text-sm font-weight-bold text-primary mb-1">
-                            UserName
-                        </div>
-                        <div class="text-sm mb-0 font-weight-normal text-gray-800">Submits a new contribution</div>
-                        <div class="small text-gray-500">December 7, 2019</div>
-                    </div>
-                    <div>
-                        <i class="fa fa-circle"></i>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
-        </a>
-    </div>
-
+    }
 </div>

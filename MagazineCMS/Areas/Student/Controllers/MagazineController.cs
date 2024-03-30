@@ -100,7 +100,9 @@ namespace MagazineCMS.Areas.Student.Controllers
                 SaveContributionAndDocuments(model.Files, contribution);
                 var magazineTitle = GetMagazineTitle(magazineId);
                 var coordinatorEmails = await GetCoordinatorEmailsAsync();
+                var userFacultyId = _unitOfWork.User.Get(u => u.Email == userEmail).FacultyId;
                 await SendContributionEmailToCoordinatorsAsync(userEmail, magazineTitle, coordinatorEmails);
+                SubmitContributionNotificationAsync(userFacultyId, userId);
                 TempData["Success"] = "Contribution submitted successfully.";
             }
             catch (Exception ex)
@@ -283,10 +285,11 @@ namespace MagazineCMS.Areas.Student.Controllers
                         .OrderByDescending(n => n.CreatedAt)
                         .FirstOrDefault(n => n.RecipientUserId == coordinator.Id && n.Type == SD.Noti_Type_SubmitSingle);
 
-                if (oldNotification != null)
+                if (oldNotification != null && !oldNotification.UserIds.Contains(userId))
                 {
                     oldNotification.UserIds.Add(userId);
                     oldNotification.CreatedAt = DateTime.Now;
+                    oldNotification.IsRead = false;
                     _unitOfWork.Notification.Update(oldNotification);
                 }
                 else
@@ -295,6 +298,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                     {
                         RecipientUserId = coordinator.Id,
                         UserIds = new List<string> { userId },
+                        SenderUserName = "",
                         Content = "submits a new contribution",
                         Type = SD.Noti_Type_SubmitSingle,
                         Url = "/#",
