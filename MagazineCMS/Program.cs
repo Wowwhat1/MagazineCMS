@@ -8,11 +8,13 @@ using MagazineCMS.DataAccess.DBInitializer;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.DataAccess.Repository;
 using System.Text.Json.Serialization;
+using MagazineCMS.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<MagazineCMS.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -28,7 +30,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     AddDefaultTokenProviders();
 builder.Services.AddScoped<IRepository<Magazine>, MagazineRepository>();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<MagazineCMS.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
 // Add scoped
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

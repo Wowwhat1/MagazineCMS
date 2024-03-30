@@ -48,25 +48,47 @@
                     {
                         <div class="card shadow mt-4">
                             <div class="card-body">
-                                <h3>File Submissions: </h3>
-                                <ul>
-                                    @foreach (var document in Model.Documents)
-                                    {
-                                        <li>
-                                            <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
-                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                <h3>File Submissions</h3>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tên</th>
+                                                <th scope="col">File</th>
+                                                <th scope="col">View</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var document in Model.Documents)
                                             {
-                                                <span>@Model.User.Firstname @Model.User.Lastname:</span>
-                                                <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
-                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
-                                                </a>
+                                                <tr>
+                                                    <td>@Model.User.Firstname @Model.User.Lastname</td>
+                                                    <td>
+                                                        <!-- Hiển thị tên tệp và tạo liên kết để tải xuống -->
+                                                        @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                                        {
+                                                            <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                                                @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <!-- Tạo liên kết để xem file trực tiếp trên web -->
+                                                        @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                                        {
+                                                            <a href="@Url.Action("ViewDocument", "Contribution", new { documentId = document.Id })" target="_blank">View</a>
+                                                        }
+
+                                                    </td>
+                                                </tr>
                                             }
-                                        </li>
-                                    }
-                                </ul>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     }
+
 
 
                     <!-- Nút quay lại danh sách -->
