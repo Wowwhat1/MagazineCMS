@@ -25,6 +25,10 @@
                 <h4 class="center">Number of Users in each Role</h4>
                 <canvas id="polarUserChart" width="400" height="400"></canvas>
             </div>
+            <div class="col-md-6">
+                <h4 class="center">Number of Topics Published Each Month</h4>
+                <canvas id="topicChart" width="800" height="600"></canvas>
+            </div>
         </div>
     </div>
 
@@ -34,6 +38,7 @@
         $(document).ready(function () {
             loadChartData();
             loadChartDataUser();
+            calculateTopicCounts();
         });
 
         function loadChartData() {
@@ -196,7 +201,82 @@
             });
         }
 
-     
+        var monthNames = [
+            "January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"
+        ];
+
+        $(document).ready(function () {
+            // Gọi API để lấy dữ liệu về các topic
+            $.ajax({
+                url: '/manager/managemagazine/getall',
+                type: 'GET',
+                success: function (response) {
+                    var data = response.data;
+                    // Khởi tạo mảng để lưu trữ ngày kết thúc của các topic
+                    var endDates = [];
+                    // Lặp qua mỗi topic để trích xuất ngày kết thúc
+                    data.forEach(function (topic) {
+                        endDates.push(new Date(topic.endDate));
+                    });
+                    // Tính toán số lượng topic trong mỗi tháng
+                    var topicCounts = calculateTopicCounts(endDates);
+                    // Tạo mảng các tháng từ 1 đến 12
+                    var months = Array.from({ length: 12 }, (_, i) => i + 1);
+                    // Vẽ biểu đồ dạng đường
+                    drawLineChart(months, topicCounts);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Error fetching data:", errorThrown);
+                }
+            });
+        });
+
+        // Hàm để tính toán số lượng topic trong từng tháng
+        function calculateTopicCounts(endDates) {
+            var topicCounts = Array.from({ length: 12 }, () => 0);
+            // Lặp qua mỗi ngày kết thúc và tăng số lượng topic trong tháng tương ứng
+            endDates.forEach(function (endDate) {
+                var month = endDate.getMonth();
+                topicCounts[month]++;
+            });
+            return topicCounts;
+        }
+
+        // Hàm để vẽ biểu đồ dạng đường
+        function drawLineChart(months, topicCounts) {
+            var ctx = document.getElementById('topicChart').getContext('2d');
+            var topicChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months.map(month => monthNames[month - 1]), // Chuyển đổi số tháng thành tên tháng
+                    datasets: [{
+                        label: 'Topic Counts by Month',
+                        data: topicCounts,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Topics'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
