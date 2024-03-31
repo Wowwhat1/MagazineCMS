@@ -126,6 +126,7 @@ namespace MagazineCMS.Areas.Student.Controllers
 
                         // Save the file to the server
                         var filePath = Path.Combine(contributionFolderPath, file.FileName);
+
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream);
@@ -227,7 +228,6 @@ namespace MagazineCMS.Areas.Student.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         #region API CALLS
 
