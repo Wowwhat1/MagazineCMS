@@ -44,7 +44,7 @@
                 <i class="fas mr-2"></i> ← Back to Contribution List
             </a>
 
-            @if (Model.Item3 < DateTime.Now)
+            @if (Model.Item3 < DateTime.Now && Model.Item1.Status != "Pending")
             {
                 <script>
                     $(document).ready(function () {

@@ -52,7 +52,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(string status, int contributionId)
         {
-            var contribution = await _unitOfWork.Contribution.GetFirstOrDefaultAsync(c => c.Id == contributionId);
+            var contribution = _unitOfWork.Contribution.Get(c => c.Id == contributionId);
             if (contribution == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     }
 
                     // Save changes to the database
-                    await _unitOfWork.SaveAsync();
+                    _unitOfWork.Save();
 
                     TempData["Success"] = "Documents uploaded successfully.";
                 }
@@ -177,7 +177,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 };
 
                 _unitOfWork.Feedback.Add(feedback);
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.Save();
 
                 TempData["Success"] = "Feedback added successfully.";
             }

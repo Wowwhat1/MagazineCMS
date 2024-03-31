@@ -30,13 +30,17 @@ namespace MagazineCMS.Areas.Student.Controllers
             var feedback = _unitOfWork.Feedback.Get(filter: f => f.ContributionId == id);
 
             // Retrieve the magazine associated with the contribution
-            var magazine = _unitOfWork.Magazine.Get( m => m.Id == contribution.MagazineId);
+            var magazine = _unitOfWork.Magazine.Get(m => m.Id == contribution.MagazineId);
 
-            // Return a tuple containing the contribution, feedback, and magazine end date
-            var model = (contribution, feedback, magazine.EndDate);
+            // Retrieve the semester associated with the contribution
+            var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
+
+            // Return a tuple containing the contribution, feedback, and semester end date
+            var model = (contribution, feedback, semester.EndDate);
 
             return View(model); // Pass the tuple to the ContributionDetails view
         }
+
 
 
         [HttpPost]
