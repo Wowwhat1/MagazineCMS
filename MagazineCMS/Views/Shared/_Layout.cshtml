@@ -30,12 +30,42 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <i class="fas fa-laugh-wink"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
-                </a>
+                @if (User.IsInRole("Student"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Manager"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Manager" asp-controller="Dashboard" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Coordinator"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
 
 
                 <!-- Divider -->

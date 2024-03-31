@@ -1,0 +1,37 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    var labels = Model.Select(m => m.FacultyName).ToArray();
+    var data = Model.Select(m => m.Count).ToArray();
+}
+
+<canvas id="contributionChart"></canvas>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('contributionChart').getContext('2d');
+        var contributionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(labels)),
+                datasets: [{
+                    label: 'Count of Contributions',
+                    data: @Html.Raw(Json.Serialize(data)),
+                    backgroundColor: '#00b4d8',
+                    borderColor: '#03045e',
+                    borderRadius: 5,
+                    barThickness: 120,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
