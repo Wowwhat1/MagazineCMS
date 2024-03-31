@@ -79,12 +79,11 @@
                                 <th>Title</th>
                                 <th>Submission Date</th>
                                 <th>Status</th>
-                                <th>Documents</th>
-                                <th>Update</th>
+                                <th>Details</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var contribution in Model.Item2)
+                            @foreach (var contribution in Model.Item2.OrderByDescending(c => c.SubmissionDate))
                             {
                                 <tr>
                                     <td>@contribution.Title</td>
@@ -111,37 +110,8 @@
                                         <span class="@statusBadge">@contribution.Status</span>
                                     </td>
                                     <td>
-                                        <!-- Display all files associated with the contribution -->
-                                        @foreach (var document in contribution.Documents)
-                                        {
-                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                            {
-                                                <a href="@Url.Action("Download", "Magazine", new { documentId = document.Id })" target="_blank">
-                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
-                                                </a>
-                                            }
-                                        }
-                                    </td>
-                                    <td>
-                                    <td>
-                                        <!-- Update button -->
-                                            @if (contribution.Status == "Pending")
-                                            {
-                                            <form method="post" enctype="multipart/form-data" action="@Url.Action("UpdateContribution", "Magazine")">
-                                                <input type="hidden" name="ContributionId" value="@contribution.Id" />
-                                                <div class="form-group">
-                                                    <label for="updateDocuments">Upload New Document(s)</label>
-                                                    <input type="file" class="form-control-file" id="updateDocuments" name="Files" multiple required>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </form>
-                                            }
-                                            else
-                                            {
-                                            <button class="btn btn-primary" disabled>Update</button>
-                                            }
-                                    </td>
-
+                                        <!-- Details button -->
+                                        <a class="btn btn-primary" href="@Url.Action("ContributionDetails", "Contribution", new { id = contribution.Id })">Details</a>
                                     </td>
                                 </tr>
                             }
