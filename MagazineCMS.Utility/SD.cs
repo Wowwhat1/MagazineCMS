@@ -28,8 +28,8 @@ namespace MagazineCMS.Utility
         // a student submits n contributions
         public const string Noti_Type_SubmitMultipleTime = "SubmitMultipleTime";
        
-        public const string Noti_Type_Approval = "Approval";
-        public const string Noti_Type_Rejection = "Rejection";
+        public const string Noti_Type_Approval = "Approved";
+        public const string Noti_Type_Rejection = "Rejected";
         public const string Noti_Type_Comment = "Comment";
         public const string Noti_Type_Feedback = "Feedback";
 

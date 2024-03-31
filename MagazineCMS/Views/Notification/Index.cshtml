@@ -9,8 +9,8 @@
     @foreach (var notification in Model)
     {
 
-        string iconClass = notification.Type == "Submit" ? "fa fa-file-text" : notification.Type == "Approval" ? "fa fa-check" : notification.Type == "Reject" ? "fa fa-minus" : "fa fa-info";
-        string color = notification.Type == "Submit" ? "primary" : notification.Type == "Approval" ? "success" : notification.Type == "Reject" ? "danger" : "primary";
+        string iconClass = notification.Type == "Submit" ? "fa fa-file-text" : notification.Type == "Approved" ? "fa fa-check" : notification.Type == "Rejected" ? "fa fa-minus" : "fa fa-info";
+        string color = notification.Type == "Submit" ? "primary" : notification.Type == "Approved" ? "success" : notification.Type == "Rejected" ? "danger" : "info";
 
         <div class="col-xl-6 col-md-6 mb-4">
             <a class="text-decoration-none" href="#">

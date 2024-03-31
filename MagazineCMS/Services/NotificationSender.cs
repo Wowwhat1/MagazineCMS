@@ -50,5 +50,24 @@ namespace MagazineCMS.Services
             }
             _unitOfWork.Save();
         }
+
+        public void ContributionStatusNotification(string recipientUserId,string userId, string magazineId, string contributionId)
+        {
+            var status = _unitOfWork.Contribution.Get(c => c.Id == Convert.ToInt32(contributionId)).Status;
+            var notification = new Notification
+            {
+                RecipientUserId = recipientUserId,
+                UserIds = new List<string> { userId },
+                SenderUserName = "",
+                Content = "has feedback on your contribution",
+                Type = status,
+                Url = "/Student/" + magazineId + "" + contributionId,
+                CreatedAt = DateTime.Now,
+                IsRead = false,
+            };
+
+            _unitOfWork.Notification.Add(notification);
+            _unitOfWork.Save();
+        }
     }
 }
