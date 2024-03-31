@@ -34,6 +34,7 @@ builder.Services.AddScoped<MagazineCMS.Services.IEmailSender, MagazineCMS.Servic
 // Add scoped
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<INotificationSender, NotificationSender>();
 
 var app = builder.Build();
 
@@ -63,7 +64,12 @@ app.MapControllerRoute(
     name: "notification",
     pattern: "{controller=Notification}/{action=Index}/{id?}"
     );
-    
+app.MapControllerRoute(
+    name: "magazine",
+    pattern: "{controller}/{action}/{id?}",
+    defaults: new { area = "Student", controller = "Magazine", action = "Index" }
+    );
+
 app.Run();
 
 void SeedDatabase()

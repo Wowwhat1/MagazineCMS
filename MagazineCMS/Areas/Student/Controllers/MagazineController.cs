@@ -22,14 +22,16 @@ namespace MagazineCMS.Areas.Student.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly INotificationSender _notificationSender;
         private readonly IUserRepository userRepository;
 
-        public MagazineController(IWebHostEnvironment hostingEnvironment, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public MagazineController(IWebHostEnvironment hostingEnvironment, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, IEmailSender emailSender, INotificationSender notificationSender)
         {
             _hostingEnvironment = hostingEnvironment;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _emailSender = emailSender;
+            _notificationSender = notificationSender;
         }
         public IActionResult Index()
         {
@@ -102,7 +104,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 var coordinatorEmails = await GetCoordinatorEmailsAsync();
                 var userFacultyId = _unitOfWork.User.Get(u => u.Email == userEmail).FacultyId;
                 await SendContributionEmailToCoordinatorsAsync(userEmail, magazineTitle, coordinatorEmails);
-                SubmitContributionNotificationAsync(userFacultyId, userId);
+                _notificationSender.SubmitContributionNotification(userFacultyId, userId, magazineId.ToString(), model.ContributionId.ToString());
                 TempData["Success"] = "Contribution submitted successfully.";
             }
             catch (Exception ex)
@@ -272,45 +274,6 @@ namespace MagazineCMS.Areas.Student.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        public void SubmitContributionNotificationAsync(int facultyId, string userId)
-        {
-
-            var coordinators = _unitOfWork.User.GetUserByFacultyIdAndRole(facultyId, SD.Role_Coordinator);
-
-            foreach (var coordinator in coordinators)
-            {
-                var oldNotification = _unitOfWork.Notification.GetAll()
-                        .OrderByDescending(n => n.CreatedAt)
-                        .FirstOrDefault(n => n.RecipientUserId == coordinator.Id && n.Type == SD.Noti_Type_SubmitSingle);
-
-                if (oldNotification != null && !oldNotification.UserIds.Contains(userId))
-                {
-                    oldNotification.UserIds.Add(userId);
-                    oldNotification.CreatedAt = DateTime.Now;
-                    oldNotification.IsRead = false;
-                    _unitOfWork.Notification.Update(oldNotification);
-                }
-                else
-                {
-                    var notification = new Notification
-                    {
-                        RecipientUserId = coordinator.Id,
-                        UserIds = new List<string> { userId },
-                        SenderUserName = "",
-                        Content = "submits a new contribution",
-                        Type = SD.Noti_Type_SubmitSingle,
-                        Url = "/#",
-                        CreatedAt = DateTime.Now,
-                        IsRead = false,
-                    };
-
-                    _unitOfWork.Notification.Add(notification);
-
-                }
-            }
-            _unitOfWork.Save();
         }
 
         #region API CALLS
