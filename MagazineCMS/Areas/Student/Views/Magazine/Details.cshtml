@@ -81,10 +81,11 @@
                                 <th>Status</th>
                                 <th>Documents</th>
                                 <th>Update</th>
+                                <th>Details</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var contribution in Model.Item2)
+                            @foreach (var contribution in Model.Item2.OrderByDescending(c => c.SubmissionDate))
                             {
                                 <tr>
                                     <td>@contribution.Title</td>
@@ -119,10 +120,10 @@
                                                 <a href="@Url.Action("Download", "Magazine", new { documentId = document.Id })" target="_blank">
                                                     @System.IO.Path.GetFileName(document.DocumentUrl)
                                                 </a>
+                                                <br />
                                             }
                                         }
                                     </td>
-                                    <td>
                                     <td>
                                         <!-- Update button -->
                                             @if (contribution.Status == "Pending")
@@ -141,7 +142,9 @@
                                             <button class="btn btn-primary" disabled>Update</button>
                                             }
                                     </td>
-
+                                    <td>
+                                        <!-- Details button -->
+                                        <a class="btn btn-primary" href="@Url.Action("ContributionDetails", "Contribution", new { id = contribution.Id })">Details</a>
                                     </td>
                                 </tr>
                             }
