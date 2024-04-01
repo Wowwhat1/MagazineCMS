@@ -13,5 +13,6 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
         Contribution GetFirstOrDefault(Expression<Func<Contribution, bool>> filter = null, string includeProperties = null);
         Task<Contribution> GetFirstOrDefaultAsync(Expression<Func<Contribution, bool>> filter = null, string includeProperties = null);
         void Update(Contribution obj);
+        Contribution GetById(int id);
     }
 }
