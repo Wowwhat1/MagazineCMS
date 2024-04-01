@@ -129,7 +129,6 @@ body {
     .container {
         padding-top: 20px;
     }
-
     .form-signin {
         width: 100%;
         max-width: 480px;
@@ -193,6 +192,32 @@ body {
         .deep-blue-btn:hover {
             background-color: #00B4D8;
         }
+
+
+    /*----------------Form-regis------------------*/
+
+    .form-register {
+        width: 100%;
+        max-width: 450px;
+        padding: 15px;
+        margin: auto;
+        background: white;
+        border-radius: 5px;
+    }
+
+    .term-and-conditions {
+        color: #1a17ca;
+    }
+
+    #errorMessage {
+        color: red;
+        display: none;
+    }
+
+    .register-space-hold {
+        padding-top: 20px;
+    }
+
 }
 
 @media only screen and (max-width: 450px) {
