@@ -17,6 +17,8 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         }
         public IActionResult Index()
         {
+            var user = User.Identity.Name;
+            var facultyId = _unitOfWork.User.Get(u => u.UserName == user).FacultyId;
             var countContributionApproved = 0;
             var countContributionPending = 0;
             var countContributionRejected = 0;
@@ -30,17 +32,17 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 currentSemester = semesters[semesters.Count -1];
             }
             // get contributions
-            var magazineIds = _unitOfWork.Magazine.GetAll(m => m.SemesterId == currentSemester.Id).Select(m => m.Id).ToList();
-            foreach (var magazineId in magazineIds)
+            var magazines = _unitOfWork.Magazine.GetAll(m => m.SemesterId == currentSemester.Id && m.FacultyId == facultyId, includeProperties: "Faculty,Semester").ToList();
+            foreach (var magazine in magazines)
             {
-                var a = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazineId && c.Status == SD.Status_Approved).ToList().Count;
-                var b = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazineId && c.Status == SD.Status_Pending).ToList().Count;
-                var c = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazineId && c.Status == SD.Status_Rejected).ToList().Count;
+                var a = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id && c.Status == SD.Status_Approved).ToList().Count;
+                var b = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id && c.Status == SD.Status_Pending).ToList().Count;
+                var c = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id && c.Status == SD.Status_Rejected).ToList().Count;
                 countContributionApproved += a;
                 countContributionPending += b;
                 countContributionPending += c;       
             }
-            return View(new Tuple<Semester, int, int, int>(currentSemester, countContributionApproved, countContributionPending, countContributionRejected));
+            return View(new Tuple<Semester, int, int, int, List<Magazine>>(currentSemester, countContributionApproved, countContributionPending, countContributionRejected, magazines));
         }
     }
 }

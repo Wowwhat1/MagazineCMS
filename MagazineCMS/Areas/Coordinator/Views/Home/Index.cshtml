@@ -1,4 +1,4 @@
-﻿@model Tuple<Semester, int, int, int>
+﻿@model Tuple<Semester, int, int, int, List<Magazine>>
 @{
     string startDate = Model.Item1.StartDate.ToString("dd/MM/yyyy");
     string endDate = Model.Item1.EndDate.ToString("dd/MM/yyyy");
@@ -40,7 +40,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-success text-uppercase mb-1">
-                                Approved Contribution
+                                Contribution Approved
                             </div>
                             <div class="h6 mb-0 font-weight-bold text-gray-800">@Model.Item2 contributions approved</div>
                         </div>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">@Model.Item3 contributions pending</div>
+                                    <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">@Model.Item3 pending contributions</div>
                                 </div>
                             </div>
                         </div>
@@ -82,9 +82,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-danger text-uppercase mb-1">
-                                Rejected Contributions
+                                Contribution Rejected
                             </div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">@Model.Item4 contribution reject</div>
+                            <div class="h6 mb-0 font-weight-bold text-gray-800">@Model.Item4 contributions rejected</div>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-times fa-2x text-danger"></i>
@@ -93,5 +93,48 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="d-sm-flex mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Opening Magazines</h1>
+    </div>
+    <!-- Row -->
+    <div class="row mx-2">
+        @if (Model.Item5.Any())
+        {
+            <div class="d-flex flex-wrap" style="gap: 2rem;">
+                @foreach (var magazine in Model.Item5)
+                {
+                    <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+                        <div class="card shadow" style="width: 18rem;">
+                            <div>
+                                <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
+                                <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                                    @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
+                                    {
+                                        <span class="badge badge-warning">Near Closing</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-success">Opening</span>
+                                    }
+                                    <span class="badge badge-primary">@magazine.Faculty.Name</span>
+                                    <span class="badge badge-info">@magazine.Semester.Name</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title " style="height: 3rem; overflow: hidden; text-overflow: ellipsis;" title="@magazine.Name">@magazine.Name</h5>
+                                <p class="card-text" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
+                                <div class="card-text d-flex">
+                                    <p class="text-success"><i class="fa fa-calendar" style="color: black;"></i> &nbsp; @magazine.StartDate.ToShortDateString()</p>
+                                    <p>&nbsp; to &nbsp;</p>
+                                    <p class="text-danger">@magazine.EndDate.ToShortDateString()</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
     </div>
 </div>
