@@ -3,6 +3,7 @@ using MagazineCMS.DataAccess.Repository;
 using MagazineCMS.Models;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using System.Security.Claims;
+using MagazineCMS.Models.ViewModels;
 
 namespace MagazineCMS.Areas.Student.Controllers
 {
@@ -41,18 +42,11 @@ namespace MagazineCMS.Areas.Student.Controllers
             return View(model); // Pass the tuple to the ContributionDetails view
         }
 
-
-
         [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile file, int contributionId)
+        public async Task<IActionResult> AddFiles(List<IFormFile> files, int contributionId)
         {
             try
             {
-                if (file == null || file.Length == 0)
-                {
-                    return BadRequest("File is empty");
-                }
-
                 var contribution = _unitOfWork.Contribution.Get(filter: c => c.Id == contributionId);
 
                 if (contribution == null)
@@ -60,41 +54,42 @@ namespace MagazineCMS.Areas.Student.Controllers
                     return NotFound("Contribution not found");
                 }
 
-                // Get the current user's ID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                // Create a folder for the contribution if it doesn't exist
                 var contributionFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
+
                 if (!Directory.Exists(contributionFolderPath))
                 {
                     Directory.CreateDirectory(contributionFolderPath);
                 }
 
-                // Save the file to the server
-                var fileName = Path.GetFileName(file.FileName);
-                var filePath = Path.Combine(contributionFolderPath, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                foreach (var file in files)
                 {
-                    await file.CopyToAsync(stream);
+                    if (file.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var filePath = Path.Combine(contributionFolderPath, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        var document = new Document
+                        {
+                            Type = "Uploaded",
+                            DocumentUrl = fileName,
+                            ContributionId = contributionId
+                        };
+
+                        _unitOfWork.Document.Add(document);
+                    }
                 }
-
-                // Create a document entry in the database
-                var document = new Document
-                {
-                    Type = "Uploaded",
-                    DocumentUrl = fileName,
-                    ContributionId = contributionId
-                };
-
-                // Add the document to the database context
-                _unitOfWork.Document.Add(document);
 
                 // Update the submission date of the contribution
                 contribution.SubmissionDate = DateTime.Now;
-
                 _unitOfWork.Save();
 
-                TempData["Success"] = "File added successfully.";
+                TempData["Success"] = "Files added successfully.";
             }
             catch (Exception ex)
             {
@@ -103,6 +98,8 @@ namespace MagazineCMS.Areas.Student.Controllers
 
             return RedirectToAction("ContributionDetails", new { id = contributionId });
         }
+
+
 
         [HttpPost]
         public IActionResult DeleteFile(int fileId, int contributionId)
