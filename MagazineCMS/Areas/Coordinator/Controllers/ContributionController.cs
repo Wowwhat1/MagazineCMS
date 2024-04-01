@@ -27,7 +27,40 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         public IActionResult Index()
         {
             var contributions = _unitOfWork.Contribution.GetAll(includeProperties: "User,Magazine").ToList();
-            return View(contributions);
+            var openContributions = contributions.Where(contributions => contributions.Magazine.EndDate > DateTime.Now).ToList();
+            var closeContributions = contributions.Where(contributions => contributions.Magazine.EndDate > DateTime.Now).ToList();
+            foreach (var contribution in contributions)
+            {
+                contribution.Magazine.Faculty = _unitOfWork.Faculty.Get(f => f.Id == contribution.Magazine.FacultyId);
+                contribution.Magazine.Semester = _unitOfWork.Semester.Get(s => s.Id == contribution.Magazine.SemesterId);
+            }
+            foreach (var contribution in contributions)
+            {
+                if (contribution.Magazine.EndDate > DateTime.Now)
+                {
+                    if (!openContributions.Contains(contribution))
+                    {
+                        openContributions.Add(contribution);
+                    }
+                    if (closeContributions.Contains(contribution))
+                    {
+                        closeContributions.Remove(contribution);
+                    }
+                }
+                else
+                {
+                    if (!closeContributions.Contains(contribution))
+                    {
+                        closeContributions.Add(contribution);
+                    }
+                    if (openContributions.Contains(contribution))
+                    {
+                        openContributions.Remove(contribution);
+                    }
+                }
+            }
+
+            return View(new Tuple<List<Contribution>, List<Contribution>>(openContributions, closeContributions));
         }
         public async Task<IActionResult> Details(int id)
         {
@@ -46,13 +79,14 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 }
             }
 
+
             return View(contribution);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(string status, int contributionId)
         {
-            var contribution = await _unitOfWork.Contribution.GetFirstOrDefaultAsync(c => c.Id == contributionId);
+            var contribution = _unitOfWork.Contribution.Get(c => c.Id == contributionId);
             if (contribution == null)
             {
                 return NotFound();
@@ -123,7 +157,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     }
 
                     // Save changes to the database
-                    await _unitOfWork.SaveAsync();
+                    _unitOfWork.Save();
 
                     TempData["Success"] = "Documents uploaded successfully.";
                 }
@@ -159,6 +193,17 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             // Nếu không tìm thấy tệp, trả về NotFound
             return NotFound();
         }
+        public IActionResult ViewDocument(int documentId)
+        {
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
+            {
+                // Trả về file để xem trực tiếp trên web
+                return File(document.DocumentUrl, "application/pdf"); // Điều chỉnh loại tệp phù hợp với loại tệp của bạn
+            }
+            return NotFound();
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -177,7 +222,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 };
 
                 _unitOfWork.Feedback.Add(feedback);
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.Save();
 
                 TempData["Success"] = "Feedback added successfully.";
             }
