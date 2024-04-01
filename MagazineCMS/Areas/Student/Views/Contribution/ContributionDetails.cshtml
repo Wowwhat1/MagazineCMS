@@ -125,14 +125,16 @@
 
                     <h1>Documents</h1>
 
-                    @using (Html.BeginForm("AddFiles", "Contribution", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        <div class="form-group">
-                            <input type="file" name="files" id="files" multiple required class="form-control-file" />
-                            <input type="hidden" name="contributionId" value="@Model.Item1.Id" />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Files</button>
-                    }
+                    <div id="addFileBtn" style="display: none;">
+                        @using (Html.BeginForm("AddFiles", "Contribution", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-group">
+                                <input type="file" name="files" id="files" multiple required class="form-control-file" />
+                                <input type="hidden" name="contributionId" value="@Model.Item1.Id" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Files</button>
+                        }
+                    </div>
 
                     <div id="documentsSection" class="row">
                         @if (Model.Item1.Documents != null && Model.Item1.Documents.Any())
