@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Coordinator\Controllers\" />
     <Folder Include="wwwroot\contributions\StudentID1\" />
     <Folder Include="wwwroot\Documents\" />
     <Folder Include="wwwroot\image\avatar\" />
