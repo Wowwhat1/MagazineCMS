@@ -41,8 +41,6 @@ namespace MagazineCMS.Areas.Student.Controllers
             return View(model); // Pass the tuple to the ContributionDetails view
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> AddFile(IFormFile file, int contributionId)
         {
@@ -60,6 +58,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                     return NotFound("Contribution not found");
                 }
 
+
                 // Get the current user's ID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -69,6 +68,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 {
                     Directory.CreateDirectory(contributionFolderPath);
                 }
+
 
                 // Save the file to the server
                 var fileName = Path.GetFileName(file.FileName);
@@ -103,6 +103,7 @@ namespace MagazineCMS.Areas.Student.Controllers
 
             return RedirectToAction("ContributionDetails", new { id = contributionId });
         }
+
 
         [HttpPost]
         public IActionResult DeleteFile(int fileId, int contributionId)
