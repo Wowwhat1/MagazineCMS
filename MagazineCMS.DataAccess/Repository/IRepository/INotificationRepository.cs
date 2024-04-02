@@ -7,11 +7,8 @@ using MagazineCMS.Models;
 
 namespace MagazineCMS.DataAccess.Repository.IRepository
 {
-    public interface IUserRepository : IRepository<User>
+    public interface INotificationRepository : IRepository<Notification>
     {
-        void Update(User obj);
-
-        IEnumerable<User> GetUserByFacultyIdAndRole(int facultyId, string roleName);
-
+        void Update(Notification obj);
     }
 }

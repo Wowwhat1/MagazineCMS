@@ -22,5 +22,16 @@ namespace MagazineCMS.Utility
 
         public const string Document_Type_Word = "Word";
         public const string Document_Type_Image = "Image";
+        
+        // a student submits 1 contribution
+        public const string Noti_Type_SubmitSingle = "Submit";
+        // a student submits n contributions
+        public const string Noti_Type_SubmitMultipleTime = "SubmitMultipleTime";
+       
+        public const string Noti_Type_Approval = "Approved";
+        public const string Noti_Type_Rejection = "Rejected";
+        public const string Noti_Type_Comment = "Comment";
+        public const string Noti_Type_Feedback = "Feedback";
+
     }
 }

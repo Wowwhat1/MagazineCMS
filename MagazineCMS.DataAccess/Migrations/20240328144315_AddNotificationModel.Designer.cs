@@ -4,6 +4,7 @@ using MagazineCMS.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328144315_AddNotificationModel")]
+    partial class AddNotificationModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +65,7 @@ namespace MagazineCMS.DataAccess.Migrations
                             Id = 1,
                             MagazineId = 1,
                             Status = "Pending",
-                            SubmissionDate = new DateTime(2024, 3, 29, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7350),
+                            SubmissionDate = new DateTime(2024, 3, 28, 21, 43, 14, 934, DateTimeKind.Local).AddTicks(4931),
                             Title = "The Future of AI",
                             UserId = "StudentID1"
                         });
@@ -214,21 +217,21 @@ namespace MagazineCMS.DataAccess.Migrations
                         {
                             Id = 1,
                             Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
-                            EndDate = new DateTime(2024, 4, 5, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7322),
+                            EndDate = new DateTime(2024, 4, 4, 21, 43, 14, 934, DateTimeKind.Local).AddTicks(4902),
                             FacultyId = 2,
                             Name = "Computing Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 22, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7298)
+                            StartDate = new DateTime(2024, 3, 21, 21, 43, 14, 934, DateTimeKind.Local).AddTicks(4885)
                         },
                         new
                         {
                             Id = 2,
                             Description = "Welcome",
-                            EndDate = new DateTime(2024, 4, 5, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7326),
+                            EndDate = new DateTime(2024, 4, 4, 21, 43, 14, 934, DateTimeKind.Local).AddTicks(4907),
                             FacultyId = 3,
                             Name = "Business Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 22, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7326)
+                            StartDate = new DateTime(2024, 3, 21, 21, 43, 14, 934, DateTimeKind.Local).AddTicks(4906)
                         });
                 });
 
@@ -253,10 +256,6 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.Property<string>("RecipientUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()

@@ -23,6 +23,7 @@ namespace MagazineCMS.DataAccess.Data
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuidlder)
         {
