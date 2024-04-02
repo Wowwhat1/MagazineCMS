@@ -57,15 +57,17 @@ function loadDataTable() {
         "columns": [
             { "data": "name", "width": "25%", "className": "table-cell" },
             { "data": "semester.name", "width": "15%", "className": "table-cell" },
+            { "data": "contributionCount", "width": "15%", "className": "table-cell" },
+            { "data": "documentCount", "width": "15%", "className": "table-cell" },
             {
                 data: { id: "id" },
                 "render": function (data) {
                     return `
-                        <div class="text-center">
-                            <button onclick="downloadMagazine('${data.id}')" class="btn btn-primary text-white" style="cursor:pointer; width:150px;">
-                                <i class="bi bi-lock-fill"></i>  Download
-                            </button>
-                    `;
+                    <div class="text-center">
+                        <button onclick="download('${data.id}')" class="btn btn-primary text-white" style="cursor:pointer; width:150px;">
+                            Download
+                        </button>
+                `;
                 },
                 "width": "10%",
                 "className": "table-cell"
@@ -73,6 +75,7 @@ function loadDataTable() {
         ]
     });
 
+    //Display semester table
     $(document).ready(function () {
         $('#SemesterId').change(function () {
             var semesterId = $(this).val();
@@ -106,13 +109,14 @@ function loadDataTable() {
     }
 }
 
+function download(magazineId) {
+    window.location.href = '/manager/managemagazine/downloadalldocuments?magazineId=' + magazineId;
+}
+
+
 function updateMagazine(magazineId) {
     console.log(magazineId);
     location.href = "https://localhost:7276/Manager/ManageMagazine/updateMagazine/" + magazineId;
-}
-
-function downloadMagazine(magazineId) {
-    window.location.href = '/manager/managemagazine/download/' + magazineId;
 }
 
 function deleteMagazine(magazineId) {
