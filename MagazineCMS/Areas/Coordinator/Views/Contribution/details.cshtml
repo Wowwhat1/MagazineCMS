@@ -1,5 +1,48 @@
 ﻿@model MagazineCMS.Models.Contribution
- @using MagazineCMS.Utility
+@using MagazineCMS.Utility
+
+<!-- Modal -->
+<div class="modal fade" id="viewDocumentModal" tabindex="-1" role="dialog" aria-labelledby="viewDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDocumentModalLabel">View Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" id="documentViewer" style="width: 100%; height: 700px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this file?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form id="deleteFileForm" method="post">
+                    <input type="hidden" name="documentId" id="documentIdToDelete" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="container-fluid mx-4">
@@ -48,33 +91,53 @@
                     {
                         <div class="card shadow mt-4">
                             <div class="card-body">
-                                <h3>File Submissions: </h3>
-                                <ul>
-                                    @foreach (var document in Model.Documents)
-                                    {
-                                        <li>
-                                            <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
-                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                <h3>File Submissions</h3>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tên</th>
+                                                <th scope="col">File</th>
+                                                <th scope="col">View</th>
+                                                <th scope="col">Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var document in Model.Documents)
                                             {
-                                                <span>@Model.User.Firstname @Model.User.Lastname:</span>
-                                                <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
-                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
-                                                </a>
+                                                <tr>
+                                                    <td>@Model.User.Firstname @Model.User.Lastname</td>
+                                                    <td>
+                                                        <!-- Hiển thị tên tệp và tạo liên kết để tải xuống -->
+                                                        @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                                        {
+                                                            <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                                                @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <!-- Tạo liên kết để xem file trực tiếp trên web -->
+                                                        <div>
+                                                            <a href="#" onclick="viewDocument(@document.Id)">View Document</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="#" class="delete-file" data-document-id="@document.Id">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             }
-                                        </li>
-                                    }
-                                </ul>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     }
-
-
-                    <!-- Nút quay lại danh sách -->
-                    <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
                 </div>
             </div>
 
-            <!-- Hiển thị danh sách các tệp đã được tải lên -->
             <!-- Hiển thị danh sách các tệp đã được tải lên -->
             @if (Model.Documents != null && Model.Documents.Any())
             {
@@ -202,5 +265,39 @@
         </div>
     </div>
 
+    @section Scripts {
+        <script>
+            function viewDocument(documentId) {
+                $('#viewDocumentModal').modal('show');
+                $('#documentViewer').attr('src', '@Url.Action("ViewDocument", "Contribution")?documentId=' + documentId);
+            }
+
+            $(document).ready(function () {
+                $('.delete-file').click(function (e) {
+                    e.preventDefault();
+                    var documentId = $(this).data('document-id');
+                    $('#documentIdToDelete').val(documentId);
+                    $('#deleteFileModal').modal('show');
+                });
+
+                $('#deleteFileForm').submit(function (e) {
+                    e.preventDefault();
+                    var documentId = $('#documentIdToDelete').val();
+                    $.post('@Url.Action("DeleteDocument", "Contribution")', { documentId: documentId })
+                        .done(function (data) {
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                alert('An error occurred while deleting the file.');
+                            }
+                        })
+                        .fail(function () {
+                            alert('An error occurred while deleting the file.');
+                        });
+                });
+            });
+
+        </script>
+    }
 
 

@@ -2,11 +2,14 @@
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;
+using MagazineCMS.Services;
 using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
+using System.Data;
 using System.Security.Claims;
 
 namespace MagazineCMS.Areas.Student.Controllers
@@ -18,12 +21,17 @@ namespace MagazineCMS.Areas.Student.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailSender _emailSender;
+        private readonly INotificationSender _notificationSender;
+        private readonly IUserRepository userRepository;
 
-        public MagazineController(IWebHostEnvironment hostingEnvironment, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        public MagazineController(IWebHostEnvironment hostingEnvironment, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager, IEmailSender emailSender, INotificationSender notificationSender)
         {
             _hostingEnvironment = hostingEnvironment;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _emailSender = emailSender;
+            _notificationSender = notificationSender;
         }
         public IActionResult Index()
         {
@@ -80,72 +88,111 @@ namespace MagazineCMS.Areas.Student.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model, int magazineId)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Get the current user's ID
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    // Create a contribution
-                    var contribution = new Contribution
-                    {
-                        Title = model.Files.FirstOrDefault()?.FileName ?? "Untitled",
-                        Status = "Pending", // Set the status to pending
-                        SubmissionDate = DateTime.Now,
-                        UserId = userId,
-                        MagazineId = magazineId
-                    };
-
-                    // Add the contribution to the database context
-                    _unitOfWork.Contribution.Add(contribution);
-                    _unitOfWork.Save();
-
-                    // Create a folder for the contribution if it doesn't exist
-                    var contributionFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
-                    if (!Directory.Exists(contributionFolderPath))
-                    {
-                        Directory.CreateDirectory(contributionFolderPath);
-                    }
-
-                    // Loop through each file and save it
-                    foreach (var file in model.Files)
-                    {
-                        var document = new Document
-                        {
-                            Type = "Uploaded",
-                            DocumentUrl = file.FileName,
-                            ContributionId = contribution.Id
-                        };
-
-                        // Add the document to the database context
-                        _unitOfWork.Document.Add(document);
-
-                        // Save changes to the database
-                        _unitOfWork.Save();
-
-                        // Save the file to the server
-                        var filePath = Path.Combine(contributionFolderPath, file.FileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-                    }
-
-                    TempData["Success"] = "Contribution submitted successfully.";
-                }
-                catch (Exception ex)
-                {
-                    TempData["Error"] = $"An error occurred: {ex.Message}";
-                }
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid model state. Please check your inputs.";
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                var userId = GetCurrentUserId();
+                var userEmail = GetCurrentUserEmail();
+                var contribution = CreateContribution(model, magazineId, userId);
+                SaveContributionAndDocuments(model.Files, contribution);
+                var magazineTitle = GetMagazineTitle(magazineId);
+                var coordinatorEmails = await GetCoordinatorEmailsAsync();
+                var userFacultyId = _unitOfWork.User.Get(u => u.Email == userEmail).FacultyId;
+                await SendContributionEmailToCoordinatorsAsync(userEmail, magazineTitle, coordinatorEmails);
+                _notificationSender.SubmitContributionNotification(userFacultyId, userId, magazineId.ToString(), model.ContributionId.ToString());
+                TempData["Success"] = "Contribution submitted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred: {ex.Message}";
             }
 
             return RedirectToAction("Index");
+        }
+
+        private string GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        private string GetCurrentUserEmail()
+        {
+            return User.Identity.Name;
+        }
+
+        private Contribution CreateContribution(ContributionSubmissionVM model, int magazineId, string userId)
+        {
+            var contribution = new Contribution
+            {
+                Title = model.Files.FirstOrDefault()?.FileName ?? "Untitled",
+                Status = "Pending",
+                SubmissionDate = DateTime.Now,
+                UserId = userId,
+                MagazineId = magazineId
+            };
+
+            _unitOfWork.Contribution.Add(contribution);
+            _unitOfWork.Save();
+
+            return contribution;
+        }
+
+        private void SaveContributionAndDocuments(List<IFormFile> files, Contribution contribution)
+        {
+            var userId = contribution.UserId;
+            var contributionFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
+
+            if (!Directory.Exists(contributionFolderPath))
+            {
+                Directory.CreateDirectory(contributionFolderPath);
+            }
+
+            foreach (var file in files)
+            {
+                var document = new Document
+                {
+                    Type = "Uploaded",
+                    DocumentUrl = file.FileName,
+                    ContributionId = contribution.Id
+                };
+
+                _unitOfWork.Document.Add(document);
+                _unitOfWork.Save();
+
+                var filePath = Path.Combine(contributionFolderPath, file.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+            }
+        }
+
+        private string GetMagazineTitle(int magazineId)
+        {
+            var magazine = _unitOfWork.Magazine.Get(u => u.Id == magazineId);
+            return magazine.Name;
+        }
+
+        private async Task<IEnumerable<string>> GetCoordinatorEmailsAsync()
+        {
+            var userEmail = GetCurrentUserEmail();
+            var user = _unitOfWork.User.Get(u => u.Email == userEmail);
+
+            var coordinatorUsers = _unitOfWork.User.GetUserByFacultyIdAndRole(user.FacultyId, SD.Role_Coordinator);
+            return coordinatorUsers.Select(u => u.Email);
+        }
+
+        private async Task SendContributionEmailToCoordinatorsAsync(string userEmail, string magazineTitle, IEnumerable<string> coordinatorEmails)
+        {
+            var subject = "IMPORTANT! CONTRIBUTION SUBMITTED";
+            var message = $"{userEmail} has just submitted a contribution to {magazineTitle}. Please check and give feedback in 14 days!";
+            await _emailSender.SendEmailAsync(subject, message, coordinatorEmails);
         }
 
         [HttpPost]
@@ -242,6 +289,13 @@ namespace MagazineCMS.Areas.Student.Controllers
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
             
             return Json(new { closedMagazines, openMagazines });
+        }
+
+        [HttpGet]
+        public IActionResult GetNotification(string? userId)
+        {
+            var notifications = _unitOfWork.Notification.GetAll();
+            return Json( new { data = notifications });
         }
 
         #endregion

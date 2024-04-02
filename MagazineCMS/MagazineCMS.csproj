@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mammoth" Version="1.4.0" />
+    <PackageReference Include="EcoCore" Version="7.0.0.15531" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
@@ -29,6 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
+    <PackageReference Include="System.Net.Mail" Version="1.0.0-rtm-00002" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,9 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Manager\Controllers\" />
     <Folder Include="Areas\Coordinator\Controllers\" />
-    <Folder Include="Areas\Manager\Controllers\" />
+    <Folder Include="wwwroot\contributions\StudentID1\" />
     <Folder Include="wwwroot\Documents\" />
     <Folder Include="wwwroot\image\avatar\" />
     <Folder Include="wwwroot\image\magazine\" />

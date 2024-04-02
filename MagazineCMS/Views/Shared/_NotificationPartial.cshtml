@@ -1,17 +1,56 @@
-﻿@if (TempData["success"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script type="text/javascript">
-        toastr.success('@TempData["success"]');
-    </script>
-}
+﻿<!-- Nav Item - Alerts -->
+<li class="nav-item dropdown no-arrow mx-1" id="notification-dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="showNotification()">
+        <i class="fa fa-bell fa-fw"></i>
+        <!-- Counter - Alerts -->
+        <span class="badge badge-danger badge-counter" id="notification-count"></span>
+    </a>
+    <!-- Dropdown - Alerts -->
+    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+         aria-labelledby="alertsDropdown">
+        <h6 class="dropdown-header">
+            Notification Center
+        </h6>
+        <div id="notification-content">
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                        <i class="fa fa-file-text text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">December 12, 2019</div>
+                    <span class="font-weight-bold">A new contribution is submitted by someone!</span>
+                </div>
+            </a>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                        <i class="fa fa-money text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">December 7, 2019</div>
+                    $290.29 has been deposited into your account!
+                </div>
+            </a>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                        <i class="fa fa-exclamation-triangle text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">December 2, 2019</div>
+                    Spending Alert: We've noticed unusually high spending for your account.
+                </div>
+            </a>
+        </div>
+        <a class="dropdown-item text-center small text-gray-500" href="/Notification">Show All Alerts</a>
+    </div>
+</li>
 
-@if (TempData["error"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script type="text/javascript">
-        toastr.error('@TempData["error"]');
-    </script>
+@section Scripts {
+    <script src="~/js/notification.js"></script>
 }

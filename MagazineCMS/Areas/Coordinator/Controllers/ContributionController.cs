@@ -27,7 +27,40 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         public IActionResult Index()
         {
             var contributions = _unitOfWork.Contribution.GetAll(includeProperties: "User,Magazine").ToList();
-            return View(contributions);
+            var openContributions = contributions.Where(contributions => contributions.Magazine.EndDate > DateTime.Now).ToList();
+            var closeContributions = contributions.Where(contributions => contributions.Magazine.EndDate > DateTime.Now).ToList();
+            foreach (var contribution in contributions)
+            {
+                contribution.Magazine.Faculty = _unitOfWork.Faculty.Get(f => f.Id == contribution.Magazine.FacultyId);
+                contribution.Magazine.Semester = _unitOfWork.Semester.Get(s => s.Id == contribution.Magazine.SemesterId);
+            }
+            foreach (var contribution in contributions)
+            {
+                if (contribution.Magazine.EndDate > DateTime.Now)
+                {
+                    if (!openContributions.Contains(contribution))
+                    {
+                        openContributions.Add(contribution);
+                    }
+                    if (closeContributions.Contains(contribution))
+                    {
+                        closeContributions.Remove(contribution);
+                    }
+                }
+                else
+                {
+                    if (!closeContributions.Contains(contribution))
+                    {
+                        closeContributions.Add(contribution);
+                    }
+                    if (openContributions.Contains(contribution))
+                    {
+                        openContributions.Remove(contribution);
+                    }
+                }
+            }
+
+            return View(new Tuple<List<Contribution>, List<Contribution>>(openContributions, closeContributions));
         }
         public async Task<IActionResult> Details(int id)
         {
@@ -45,6 +78,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     feedback.User = new User { UserName = user.UserName };
                 }
             }
+
 
             return View(contribution);
         }
@@ -159,6 +193,68 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             // Nếu không tìm thấy tệp, trả về NotFound
             return NotFound();
         }
+        public IActionResult ViewDocument(int documentId)
+        {
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(document.DocumentUrl);
+                var fileName = Path.GetFileName(document.DocumentUrl);
+                var fileExtension = Path.GetExtension(document.DocumentUrl).ToLower();
+                var fileType = GetMimeType(fileExtension); // Lấy kiểu MIME từ phần mở rộng của tệp
+
+                return File(fileBytes, fileType);
+            }
+            return NotFound();
+        }
+
+        // Phương thức để lấy kiểu MIME từ phần mở rộng của tệp
+        private string GetMimeType(string fileExtension)
+        {
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    return "application/pdf";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".png":
+                    return "image/png";
+                case ".jpg":
+                    return "image/jpeg";
+                // Thêm các loại tệp khác nếu cần
+                default:
+                    return "application/octet-stream"; // Mặc định là kiểu MIME không xác định
+            }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteDocument(int documentId)
+        {
+            try
+            {
+                var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+                if (document != null)
+                {
+                    var filePath = document.DocumentUrl;
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    _unitOfWork.Document.Remove(document);
+                    _unitOfWork.Save();
+
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

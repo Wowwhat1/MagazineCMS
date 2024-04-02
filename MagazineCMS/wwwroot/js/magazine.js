@@ -34,21 +34,6 @@ function loadDataTable() {
             {
                 data: { id: "id" },
                 "render": function (data) {
-                   /* var today = new Date().getTime();
-                    var lockout = new Date(data.lockoutEnd).getTime();
-
-                    if (lockout > today) {
-                        return `
-                        <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-info text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-lock-fill"></i>  Edit
-                            </a> 
-                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-trash-fill"></i> Delete
-                            </button>
-                        </div>
-                    `;
-                    } else {*/
                         return `
                         <div class="text-center">
                             <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
@@ -59,7 +44,6 @@ function loadDataTable() {
                             </button>
                         </div>
                     `;
-                    //}
                 },
                 "width": "10%",
                 "className": "table-cell"

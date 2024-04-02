@@ -13,30 +13,30 @@
 
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="modal-body">
-            <div class="row mb-3">
+                    <div class="row mb-3">
                         <div class="col-2">
                             <div class="row" style="padding-top: 10px;">
                                 <h5 style="padding-left: 10px;">Magazine</h5>
-                    <div>
+                                <div>
                                     <input asp-for="@Model.Magazine.Name" class="form-control" aria-required="true" placeholder=""
                                            style="width: 400px; height: 38px; padding-top: 20px;" />
-                        <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
-                    </div>
-                </div>
+                                    <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
+                                </div>
+                            </div>
                             <div class="row" style="padding-top: 10px;">
                                 <h5 style="padding-left: 10px;">Description</h5>
-                    <div>
+                                <div>
                                     <textarea id="tiny" asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder=""
                                               style="width: 400px; height: 180px;">
-                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
-                        </textarea>
-                    </div>
-                </div>
-            </div>
+                                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
-                <div class="col">
+                    <div class="col">
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Faculty</h5>
                             <div>
@@ -98,10 +98,7 @@
                                 <a asp-area="Manager" asp-controller="ManageMagazine" asp-action="Index" style="color: white;">Close</a>
                             </button>
                         </div>
-                </div>
-                <div class="col-auto">
-                    <button id="close-form" type="button" class="btn btn-lg btn-secondary">Close</button>
-                </div>
+                    </div>
             </div>
 
 
