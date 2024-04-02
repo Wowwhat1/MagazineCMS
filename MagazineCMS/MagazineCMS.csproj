@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\contributionDetail.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Mammoth" Version="1.4.0" />
     <PackageReference Include="EcoCore" Version="7.0.0.15531" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.2" />
