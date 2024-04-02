@@ -1,4 +1,5 @@
-﻿using MagazineCMS.DataAccess.Repository;
+﻿using MagazineCMS.DataAccess.Data;
+using MagazineCMS.DataAccess.Repository;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;

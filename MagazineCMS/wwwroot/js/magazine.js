@@ -51,6 +51,28 @@ function loadDataTable() {
         ]
     });
 
+    /*Table data contribution download of magazine*/
+    dataTable = $('#contribution-magazine-table').DataTable({
+        "ajax": { url: '/manager/managemagazine/getall' },
+        "columns": [
+            { "data": "name", "width": "25%", "className": "table-cell" },
+            { "data": "semester.name", "width": "15%", "className": "table-cell" },
+            {
+                data: { id: "id" },
+                "render": function (data) {
+                    return `
+                        <div class="text-center">
+                            <button onclick="downloadMagazine('${data.id}')" class="btn btn-primary text-white" style="cursor:pointer; width:150px;">
+                                <i class="bi bi-lock-fill"></i>  Download
+                            </button>
+                    `;
+                },
+                "width": "10%",
+                "className": "table-cell"
+            }
+        ]
+    });
+
     $(document).ready(function () {
         $('#SemesterId').change(function () {
             var semesterId = $(this).val();
@@ -87,6 +109,10 @@ function loadDataTable() {
 function updateMagazine(magazineId) {
     console.log(magazineId);
     location.href = "https://localhost:7276/Manager/ManageMagazine/updateMagazine/" + magazineId;
+}
+
+function downloadMagazine(magazineId) {
+    window.location.href = '/manager/managemagazine/download/' + magazineId;
 }
 
 function deleteMagazine(magazineId) {
