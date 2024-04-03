@@ -175,24 +175,22 @@ namespace MagazineCMS.Areas.Manager.Controllers
         {
             MagazineVM magazineVM = new MagazineVM()
             {
-                MagazineVM magazineVM = new MagazineVM()
+                Magazine = new Magazine(),
+                FacultyList = _unitOfWork.Faculty
+                .GetAll().Select(u => new SelectListItem
                 {
-                    Magazine = new Magazine(),
-                    FacultyList = _unitOfWork.Faculty
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                SemesterList = _unitOfWork.Semester
                     .GetAll().Select(u => new SelectListItem
                     {
                         Text = u.Name,
                         Value = u.Id.ToString()
                     }),
-                    SemesterList = _unitOfWork.Semester
-                        .GetAll().Select(u => new SelectListItem
-                        {
-                            Text = u.Name,
-                            Value = u.Id.ToString()
-                        }),
-                };
-                return magazineVM;
-            }
+            };
+            return magazineVM;
+        }
 
         public async Task<List<Document>> GetDocumentsByMagazineId(int magazineId)
         {

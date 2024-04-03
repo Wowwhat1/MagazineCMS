@@ -75,8 +75,8 @@ namespace MagazineCMS.Controllers
             else
             {
                 // Ng??i dùng ch?a ??ng nh?p, hi?n th? t?t c? t?p chí
-                openMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate > DateTime.Now).ToList();
-                closedMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate <= DateTime.Now).ToList();
+                openMagazines = _unitOfWork.Magazine.GetAll(includeProperties: "Faculty,Semester").Where(m => m.EndDate > DateTime.Now).ToList();
+                closedMagazines = _unitOfWork.Magazine.GetAll(includeProperties: "Faculty,Semester").Where(m => m.EndDate <= DateTime.Now).ToList();
             }
 
             return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
