@@ -62,7 +62,7 @@ namespace MagazineCMS.DataAccess.Migrations
                             Id = 1,
                             MagazineId = 1,
                             Status = "Pending",
-                            SubmissionDate = new DateTime(2024, 3, 18, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6091),
+                            SubmissionDate = new DateTime(2024, 3, 29, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7350),
                             Title = "The Future of AI",
                             UserId = "StudentID1"
                         });
@@ -214,22 +214,67 @@ namespace MagazineCMS.DataAccess.Migrations
                         {
                             Id = 1,
                             Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
-                            EndDate = new DateTime(2024, 3, 25, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6054),
+                            EndDate = new DateTime(2024, 4, 5, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7322),
                             FacultyId = 2,
                             Name = "Computing Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 11, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6031)
+                            StartDate = new DateTime(2024, 3, 22, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7298)
                         },
                         new
                         {
                             Id = 2,
                             Description = "Welcome",
-                            EndDate = new DateTime(2024, 3, 25, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6060),
+                            EndDate = new DateTime(2024, 4, 5, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7326),
                             FacultyId = 3,
                             Name = "Business Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 3, 11, 23, 13, 32, 243, DateTimeKind.Local).AddTicks(6059)
+                            StartDate = new DateTime(2024, 3, 22, 23, 57, 40, 853, DateTimeKind.Local).AddTicks(7326)
                         });
+                });
+
+            modelBuilder.Entity("MagazineCMS.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RecipientUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderUserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientUserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Semester", b =>
@@ -516,13 +561,13 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.HasOne("MagazineCMS.Models.Magazine", "Magazine")
                         .WithMany()
                         .HasForeignKey("MagazineId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Magazine");
@@ -544,7 +589,7 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Feedback", b =>
                 {
                     b.HasOne("MagazineCMS.Models.Contribution", "Contribution")
-                        .WithMany()
+                        .WithMany("Feedbacks")
                         .HasForeignKey("ContributionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -577,6 +622,17 @@ namespace MagazineCMS.DataAccess.Migrations
                     b.Navigation("Faculty");
 
                     b.Navigation("Semester");
+                });
+
+            modelBuilder.Entity("MagazineCMS.Models.Notification", b =>
+                {
+                    b.HasOne("MagazineCMS.Models.User", "RecipientUser")
+                        .WithMany()
+                        .HasForeignKey("RecipientUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecipientUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -644,6 +700,8 @@ namespace MagazineCMS.DataAccess.Migrations
             modelBuilder.Entity("MagazineCMS.Models.Contribution", b =>
                 {
                     b.Navigation("Documents");
+
+                    b.Navigation("Feedbacks");
                 });
 
             modelBuilder.Entity("MagazineCMS.Models.Faculty", b =>

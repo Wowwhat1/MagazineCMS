@@ -1,0 +1,106 @@
+﻿@model Tuple<Magazine, List<Contribution>>
+
+@{
+    TimeSpan remainingTime = Model.Item1.EndDate - DateTime.Now;
+    int days = (int)remainingTime.TotalDays;
+    int hours = remainingTime.Hours;
+    int minutes = remainingTime.Minutes;
+}
+
+<div id="accordion" class="mx-4">
+    <a href="@Url.Action("Index", "Magazine")">← Back to Magazine List</a>
+    <h1 class="h4 text-primary font-weight-bold my-2">@Model.Item1.Name</h1>
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Information
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <h1 class="h5 font-weight-bold my-2">Faculty: </h1>
+                    <div class="badge badge-primary mx-2" style="height: 20px;">@Model.Item1.Faculty.Name</div>
+                </div>
+                <h1 class="h5 font-weight-bold my-2">Description</h1>
+                <div class="text-gray-900">
+                    @Model.Item1.Description
+                </div>
+                <h1 class="h5 font-weight-bold my-2">Time line</h1>
+                <div class="text-gray-900">
+                    Start date : @Model.Item1.StartDate.ToString("dddd, dd/MM/yyyy HH:mm")
+                    <br />
+                    Due date : @Model.Item1.EndDate.ToString("dddd, dd/MM/yyyy HH:mm")
+                    <br />
+                    Time remaining : @($"{days} days {hours} hours {minutes} mins")
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Submission history
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
+            <div class="card-body">
+                <h1 class="h5 font-weight-bold my-2">Contribution History</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Title</th>
+                                <th>Submission Date</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contribution in Model.Item2.OrderByDescending(c => c.SubmissionDate))
+                            {
+                                <tr>
+                                    <td>@contribution.User.Lastname @contribution.User.Firstname</td>
+                                    <td>@contribution.Title</td>
+                                    <td>@contribution.SubmissionDate.ToString("dddd, dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @{
+                                            string statusBadge = "";
+                                            switch (contribution.Status)
+                                            {
+                                                case "Pending":
+                                                    statusBadge = "badge bg-warning text-dark";
+                                                    break;
+                                                case "Approved":
+                                                    statusBadge = "badge bg-success";
+                                                    break;
+                                                case "Rejected":
+                                                    statusBadge = "badge bg-danger";
+                                                    break;
+                                                default:
+                                                    statusBadge = "badge bg-primary";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="@statusBadge text-gray-800">@contribution.Status</span>
+                                    </td>
+                                    <td>
+                                        <!-- Details button -->
+                                        <a class="btn btn-primary" href="@Url.Action("ContributionDetails", "Contribution", new { id = contribution.Id })">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

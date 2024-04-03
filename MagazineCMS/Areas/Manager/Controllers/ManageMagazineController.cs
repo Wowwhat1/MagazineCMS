@@ -161,7 +161,19 @@ namespace MagazineCMS.Areas.Manager.Controllers
             return View("Index");
         }
 
+        public IActionResult Details(int id)
+        {
+            var magazine = _unitOfWork.Magazine.Get(m => m.Id == id, includeProperties: "Faculty,Semester");
+            var contributions = _unitOfWork.Contribution.GetAll(c =>
+                c.MagazineId == id,
+                includeProperties: "Documents,User"
+                ).ToList();
+            return View(new Tuple<Magazine, List<Contribution>>(magazine, contributions));
+        }
+
         private MagazineVM CreateMagazineVM()
+        {
+            MagazineVM magazineVM = new MagazineVM()
             {
                 MagazineVM magazineVM = new MagazineVM()
                 {
@@ -310,6 +322,25 @@ namespace MagazineCMS.Areas.Manager.Controllers
 
                 return BadRequest(new { success = false, message = "Error while deleting magazine" });
             }
+        }
+
+
+        [HttpPost]
+        public IActionResult UpdateContributionStatus(int[] contributionIds)
+        {
+            if (contributionIds == null || contributionIds.Length == 0)
+            {
+                return BadRequest(new { success = false, message = "No contribution selected" });
+            }
+            var selectedContributions = _unitOfWork.Contribution.GetAll(c => contributionIds.Contains(c.Id));
+            foreach (var contribution in selectedContributions)
+            {
+                contribution.Status = SD.Status_Public;
+                _unitOfWork.Contribution.Update(contribution);
+            }
+            _unitOfWork.Save();
+            TempData["Success"] = "Contributions public successfully";
+            return Ok();
         }
 
         #endregion
