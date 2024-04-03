@@ -32,6 +32,10 @@ namespace MagazineCMS.Models
         [ForeignKey("SemesterId")]
         [ValidateNever]
         public Semester Semester { get; set; }
+        [NotMapped]
+        public int ContributionCount { get; set; }
+        [NotMapped]
+        public int DocumentCount { get; set; }
 
     }
 }
