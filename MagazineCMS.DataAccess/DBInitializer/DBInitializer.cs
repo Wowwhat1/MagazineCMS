@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -32,187 +33,187 @@ namespace MagazineCMS.DataAccess.DBInitializer
 
         public void Initialize()
         {
-            // Fake firstNames and LastNames
-            List<string> firstNames = new List<string> { "A", "B", "C", "D", "E" };
-            List<string> lastNames = new List<string> { "Nguyen", "Tran", "Le", "Pham", "Hoang" };
+            //// Fake firstNames and LastNames
+            //List<string> firstNames = new List<string> { "A", "B", "C", "D", "E" };
+            //List<string> lastNames = new List<string> { "Nguyen", "Tran", "Le", "Pham", "Hoang" };
 
-            // Create roles if that invalid
-            if (!_roleManager.RoleExistsAsync(SD.Role_Student).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Student)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Coordinator)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Manager)).GetAwaiter().GetResult();
-            }
+            //// Create roles if that invalid
+            //if (!_roleManager.RoleExistsAsync(SD.Role_Student).GetAwaiter().GetResult())
+            //{
+            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Student)).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Coordinator)).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
+            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Manager)).GetAwaiter().GetResult();
+            //}
 
-            /*            // Loop for create accounts
-                        // Create accounts for Computing follow Id from 1 to 100
-                        for (int i = 0; i < 100; i++)
-                        {
-                            string firstName = firstNames[i % firstNames.Count];
-                            string lastName = lastNames[i % lastNames.Count];
-                            string email = $"user{i}@gmail.com";
+            //// Loop for create accounts
+            //// Create accounts for Computing follow Id from 1 to 100
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    string firstName = firstNames[i % firstNames.Count];
+            //    string lastName = lastNames[i % lastNames.Count];
+            //    string email = $"user{i}@gmail.com";
 
-                            var user = new User
-                            {
-                                Id = $"UserID{i}",
-                                UserName = email,
-                                Email = email,
-                                Firstname = firstName,
-                                Lastname = lastName,
-                                PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
-                                AvatarUrl = SD.Default_Avatar,
-                                FacultyId = 2 // Create value 2 for Facuty
-                            };
+            //    var user = new User
+            //    {
+            //        Id = $"UserID{i}",
+            //        UserName = email,
+            //        Email = email,
+            //        Firstname = firstName,
+            //        Lastname = lastName,
+            //        PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
+            //        AvatarUrl = SD.Default_Avatar,
+            //        FacultyId = 2 // Create value 2 for Facuty
+            //    };
 
-                            var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
+            //    var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
 
-                            if (result.Succeeded)
-                            {
-                                _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
-                            }
-                        }
+            //    if (result.Succeeded)
+            //    {
+            //        _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
+            //    }
+            //}
 
-                        // Create accounts for Business follow Id from 101 to 200
-                        for (int i = 100; i < 200; i++)
-                        {
-                            string firstName = firstNames[i % firstNames.Count];
-                            string lastName = lastNames[i % lastNames.Count];
-                            string email = $"user{i}@gmail.com";
+            //// Create accounts for Business follow Id from 101 to 200
+            //for (int i = 100; i < 200; i++)
+            //{
+            //    string firstName = firstNames[i % firstNames.Count];
+            //    string lastName = lastNames[i % lastNames.Count];
+            //    string email = $"user{i}@gmail.com";
 
-                            var user = new User
-                            {
-                                Id = $"UserID{i}",
-                                UserName = email,
-                                Email = email,
-                                Firstname = firstName,
-                                Lastname = lastName,
-                                PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
-                                AvatarUrl = SD.Default_Avatar,
-                                FacultyId = 3 // Create value 3 for Facuty
-                            };
+            //    var user = new User
+            //    {
+            //        Id = $"UserID{i}",
+            //        UserName = email,
+            //        Email = email,
+            //        Firstname = firstName,
+            //        Lastname = lastName,
+            //        PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
+            //        AvatarUrl = SD.Default_Avatar,
+            //        FacultyId = 3 // Create value 3 for Facuty
+            //    };
 
-                            var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
+            //    var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
 
-                            if (result.Succeeded)
-                            {
-                                _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
-                            }
-                        }
+            //    if (result.Succeeded)
+            //    {
+            //        _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
+            //    }
+            //}
 
-                        // Create accounts for Design follow Id from 201 to 250
-                        for (int i = 200; i < 250; i++)
-                        {
-                            string firstName = firstNames[i % firstNames.Count];
-                            string lastName = lastNames[i % lastNames.Count];
-                            string email = $"user{i}@gmail.com";
+            //// Create accounts for Design follow Id from 201 to 250
+            //for (int i = 200; i < 250; i++)
+            //{
+            //    string firstName = firstNames[i % firstNames.Count];
+            //    string lastName = lastNames[i % lastNames.Count];
+            //    string email = $"user{i}@gmail.com";
 
-                            var user = new User
-                            {
-                                Id = $"UserID{i}",
-                                UserName = email,
-                                Email = email,
-                                Firstname = firstName,
-                                Lastname = lastName,
-                                PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
-                                AvatarUrl = SD.Default_Avatar,
-                                FacultyId = 4 // Create value 4 for Facuty
-                            };
+            //    var user = new User
+            //    {
+            //        Id = $"UserID{i}",
+            //        UserName = email,
+            //        Email = email,
+            //        Firstname = firstName,
+            //        Lastname = lastName,
+            //        PhoneNumber = $"1112223{i.ToString().PadLeft(3, '0')}",
+            //        AvatarUrl = SD.Default_Avatar,
+            //        FacultyId = 4 // Create value 4 for Facuty
+            //    };
 
-                            var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
+            //    var result = _userManager.CreateAsync(user, "Password123*").GetAwaiter().GetResult();
 
-                            if (result.Succeeded)
-                            {
-                                _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
-                            }
-                        }*/
+            //    if (result.Succeeded)
+            //    {
+            //        _userManager.AddToRoleAsync(user, SD.Role_Student).GetAwaiter().GetResult();
+            //    }
+            //}
 
 
-            /* // Loop for create contributions
-             if (!_db.Contributions.Any())
-             {
-                 // create some contributions
-                 var contributions = new List<Contribution>();
+            //// Loop for create contributions
+            //if (!_db.Contributions.Any())
+            //{
+            //    // create some contributions
+            //    var contributions = new List<Contribution>();
 
-                 // Create contribution for computing
-                 for (int i = 1; i <= 20; i++)
-                 {
-                     var userId = $"UserID{i}";
-                     var userExists = _db.Users.Any(u => u.Id == userId);
+            //    // Create contribution for computing
+            //    for (int i = 1; i <= 20; i++)
+            //    {
+            //        var userId = $"UserID{i}";
+            //        var userExists = _db.Users.Any(u => u.Id == userId);
 
-                     if (!userExists)
-                     {
-                         // Handle the case where the user does not exist
-                         // For example, you could continue to the next iteration of the loop
-                         continue;
-                     }
+            //        if (!userExists)
+            //        {
+            //            // Handle the case where the user does not exist
+            //            // For example, you could continue to the next iteration of the loop
+            //            continue;
+            //        }
 
-                     contributions.Add(new Contribution
-                     {
-                         Title = $"The Future of AI {i}",
-                         Status = SD.Status_Pending,
-                         SubmissionDate = DateTime.Now,
-                         UserId = userId,
-                         MagazineId = 1
-                     });
-                 }
+            //        contributions.Add(new Contribution
+            //        {
+            //            Title = $"The Future of AI {i}",
+            //            Status = SD.Status_Pending,
+            //            SubmissionDate = DateTime.Now,
+            //            UserId = userId,
+            //            MagazineId = 1
+            //        });
+            //    }
 
-                 // Create contribution for business
-                 for (int i = 100; i <= 152; i++)
-                 {
-                     var userId = $"UserID{i}";
-                     var userExists = _db.Users.Any(u => u.Id == userId);
+            //    // Create contribution for business
+            //    for (int i = 100; i <= 152; i++)
+            //    {
+            //        var userId = $"UserID{i}";
+            //        var userExists = _db.Users.Any(u => u.Id == userId);
 
-                     if (!userExists)
-                     {
-                         // Handle the case where the user does not exist
-                         // For example, you could continue to the next iteration of the loop
-                         continue;
-                     }
+            //        if (!userExists)
+            //        {
+            //            // Handle the case where the user does not exist
+            //            // For example, you could continue to the next iteration of the loop
+            //            continue;
+            //        }
 
-                     contributions.Add(new Contribution
-                     {
-                         Title = $"AI in business {i}",
-                         Status = SD.Status_Pending,
-                         SubmissionDate = DateTime.Now,
-                         UserId = userId,
-                         MagazineId = 2
-                     });
-                 }
+            //        contributions.Add(new Contribution
+            //        {
+            //            Title = $"AI in business {i}",
+            //            Status = SD.Status_Pending,
+            //            SubmissionDate = DateTime.Now,
+            //            UserId = userId,
+            //            MagazineId = 2
+            //        });
+            //    }
 
-                 _db.Contributions.AddRange(contributions);
-                 _db.SaveChanges();
-             }*/
+            //    _db.Contributions.AddRange(contributions);
+            //    _db.SaveChanges();
+            //}
 
-            /*// Loop for create feedbacks
-            var feedbacks = new List<Feedback>();
+            //// Loop for create feedbacks
+            //var feedbacks = new List<Feedback>();
 
-            // Create feedback for contributions
-            for (int i = 2; i < 20; i++)
-            {
-                feedbacks.Add(new Feedback
-                {
-                    Comment = "good",
-                    FeedbackDate = DateTime.Now,
-                    UserId = "CoordinatorID1",
-                    ContributionId = i // Assuming the ContributionId starts from 2
-                });
-            }
+            //// Create feedback for contributions
+            //for (int i = 2; i < 20; i++)
+            //{
+            //    feedbacks.Add(new Feedback
+            //    {
+            //        Comment = "good",
+            //        FeedbackDate = DateTime.Now,
+            //        UserId = "CoordinatorID1",
+            //        ContributionId = i // Assuming the ContributionId starts from 2
+            //    });
+            //}
 
-            // Create feedback for business
-            for (int i = 25; i <= 60; i++)
-            {
-                feedbacks.Add(new Feedback
-                {
-                    Comment = "good",
-                    FeedbackDate = DateTime.Now,
-                    UserId = "CoordinatorID1",
-                    ContributionId = i // Assuming the ContributionId starts from 30
-                });
-            }
+            //// Create feedback for business
+            //for (int i = 25; i <= 60; i++)
+            //{
+            //    feedbacks.Add(new Feedback
+            //    {
+            //        Comment = "good",
+            //        FeedbackDate = DateTime.Now,
+            //        UserId = "CoordinatorID1",
+            //        ContributionId = i // Assuming the ContributionId starts from 30
+            //    });
+            //}
 
-            _db.Feedbacks.AddRange(feedbacks);
-            _db.SaveChanges();*/
+            //_db.Feedbacks.AddRange(feedbacks);
+            //_db.SaveChanges();
 
             //-------------------------------------------------------------------------------------------------------------------
 
@@ -312,7 +313,7 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _db.Semesters.AddRange(semesters);
                 _db.SaveChanges();
             }
-
+            
             if (!_db.Magazines.Any())
             {
                 // create some magazines
@@ -344,26 +345,26 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _db.SaveChanges();
             }
 
-           /* if (!_db.Contributions.Any())
-            {
-                // create some contributions
-                var contributions = new List<Contribution>
-                {
-                    new Contribution
-                    {
-                        Id = 1,
-                        Title = "The Future of AI",
-                        Status = SD.Status_Pending,
-                        SubmissionDate = DateTime.Now,
-                        UserId = "StudentID1",
-                        MagazineId = 1
-                    }
-                };
 
-                _db.Contributions.AddRange(contributions);
-                _db.SaveChanges();
-            }*/
+            //if (!_db.Contributions.Any())
+            //{
+            //    // create some contributions
+            //    var contributions = new List<Contribution>
+            //    {
+            //        new Contribution
+            //        {
+            //            Id = 1,
+            //            Title = "The Future of AI",
+            //            Status = SD.Status_Pending,
+            //            SubmissionDate = DateTime.Now,
+            //            UserId = "StudentID1",
+            //            MagazineId = 1
+            //        }
+            //    };
 
+            //    _db.Contributions.AddRange(contributions);
+            //    _db.SaveChanges();
+            //}
 
             //if (!_db.Documents.Any())
             //{

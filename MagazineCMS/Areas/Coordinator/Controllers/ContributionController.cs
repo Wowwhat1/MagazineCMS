@@ -86,7 +86,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(string status, int contributionId)
         {
-            var contribution = await _unitOfWork.Contribution.GetFirstOrDefaultAsync(c => c.Id == contributionId);
+            var contribution = _unitOfWork.Contribution.Get(c => c.Id == contributionId);
             if (contribution == null)
             {
                 return NotFound();
@@ -157,7 +157,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     }
 
                     // Save changes to the database
-                    await _unitOfWork.SaveAsync();
+                    _unitOfWork.Save();
 
                     TempData["Success"] = "Documents uploaded successfully.";
                 }
@@ -200,10 +200,60 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             {
                 // Trả về file để xem trực tiếp trên web
                 return File(document.DocumentUrl, "application/pdf"); // Điều chỉnh loại tệp phù hợp với loại tệp của bạn
+                var fileBytes = System.IO.File.ReadAllBytes(document.DocumentUrl);
+                var fileName = Path.GetFileName(document.DocumentUrl);
+                var fileExtension = Path.GetExtension(document.DocumentUrl).ToLower();
+                var fileType = GetMimeType(fileExtension); // Lấy kiểu MIME từ phần mở rộng của tệp
+
+                return File(fileBytes, fileType);
             }
             return NotFound();
         }
 
+        // Phương thức để lấy kiểu MIME từ phần mở rộng của tệp
+        private string GetMimeType(string fileExtension)
+        {
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    return "application/pdf";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".png":
+                    return "image/png";
+                case ".jpg":
+                    return "image/jpeg";
+                // Thêm các loại tệp khác nếu cần
+                default:
+                    return "application/octet-stream"; // Mặc định là kiểu MIME không xác định
+            }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteDocument(int documentId)
+        {
+            try
+            {
+                var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+                if (document != null)
+                {
+                    var filePath = document.DocumentUrl;
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    _unitOfWork.Document.Remove(document);
+                    _unitOfWork.Save();
+
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -222,7 +272,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 };
 
                 _unitOfWork.Feedback.Add(feedback);
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.Save();
 
                 TempData["Success"] = "Feedback added successfully.";
             }

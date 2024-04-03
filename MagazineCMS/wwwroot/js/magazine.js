@@ -34,21 +34,6 @@ function loadDataTable() {
             {
                 data: { id: "id" },
                 "render": function (data) {
-                   /* var today = new Date().getTime();
-                    var lockout = new Date(data.lockoutEnd).getTime();
-
-                    if (lockout > today) {
-                        return `
-                        <div class="text-center">
-                            <a onclick=LockUnlock('${data.id}') class="btn btn-info text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-lock-fill"></i>  Edit
-                            </a> 
-                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
-                                <i class="bi bi-trash-fill"></i> Delete
-                            </button>
-                        </div>
-                    `;
-                    } else {*/
                         return `
                         <div class="text-center">
                             <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
@@ -59,7 +44,6 @@ function loadDataTable() {
                             </button>
                         </div>
                     `;
-                    //}
                 },
                 "width": "10%",
                 "className": "table-cell"
@@ -67,6 +51,31 @@ function loadDataTable() {
         ]
     });
 
+    /*Table data contribution download of magazine*/
+    dataTable = $('#contribution-magazine-table').DataTable({
+        "ajax": { url: '/manager/managemagazine/getall' },
+        "columns": [
+            { "data": "name", "width": "25%", "className": "table-cell" },
+            { "data": "semester.name", "width": "15%", "className": "table-cell" },
+            { "data": "contributionCount", "width": "15%", "className": "table-cell" },
+            { "data": "documentCount", "width": "15%", "className": "table-cell" },
+            {
+                data: { id: "id" },
+                "render": function (data) {
+                    return `
+                    <div class="text-center">
+                        <button onclick="download('${data.id}')" class="btn btn-primary text-white" style="cursor:pointer; width:150px;">
+                            Download
+                        </button>
+                `;
+                },
+                "width": "10%",
+                "className": "table-cell"
+            }
+        ]
+    });
+
+    //Display semester table
     $(document).ready(function () {
         $('#SemesterId').change(function () {
             var semesterId = $(this).val();
@@ -99,6 +108,11 @@ function loadDataTable() {
         style.appendChild(document.createTextNode(css));
     }
 }
+
+function download(magazineId) {
+    window.location.href = '/manager/managemagazine/downloadalldocuments?magazineId=' + magazineId;
+}
+
 
 function updateMagazine(magazineId) {
     console.log(magazineId);

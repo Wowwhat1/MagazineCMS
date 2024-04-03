@@ -9,11 +9,20 @@
         <div class="card-header py-3 d-flex justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">Magazine Table</h6>
             <div class="col-6 d-flex justify-content-end">
+                <a class="btn btn-primary" style="margin-right: 10px;"
+                data-toggle="modal" data-target="#exampleModal">
+                    <i class="fa fa-download" aria-hidden="true"></i>  Download Contribution
+                </a>
+                @* <a asp-controller="Download" asp-action="DownloadMagazineContributions" class="btn btn-primary" style="margin-right: 10px;">
+                    <i class="fa fa-download" aria-hidden="true"></i>  Download Contribution
+                </a> *@
                 <a asp-controller="ManageMagazine" asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i>  Create New Magazine
+                    <i class="fa fa-plus" aria-hidden="true"></i>  Create New Magazine
                 </a>
             </div>
         </div>
+
+        @* This is table of magazine *@
         <div class="card-body">
             <div class="">
                 <table id="magazine-table" class="table table-bordered table-hover table-striped" width="100%" cellspacing="0">
@@ -31,6 +40,43 @@
                 </table>
             </div>
         </div>
+
+        @* This is table of contribution *@
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="width: 100%;">
+          <div class="modal-dialog" role="document" style="width: 100%; left: -300px;">
+            <div class="modal-content" style="width: 1200px;">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Contributions of magazine</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                
+                  <div class="card-body">
+                    <div class="">
+                        <table id="contribution-magazine-table" class="table table-bordered table-hover table-striped" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Name Magazine</th>
+                                    <th>Semester</th>
+                                    <th>Count Contribution</th>
+                                    <th>Count Document</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
 </div>
 

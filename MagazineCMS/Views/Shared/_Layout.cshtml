@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link href="/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-
 </head>
 <body id="page-top">
 
@@ -31,12 +30,42 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <i class="fas fa-laugh-wink"></i>
-                    </div>
-                    <div class="sidebar-brand-text mx-3">Magazine CMS</div>
-                </a>
+                @if (User.IsInRole("Student"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Manager"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Manager" asp-controller="Dashboard" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
+                @if (User.IsInRole("Coordinator"))
+                {
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                        <div class="sidebar-brand-icon rotate-n-15">
+                            <i class="fas fa-laugh-wink"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
+                    </a>
+                }
 
 
                 <!-- Divider -->
@@ -72,11 +101,12 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     @if (!SignInManager.IsSignedIn(User))
                     {
-                        <div>
-                            <a asp-area="Student" asp-controller="Home" asp-action="Index">
-                                <img src="/image/Magazine.whitelogo.png" alt="logo" width="170">
-                            </a>
-                        </div>
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index" style="text-decoration: none;">
+                            <div class="sidebar-brand-icon rotate-n-15">
+                                <i class="fas fa-laugh-wink"></i>
+                            </div>
+                            <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 22px;">Magazine CMS</div>
+                        </a>
 
                     }
 
@@ -89,20 +119,11 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-bell" aria-hidden="true"></i>
-                                    <!-- Counter - Alerts -->
-                                    @* <span class="badge badge-danger badge-counter">•</span> *@
-                                </a>
-                            }
-                        </li>
-
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <partial name="_NotificationPartial" />        
+                        }
+                        
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <partial name="_LoginPartial" />
@@ -111,7 +132,7 @@
 
                 <div class="content">
                     <main role="main" class="pb-3">
-                        <partial name="_NotificationPartial" />
+                        <partial name="_AlertPartial" />
                         @RenderBody()
                     </main>
                 </div>
@@ -193,6 +214,11 @@
 
 <!-- Tiny textare js/bootstrap 5.7 -->
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+@if (SignInManager.IsSignedIn(User))
+{
+	<script src="~/js/notification.js"></script>
+}
 
 @await RenderSectionAsync("Scripts", required: false)
 </html>
