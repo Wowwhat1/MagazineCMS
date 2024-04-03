@@ -198,8 +198,6 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             var document = _unitOfWork.Document.Get(d => d.Id == documentId);
             if (document != null)
             {
-                // Trả về file để xem trực tiếp trên web
-                return File(document.DocumentUrl, "application/pdf"); // Điều chỉnh loại tệp phù hợp với loại tệp của bạn
                 var fileBytes = System.IO.File.ReadAllBytes(document.DocumentUrl);
                 var fileName = Path.GetFileName(document.DocumentUrl);
                 var fileExtension = Path.GetExtension(document.DocumentUrl).ToLower();
