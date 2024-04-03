@@ -36,13 +36,11 @@ namespace MagazineCMS.Areas.Student.Controllers
         public IActionResult Index()
         {
             string userEmail = User.Identity.Name;
-            int userFaculty = _unitOfWork.User.Get(x => x.Email == userEmail).FacultyId;
-            string facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty).Name;
-            List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == 2, includeProperties: "Faculty,Semester").ToList();
+            var faculty = _unitOfWork.User.Get(u => u.Email == userEmail, includeProperties: "Faculty").Faculty;
+            List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == faculty.Id, includeProperties: "Faculty,Semester").ToList();
             List<Magazine> closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
-
-            return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName)) ;
+            return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, faculty.Name));
         }
 
         public IActionResult Details(int id)

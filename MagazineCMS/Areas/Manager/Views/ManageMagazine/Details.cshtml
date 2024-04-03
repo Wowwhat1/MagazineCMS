@@ -1,4 +1,4 @@
-﻿@model Tuple<Magazine, IEnumerable<Contribution>>
+﻿@model Tuple<Magazine, List<Contribution>>
 
 @{
     TimeSpan remainingTime = Model.Item1.EndDate - DateTime.Now;
@@ -31,7 +31,7 @@
                 </div>
                 <h1 class="h5 font-weight-bold my-2">Time line</h1>
                 <div class="text-gray-900">
-                    Start date : @Model.Item1.StartDate.ToString("dddd, dd/MM/yyyy HH:mm") 
+                    Start date : @Model.Item1.StartDate.ToString("dddd, dd/MM/yyyy HH:mm")
                     <br />
                     Due date : @Model.Item1.EndDate.ToString("dddd, dd/MM/yyyy HH:mm")
                     <br />
@@ -40,52 +40,51 @@
             </div>
         </div>
     </div>
+
     <div class="card">
         <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Submit contribution
-                </button>
-            </h5>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
-                    <div class="form-group">
-                        <input type="hidden" name="MagazineId" value="@Model.Item1.Id" />
-                        <label for="documents">Upload Document(s)</label>
-                        <input type="file" class="form-control-file" id="documents" name="Files" multiple required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                     Submission history
                 </button>
             </h5>
         </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
             <div class="card-body">
-                <h1 class="h5 font-weight-bold my-2">Contribution History</h1>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <div class="my-2">
+                        <h1 class="h5 mb-2 text-gray-800">Contribution Table</h1>
+                        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-2" id="publicContributionButton">Public Contribution</button>
+                    </div>
+                    <table class="table table-striped" id="contribution-table">
                         <thead>
                             <tr>
+                                <th>
+                                    <input type="checkbox" name="selectedAllContributions" value="" id="checkAll">
+                                </th>
+                                <th>User</th>
                                 <th>Title</th>
                                 <th>Submission Date</th>
                                 <th>Status</th>
-                                <th>Details</th> 
+                                <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var contribution in Model.Item2.OrderByDescending(c => c.SubmissionDate))
                             {
                                 <tr>
+                                    <td>
+                                        @if (contribution.Status == "Approved")
+                                        {
+                                            <input type="checkbox" name="selectedContributions" class="check" value="@contribution.Id">
+
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" disabled>
+                                        }
+                                    </td>
+                                    <td>@contribution.User.Lastname @contribution.User.Firstname</td>
                                     <td>@contribution.Title</td>
                                     <td>@contribution.SubmissionDate.ToString("dddd, dd/MM/yyyy HH:mm")</td>
                                     <td>
@@ -103,7 +102,7 @@
                                                     statusBadge = "badge bg-danger";
                                                     break;
                                                 default:
-                                                    statusBadge = "badge bg-primary";
+                                                    statusBadge = "badge bg-info";
                                                     break;
                                             }
                                         }
@@ -122,3 +121,51 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            table = $('#contribution-table').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "width": "5%", "targets": 0 }, // Set width of first column to 10%
+                ]
+            });
+        });
+
+        $('#checkAll').change(function () {
+            var isChecked = $(this).prop('checked');
+            $('input[name="selectedContributions"]').prop('checked', isChecked);
+        });
+
+
+        $('#publicContributionButton').click(function () {
+            var selectedContributions = $('input[name="selectedContributions"]:checked');
+            if (selectedContributions.length > 0) {
+                // Get IDs of selected contributions
+                var contributionIds = selectedContributions.map(function () {
+                    return $(this).val();
+                }).get();
+                console.log(contributionIds)
+                // Update status of selected contributions to "Public"
+                updateContributionStatus(contributionIds);
+            } else {
+                // Update status of all contributions to "Public"
+                updateContributionStatus(null);
+            }
+        });
+
+        // Function to update contribution status
+        function updateContributionStatus(contributionIds) {
+            // Perform AJAX request to update contribution status
+            $.ajax({
+                url: '@Url.Action("UpdateContributionStatus", "ManageMagazine")',
+                type: 'POST',
+                data: { contributionIds: contributionIds },
+                success: function (data) {
+                    location.reload();
+                },
+            })
+        };
+    </script>
+}
