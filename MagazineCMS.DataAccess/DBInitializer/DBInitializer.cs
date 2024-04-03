@@ -345,6 +345,7 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _db.SaveChanges();
             }
 
+
             //if (!_db.Contributions.Any())
             //{
             //    // create some contributions
@@ -364,7 +365,6 @@ namespace MagazineCMS.DataAccess.DBInitializer
             //    _db.Contributions.AddRange(contributions);
             //    _db.SaveChanges();
             //}
-
 
             //if (!_db.Documents.Any())
             //{
