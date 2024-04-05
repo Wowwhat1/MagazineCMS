@@ -1,12 +1,39 @@
-﻿@page
-
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+<body>
+    <div class="container">
+        <h1 class="center">Dashboard</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="center">Number of Users in Faculty</h4>
+                <canvas id="userChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h4 class="center">Number of Magazines in Faculty</h4>
+                <canvas id="magazineChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="center">Number of Users in each Role</h4>
+                <canvas id="polarUserChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h4 class="center">Number of Topics Published Each Month</h4>
+                <canvas id="topicChart" width="800" height="600"></canvas>
+            </div>
+        </div>
+    </div>
 
-<h1>This is admin Dashboard</h1>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/dashboard.js"></script>
+</body>
+</html>
