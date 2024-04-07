@@ -4,6 +4,7 @@ $(document).ready(function () {
     calculateTopicCounts();
 });
 
+
 function loadChartData() {
     $.ajax({
         url: '/manager/faculty/getall',
@@ -17,11 +18,10 @@ function loadChartData() {
 
             data.forEach(function (item) {
                 facultyNames.push(item.faculty.name);
-                userCounts.push(item.userCount);
-                magazineCounts.push(item.magazineCount);
+                userCounts.push(Math.round(item.userCount));
+                magazineCounts.push(Math.round(item.magazineCount));
                 userInfo.push(item.userInfo);
             });
-
 
             createUserChart(facultyNames, userCounts);
             createMagazineChart(facultyNames, magazineCounts);
@@ -48,12 +48,13 @@ function createUserChart(labels, data) {
         },
         options: {
             scales: {
-                yAxes: [{
+                y: {
+                    beginAtZero: true,
+                    precision: 0,
                     ticks: {
-                        beginAtZero: true,
                         stepSize: 1
                     }
-                }]
+                }
             }
         }
     });
@@ -75,12 +76,13 @@ function createMagazineChart(labels, data) {
         },
         options: {
             scales: {
-                yAxes: [{
+                y: {
+                    beginAtZero: true,
+                    precision: 0,
                     ticks: {
-                        beginAtZero: true,
                         stepSize: 1
                     }
-                }]
+                }
             }
         }
     });
@@ -147,7 +149,8 @@ function createRoleChart(labels, data) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        stepSize: 1
                     }
                 }]
             },
@@ -201,8 +204,9 @@ function calculateTopicCounts(endDates) {
 
     endDates.forEach(function (endDate) {
         var month = endDate.getMonth();
-        topicCounts[month]++;
+        topicCounts[month] = Math.round(topicCounts[month] + 1);
     });
+
     return topicCounts;
 }
 
@@ -212,7 +216,7 @@ function drawLineChart(months, topicCounts) {
     var topicChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: months.map(month => monthNames[month - 1]), 
+            labels: months.map(month => monthNames[month - 1]),
             datasets: [{
                 label: 'Topic Counts by Month',
                 data: topicCounts,
@@ -234,7 +238,10 @@ function drawLineChart(months, topicCounts) {
                         display: true,
                         text: 'Number of Topics'
                     },
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
                 }
             }
         }
