@@ -1,4 +1,5 @@
 ﻿@model Tuple<Semester, int, int, int, List<Magazine>>
+
 @{
     string startDate = Model.Item1.StartDate.ToString("dd/MM/yyyy");
     string endDate = Model.Item1.EndDate.ToString("dd/MM/yyyy");
@@ -94,7 +95,6 @@
             </div>
         </div>
     </div>
-
     <div class="d-sm-flex mb-4">
         <h1 class="h3 mb-0 text-gray-800">Opening Magazines</h1>
     </div>
