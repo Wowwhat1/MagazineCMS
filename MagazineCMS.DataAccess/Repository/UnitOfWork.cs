@@ -18,6 +18,7 @@ namespace MagazineCMS.DataAccess.Repository
         public IContributionRepository Contribution { get; private set; }
         public IDocumentRepository Document { get; private set; }
         public IFeedbackRepository Feedback { get; private set; }
+        public INotificationRepository Notification { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -29,6 +30,7 @@ namespace MagazineCMS.DataAccess.Repository
             Contribution = new ContributionRepository(_db);
             Document = new DocumentRepository(_db);
             Feedback = new FeedbackRepository(_db);
+            Notification = new NotificationRepository(_db);
         }
 
         public void Save()

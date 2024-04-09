@@ -1,5 +1,26 @@
 ﻿@model MagazineCMS.Models.Contribution
- @using MagazineCMS.Utility
+@using MagazineCMS.Utility
+
+<!-- Modal -->
+<div class="modal fade" id="viewDocumentModal" tabindex="-1" role="dialog" aria-labelledby="viewDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDocumentModalLabel">View Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" id="documentViewer" style="width: 100%; height: 700px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="container-fluid mx-4">
@@ -73,12 +94,9 @@
                                                         }
                                                     </td>
                                                     <td>
-                                                        <!-- Tạo liên kết để xem file trực tiếp trên web -->
-                                                        @if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                                        {
-                                                            <a href="@Url.Action("ViewDocument", "Contribution", new { documentId = document.Id })" target="_blank">View</a>
-                                                        }
-
+                                                        <div>
+                                                            <a href="#" onclick="viewDocument(@document.Id)">View Document</a>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             }
@@ -89,14 +107,12 @@
                         </div>
                     }
 
-
-
                     <!-- Nút quay lại danh sách -->
                     <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
+
                 </div>
             </div>
 
-            <!-- Hiển thị danh sách các tệp đã được tải lên -->
             <!-- Hiển thị danh sách các tệp đã được tải lên -->
             @if (Model.Documents != null && Model.Documents.Any())
             {
@@ -195,19 +211,7 @@
                     </form>
                 </div>
             </div>
-            <div class="card shadow mt-4">
-                <div class="card-body">
-                    <h3>Upload Documents</h3>
-                    <form method="post" enctype="multipart/form-data" action="@Url.Action("SubmitDocuments", "Contribution")">
-                        <div class="form-group">
-                            <label for="files">Choose File(s)</label>
-                            <input type="file" class="form-control-file" id="files" name="Files" multiple required>
-                        </div>
-                        <input type="hidden" name="contributionId" value="@Model.Id" />
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                    </form>
-                </div>
-            </div>
+
             <div class="card shadow mt-4">
                 <div class="card-body">
                     <h3>Add Feedback</h3>
@@ -224,5 +228,39 @@
         </div>
     </div>
 
+    @section Scripts {
+        <script>
+            function viewDocument(documentId) {
+                $('#viewDocumentModal').modal('show');
+                $('#documentViewer').attr('src', '@Url.Action("ViewDocument", "Contribution")?documentId=' + documentId);
+            }
+
+            $(document).ready(function () {
+                $('.delete-file').click(function (e) {
+                    e.preventDefault();
+                    var documentId = $(this).data('document-id');
+                    $('#documentIdToDelete').val(documentId);
+                    $('#deleteFileModal').modal('show');
+                });
+
+                $('#deleteFileForm').submit(function (e) {
+                    e.preventDefault();
+                    var documentId = $('#documentIdToDelete').val();
+                    $.post('@Url.Action("DeleteDocument", "Contribution")', { documentId: documentId })
+                        .done(function (data) {
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                alert('An error occurred while deleting the file.');
+                            }
+                        })
+                        .fail(function () {
+                            alert('An error occurred while deleting the file.');
+                        });
+                });
+            });
+
+        </script>
+    }
 
 

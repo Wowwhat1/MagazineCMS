@@ -1,0 +1,94 @@
+﻿@model Tuple<Magazine, IEnumerable<Contribution>>
+
+@{
+    TimeSpan remainingTime = Model.Item1.EndDate - DateTime.Now;
+    int days = (int)remainingTime.TotalDays;
+    int hours = remainingTime.Hours;
+    int minutes = remainingTime.Minutes;
+}
+
+<div id="accordion" class="mx-4">
+    <a href="@Url.Action("Index", "Home")">← Back to Magazine List</a>
+    <h1 class="h4 text-primary font-weight-bold my-2">@Model.Item1.Name</h1>
+
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <h1 class="h5 font-weight-bold my-2">Contribution History</h1>
+            </h5>
+        </div>
+        <div id="collapseThree" class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Submission Date</th>
+                            <th>Status</th>
+                            <th>Documents</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var contribution in Model.Item2)
+                        {
+                            <tr>
+                                <td>@contribution.Title</td>
+                                <td>@contribution.SubmissionDate.ToString("dddd, dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @{
+                                        string statusBadge = "";
+                                        switch (contribution.Status)
+                                        {
+                                            case "Pending":
+                                                statusBadge = "badge bg-warning text-dark";
+                                                break;
+                                            case "Approved":
+                                                statusBadge = "badge bg-success";
+                                                break;
+                                            case "Rejected":
+                                                statusBadge = "badge bg-danger";
+                                                break;
+                                            default:
+                                                statusBadge = "badge bg-primary";
+                                                break;
+                                        }
+                                    }
+                                    <span class="@statusBadge">@contribution.Status</span>
+                                </td>
+                                <td>
+                                    @foreach (var document in contribution.Documents)
+                                    {
+                                        @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                        {
+                                            <a href="@Url.Action("Download", "Magazine", new { documentId = document.Id })" target="_blank">
+                                                @System.IO.Path.GetFileName(document.DocumentUrl)
+                                            </a>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @if (contribution.Status == "Pending")
+                                    {
+                                        <form method="post" enctype="multipart/form-data" action="@Url.Action("UpdateContribution", "Magazine")">
+                                            <input type="hidden" name="ContributionId" value="@contribution.Id" />
+                                            <div class="form-group">
+                                                <label for="updateDocuments">Upload New Document(s)</label>
+                                                <input type="file" class="form-control-file" id="updateDocuments" name="Files" multiple required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary" disabled>Update</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

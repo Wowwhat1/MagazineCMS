@@ -119,20 +119,11 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-bell" aria-hidden="true"></i>
-                                    <!-- Counter - Alerts -->
-                                    @* <span class="badge badge-danger badge-counter">•</span> *@
-                                </a>
-                            }
-                        </li>
-
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <partial name="_NotificationPartial" />        
+                        }
+                        
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <partial name="_LoginPartial" />
@@ -141,7 +132,7 @@
 
                 <div class="content">
                     <main role="main" class="pb-3">
-                        <partial name="_NotificationPartial" />
+                        <partial name="_AlertPartial" />
                         @RenderBody()
                     </main>
                 </div>
@@ -223,6 +214,11 @@
 
 <!-- Tiny textare js/bootstrap 5.7 -->
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+@if (SignInManager.IsSignedIn(User))
+{
+	<script src="~/js/notification.js"></script>
+}
 
 @await RenderSectionAsync("Scripts", required: false)
 </html>

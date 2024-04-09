@@ -86,7 +86,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(string status, int contributionId)
         {
-            var contribution = await _unitOfWork.Contribution.GetFirstOrDefaultAsync(c => c.Id == contributionId);
+            var contribution = _unitOfWork.Contribution.Get(c => c.Id == contributionId);
             if (contribution == null)
             {
                 return NotFound();
@@ -98,81 +98,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             return RedirectToAction("Details", new { id = contributionId });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitDocuments(ContributionSubmissionVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Get the current user's ID
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    // Create a folder for the user if it doesn't exist
-                    var userFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
-                    if (!Directory.Exists(userFolderPath))
-                    {
-                        Directory.CreateDirectory(userFolderPath);
-                    }
-
-                    // Create a list to store documents
-                    var documents = new List<Document>();
-
-                    // Save each file in the user's folder and database
-                    // Save each file in the user's folder and database
-                    foreach (var file in model.Files)
-                    {
-                        // Generate a unique file name
-                        var fileName = $"{Path.GetFileName(file.FileName)}";
-
-                        // Combine the user's folder path with the file name
-                        var filePath = Path.Combine(userFolderPath, fileName);
-
-                        // Copy the file to the destination path
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-
-                        // Create a new document object
-                        var document = new Document
-                        {
-                            Type = "Type of Document", // Set the type of document
-                            DocumentUrl = filePath // Set the file path
-                        };
-
-                        // Add the document to the list
-                        documents.Add(document);
-                    }
-
-
-                    // Save documents to the database
-                    foreach (var document in documents)
-                    {
-                        // Assign the contribution ID
-                        document.ContributionId = model.ContributionId;
-
-                        // Add the document to the database
-                        _unitOfWork.Document.Add(document);
-                    }
-
-                    // Save changes to the database
-                    await _unitOfWork.SaveAsync();
-
-                    TempData["Success"] = "Documents uploaded successfully.";
-                }
-                catch (Exception ex)
-                {
-                    TempData["Error"] = $"An error occurred: {ex.Message}";
-                }
-            }
-            else
-            {
-                TempData["Error"] = "Invalid model state. Please check your inputs.";
-            }
-
-            return RedirectToAction("Index");
-        }
+        
         public IActionResult DownloadDocument(int documentId)
         {
             var document = _unitOfWork.Document.Get(d => d.Id == documentId);
@@ -198,12 +124,36 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             var document = _unitOfWork.Document.Get(d => d.Id == documentId);
             if (document != null)
             {
-                // Trả về file để xem trực tiếp trên web
-                return File(document.DocumentUrl, "application/pdf"); // Điều chỉnh loại tệp phù hợp với loại tệp của bạn
+                var fileBytes = System.IO.File.ReadAllBytes(document.DocumentUrl);
+                var fileName = Path.GetFileName(document.DocumentUrl);
+                var fileExtension = Path.GetExtension(document.DocumentUrl).ToLower();
+                var fileType = GetMimeType(fileExtension); // Lấy kiểu MIME từ phần mở rộng của tệp
+
+                return File(fileBytes, fileType);
             }
             return NotFound();
         }
 
+        // Phương thức để lấy kiểu MIME từ phần mở rộng của tệp
+        private string GetMimeType(string fileExtension)
+        {
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    return "application/pdf";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".png":
+                    return "image/png";
+                case ".jpg":
+                    return "image/jpeg";
+                // Thêm các loại tệp khác nếu cần
+                default:
+                    return "application/octet-stream"; // Mặc định là kiểu MIME không xác định
+            }
+        }
+
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -222,7 +172,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 };
 
                 _unitOfWork.Feedback.Add(feedback);
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.Save();
 
                 TempData["Success"] = "Feedback added successfully.";
             }

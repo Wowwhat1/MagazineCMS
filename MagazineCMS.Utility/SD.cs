@@ -19,8 +19,20 @@ namespace MagazineCMS.Utility
         public const string Status_Approved = "Approved";
         public const string Status_Rejected = "Rejected";
         public const string Status_Submitted = "Submitted";
+        public const string Status_Public = "Public";
 
         public const string Document_Type_Word = "Word";
         public const string Document_Type_Image = "Image";
+        
+        // a student submits 1 contribution
+        public const string Noti_Type_SubmitSingle = "Submit";
+        // a student submits n contributions
+        public const string Noti_Type_SubmitMultipleTime = "SubmitMultipleTime";
+       
+        public const string Noti_Type_Approval = "Approved";
+        public const string Noti_Type_Rejection = "Rejected";
+        public const string Noti_Type_Comment = "Comment";
+        public const string Noti_Type_Feedback = "Feedback";
+        public const string Noti_Type_ContributionReminder = "ContributionReminder";
     }
 }
