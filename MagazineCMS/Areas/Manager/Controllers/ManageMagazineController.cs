@@ -192,7 +192,27 @@ namespace MagazineCMS.Areas.Manager.Controllers
             List<Magazine> closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
 
-            return Json(new { data = magazineList, closedMagazines, openMagazines });
+            foreach (var magazine in magazineList)
+            {
+                magazine.ContributionCount = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id).Count();
+
+                // Get all Contributions for this Magazine
+                var contributions = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id);
+
+                // Initialize a counter for the Documents
+                int documentCount = 0;
+
+                // For each Contribution, get all Documents and add their count to the counter
+                foreach (var contribution in contributions)
+                {
+                    documentCount += _unitOfWork.Document.GetAll(d => d.ContributionId == contribution.Id).Count();
+                }
+
+                // Add the Document count to the Magazine
+                magazine.DocumentCount = documentCount;
+            }
+
+            return Json(new { data = magazineList, closedMagazines, openMagazines }); 
         }
 
         [HttpGet]
