@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
     loadDataTable();
+    closeForm();
 });
 
 function loadDataTable() {
@@ -64,6 +65,25 @@ function loadDataTable() {
     } else {
         style.appendChild(document.createTextNode(css));
     }
+}
+
+
+function closeForm() {
+    $('#close-form').click(function () {
+        Swal.fire({
+            title: 'Are you sure you want to close?',
+            text: 'You will be redirected to the Manage User page.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, close'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/Admin/ManageUser";
+            }
+        });
+    });     
 }
 
 function LockUnlock(id) {
