@@ -50,13 +50,20 @@
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
-                <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
-                    <div class="form-group">
-                        <label for="documents">Upload Document(s)</label>
-                        <input type="file" class="form-control-file" id="documents" name="Files" multiple required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                @if (DateTime.Now < Model.EndDate)
+                {
+                    <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
+                        <div class="form-group">
+                            <label for="documents">Upload Document(s)</label>
+                            <input type="file" class="form-control-file" id="documents" name="Files" multiple required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                }
+                else
+                {
+                    <p>The deadline for this magazine has passed. You cannot submit a contribution.</p>
+                }
             </div>
         </div>
     </div>
