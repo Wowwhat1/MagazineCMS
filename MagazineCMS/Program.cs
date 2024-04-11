@@ -17,7 +17,7 @@ using System.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<MagazineCMS.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
+builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -33,7 +33,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     AddDefaultTokenProviders();
 builder.Services.AddScoped<IRepository<Magazine>, MagazineRepository>();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<MagazineCMS.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
+builder.Services.AddScoped<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
 // Add scoped
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
