@@ -9,6 +9,9 @@ using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.DataAccess.Repository;
 using System.Text.Json.Serialization;
 using MagazineCMS.Services;
+using MagazineCMS.Services.BackgroundService;
+using Hangfire;
+using System.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +38,12 @@ builder.Services.AddScoped<MagazineCMS.Services.IEmailSender, MagazineCMS.Servic
 builder.Services.AddScoped<IDBInitializer, DBInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<INotificationSender, NotificationSender>();
+
+// Add Hangfire services
+builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add Hangfire server
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -79,4 +88,14 @@ void SeedDatabase()
         var dbInitializer = scope.ServiceProvider.GetRequiredService<IDBInitializer>();
         dbInitializer.Initialize();
     }
+}
+
+void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+{
+    // Initialize Hangfire
+    app.UseHangfireDashboard();
+    app.UseHangfireServer();
+
+    // Schedule the SendContributionReminders method to run daily
+    RecurringJob.AddOrUpdate<NotificationSender>("ContributionReminderJob", x => x.SendContributionReminders(), Cron.Daily);
 }

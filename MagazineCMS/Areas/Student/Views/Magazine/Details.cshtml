@@ -21,9 +21,9 @@
 
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
             <div class="card-body">
-                <div class="d-flex" style="2">
+                <div class="d-flex align-items-center">
                     <h1 class="h5 font-weight-bold my-2">Faculty: </h1>
-                    <div class="badge badge-primary align-self-baseline" style="height: 20px;">@Model.Item1.Faculty.Name</div>
+                    <div class="badge badge-primary mx-2" style="height: 20px;">@Model.Item1.Faculty.Name</div>
                 </div>
                 <h1 class="h5 font-weight-bold my-2">Description</h1>
                 <div class="text-gray-900">
@@ -107,7 +107,7 @@
                                                     break;
                                             }
                                         }
-                                        <span class="@statusBadge">@contribution.Status</span>
+                                        <span class="@statusBadge text-gray-800">@contribution.Status</span>
                                     </td>
                                     <td>
                                         <!-- Details button -->

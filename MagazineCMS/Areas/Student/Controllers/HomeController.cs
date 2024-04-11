@@ -1,6 +1,10 @@
+using MagazineCMS.DataAccess.Data;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
+using MagazineCMS.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -16,6 +20,7 @@ namespace MagazineCMS.Controllers
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+
         }
 
         public IActionResult Index()
@@ -34,19 +39,17 @@ namespace MagazineCMS.Controllers
                     facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty)?.Name ?? "";
                     List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == userFaculty, includeProperties: "Faculty,Semester").ToList();
 
-                    
                     closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
                     openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
                 }
                 else
                 {
-                   
+
                     return RedirectToAction("Error", "Home");
                 }
             }
             else
             {
-              
                 openMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate > DateTime.Now).ToList();
                 closedMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate <= DateTime.Now).ToList();
             }
@@ -68,6 +71,7 @@ namespace MagazineCMS.Controllers
             var tuple = new Tuple<Magazine, IEnumerable<Contribution>>(magazine, contributions);
             return View(tuple);
         }
+
         public IActionResult Privacy()
         {
             return View();
