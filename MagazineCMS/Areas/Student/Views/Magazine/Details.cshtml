@@ -50,7 +50,7 @@
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
             <div class="card-body">
-                @if (DateTime.Now < Model.EndDate)
+                @if (DateTime.Now < Model.Item1.EndDate)
                 {
                     <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
                         <div class="form-group">

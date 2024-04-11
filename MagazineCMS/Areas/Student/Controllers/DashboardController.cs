@@ -8,15 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
-namespace MagazineCMS.Controllers
+namespace MagazineCMS.Areas.Student.Controllers
 {
     [Area("Student")]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DashboardController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public DashboardController(ILogger<DashboardController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;

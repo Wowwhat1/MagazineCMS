@@ -32,7 +32,7 @@
                 <!-- Sidebar - Brand -->
                 @if (User.IsInRole("Student"))
                 {
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
@@ -41,7 +41,7 @@
                 }
                 @if (User.IsInRole("Manager"))
                 {
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Manager" asp-controller="Dashboard" asp-action="Index">
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Dashboard" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
@@ -50,7 +50,7 @@
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
@@ -59,7 +59,7 @@
                 }
                 @if (User.IsInRole("Coordinator"))
                 {
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index">
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
                         </div>
@@ -101,7 +101,7 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     @if (!SignInManager.IsSignedIn(User))
                     {
-                        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Home" asp-action="Index" style="text-decoration: none;">
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index" style="text-decoration: none;">
                             <div class="sidebar-brand-icon rotate-n-15">
                                 <i class="fas fa-laugh-wink"></i>
                             </div>
