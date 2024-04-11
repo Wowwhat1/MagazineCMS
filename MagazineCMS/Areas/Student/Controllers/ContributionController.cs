@@ -42,11 +42,11 @@ namespace MagazineCMS.Areas.Student.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile file, int contributionId)
+        public async Task<IActionResult> AddFile(IFormFile files, int contributionId)
         {
             try
             {
-                if (file == null || file.Length == 0)
+                if (files == null || files.Length == 0)
                 {
                     return BadRequest("File is empty");
                 }
@@ -71,11 +71,11 @@ namespace MagazineCMS.Areas.Student.Controllers
 
 
                 // Save the file to the server
-                var fileName = Path.GetFileName(file.FileName);
+                var fileName = Path.GetFileName(files.FileName);
                 var filePath = Path.Combine(contributionFolderPath, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await file.CopyToAsync(stream);
+                    await files.CopyToAsync(stream);
                 }
 
                 // Create a document entry in the database
