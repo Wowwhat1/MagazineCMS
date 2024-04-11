@@ -8,40 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
-namespace MagazineCMS.Controllers
+namespace MagazineCMS.Areas.Student.Controllers
 {
     [Area("Student")]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DashboardController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ApplicationDbContext _db;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, ApplicationDbContext db, UserManager<IdentityUser> userManager)
+        public DashboardController(ILogger<DashboardController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
-            _db = db;
-            _userManager = userManager;
+
         }
-
-        /*public IActionResult Index()
-        {
-            return View();
-        }*/
-
-        /*public IActionResult Index()
-        {
-            string userEmail = User.Identity.Name;
-            int userFaculty = _unitOfWork.User.Get(x => x.Email == userEmail).FacultyId;
-            string facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty).Name;
-            List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == 2, includeProperties: "Faculty,Semester").ToList();
-            List<Magazine> closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
-            List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
-
-            return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
-        }*/
 
         public IActionResult Index()
         {
@@ -57,32 +37,25 @@ namespace MagazineCMS.Controllers
                 if (userFaculty != 0)
                 {
                     facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty)?.Name ?? "";
-                    //facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty).Name;
-                    // L?y danh sách t?p chí thu?c khoa c?a ng??i dùng
                     List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == userFaculty, includeProperties: "Faculty,Semester").ToList();
 
-                    // Tách t?p chí ?ã ?óng và ?ang m?
                     closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
                     openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
                 }
                 else
                 {
-                    // X? lý tr??ng h?p không tìm th?y khoa cho ng??i dùng
-                    // Ví d?: chuy?n h??ng ??n trang l?i
+
                     return RedirectToAction("Error", "Home");
                 }
             }
             else
             {
-                // Ng??i dùng ch?a ??ng nh?p, hi?n th? t?t c? t?p chí
-                openMagazines = _unitOfWork.Magazine.GetAll(includeProperties: "Faculty,Semester").Where(m => m.EndDate > DateTime.Now).ToList();
-                closedMagazines = _unitOfWork.Magazine.GetAll(includeProperties: "Faculty,Semester").Where(m => m.EndDate <= DateTime.Now).ToList();
+                openMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate > DateTime.Now).ToList();
+                closedMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate <= DateTime.Now).ToList();
             }
 
             return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
         }
-
-
 
         public IActionResult Details(int id)
         {
@@ -98,7 +71,6 @@ namespace MagazineCMS.Controllers
             var tuple = new Tuple<Magazine, IEnumerable<Contribution>>(magazine, contributions);
             return View(tuple);
         }
-
 
         public IActionResult Privacy()
         {

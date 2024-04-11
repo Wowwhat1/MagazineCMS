@@ -8,10 +8,10 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
 {
     [Area("Coordinator")]
     [Authorize(Roles = SD.Role_Coordinator)]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(IUnitOfWork unitOfWork)
+        public DashboardController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

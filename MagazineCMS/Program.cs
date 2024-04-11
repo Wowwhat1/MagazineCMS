@@ -67,17 +67,13 @@ app.MapRazorPages();
 SeedDatabase();
 
 app.MapControllerRoute(
+    name: "areaRoute",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+
+app.MapControllerRoute(
     name: "default",
-    pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "notification",
-    pattern: "{controller=Notification}/{action=Index}/{id?}"
-    );
-app.MapControllerRoute(
-    name: "magazine",
-    pattern: "{controller}/{action}/{id?}",
-    defaults: new { area = "Student", controller = "Magazine", action = "Index" }
-    );
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
