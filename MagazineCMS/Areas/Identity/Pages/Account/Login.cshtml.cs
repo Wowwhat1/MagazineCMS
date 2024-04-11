@@ -130,6 +130,14 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                     {
                         return RedirectToAction("Index", "Dashboard", new { area = "Manager" });
                     }
+                    if (await _userManager.IsInRoleAsync(user, SD.Role_Coordinator))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Coordinator" });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, SD.Role_Student))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Student" });
+                    }
                     else
                     {
                         return LocalRedirect(returnUrl); // Redirect to regular user page or ReturnUrl
