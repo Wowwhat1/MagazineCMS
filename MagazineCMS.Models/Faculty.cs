@@ -1,4 +1,5 @@
-﻿    using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +16,5 @@ namespace MagazineCMS.Models
         [Required]
         public string Name { get; set; }
 
-        // Navigation property for Users in this faculty
-        public ICollection<User> Users { get; set; }
     }
 }
