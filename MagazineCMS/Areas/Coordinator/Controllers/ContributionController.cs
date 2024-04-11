@@ -98,81 +98,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             return RedirectToAction("Details", new { id = contributionId });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitDocuments(ContributionSubmissionVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Get the current user's ID
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    // Create a folder for the user if it doesn't exist
-                    var userFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, "Documents", userId);
-                    if (!Directory.Exists(userFolderPath))
-                    {
-                        Directory.CreateDirectory(userFolderPath);
-                    }
-
-                    // Create a list to store documents
-                    var documents = new List<Document>();
-
-                    // Save each file in the user's folder and database
-                    // Save each file in the user's folder and database
-                    foreach (var file in model.Files)
-                    {
-                        // Generate a unique file name
-                        var fileName = $"{Path.GetFileName(file.FileName)}";
-
-                        // Combine the user's folder path with the file name
-                        var filePath = Path.Combine(userFolderPath, fileName);
-
-                        // Copy the file to the destination path
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-
-                        // Create a new document object
-                        var document = new Document
-                        {
-                            Type = "Type of Document", // Set the type of document
-                            DocumentUrl = filePath // Set the file path
-                        };
-
-                        // Add the document to the list
-                        documents.Add(document);
-                    }
-
-
-                    // Save documents to the database
-                    foreach (var document in documents)
-                    {
-                        // Assign the contribution ID
-                        document.ContributionId = model.ContributionId;
-
-                        // Add the document to the database
-                        _unitOfWork.Document.Add(document);
-                    }
-
-                    // Save changes to the database
-                    _unitOfWork.Save();
-
-                    TempData["Success"] = "Documents uploaded successfully.";
-                }
-                catch (Exception ex)
-                {
-                    TempData["Error"] = $"An error occurred: {ex.Message}";
-                }
-            }
-            else
-            {
-                TempData["Error"] = "Invalid model state. Please check your inputs.";
-            }
-
-            return RedirectToAction("Index");
-        }
+        
         public IActionResult DownloadDocument(int documentId)
         {
             var document = _unitOfWork.Document.Get(d => d.Id == documentId);
@@ -227,31 +153,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult DeleteDocument(int documentId)
-        {
-            try
-            {
-                var document = _unitOfWork.Document.Get(d => d.Id == documentId);
-                if (document != null)
-                {
-                    var filePath = document.DocumentUrl;
-                    if (System.IO.File.Exists(filePath))
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    _unitOfWork.Document.Remove(document);
-                    _unitOfWork.Save();
-
-                    return Json(new { success = true });
-                }
-                return Json(new { success = false });
-            }
-            catch (Exception)
-            {
-                return Json(new { success = false });
-            }
-        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
