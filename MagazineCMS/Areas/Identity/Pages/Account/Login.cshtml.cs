@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MagazineCMS.Utility;
+using System.Data;
 
 namespace MagazineCMS.Areas.Identity.Pages.Account
 {
@@ -124,6 +125,10 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                     if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
                     {
                         return RedirectToAction("Index", "Dashboard", new { area = "Admin" }); // Redirect to admin page
+                    }
+                    if (await _userManager.IsInRoleAsync(user, SD.Role_Manager))
+                    {
+                        return RedirectToAction("Index", "Dashboard", new { area = "Manager" });
                     }
                     else
                     {

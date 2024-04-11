@@ -1,4 +1,5 @@
-﻿using MagazineCMS.DataAccess.Repository;
+﻿using MagazineCMS.DataAccess.Data;
+using MagazineCMS.DataAccess.Repository;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
 
 namespace MagazineCMS.Areas.Manager.Controllers
 {
@@ -14,10 +16,12 @@ namespace MagazineCMS.Areas.Manager.Controllers
     public class ManageMagazineController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ApplicationDbContext _context;
 
-        public ManageMagazineController(IUnitOfWork unitOfWork)
+        public ManageMagazineController(IUnitOfWork unitOfWork, ApplicationDbContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -157,9 +161,17 @@ namespace MagazineCMS.Areas.Manager.Controllers
             return View("Index");
         }
 
-    
+        public IActionResult Details(int id)
+        {
+            var magazine = _unitOfWork.Magazine.Get(m => m.Id == id, includeProperties: "Faculty,Semester");
+            var contributions = _unitOfWork.Contribution.GetAll(c =>
+                c.MagazineId == id,
+                includeProperties: "Documents,User"
+                ).ToList();
+            return View(new Tuple<Magazine, List<Contribution>>(magazine, contributions));
+        }
 
-    private MagazineVM CreateMagazineVM()
+        private MagazineVM CreateMagazineVM()
         {
             MagazineVM magazineVM = new MagazineVM()
             {
@@ -180,6 +192,61 @@ namespace MagazineCMS.Areas.Manager.Controllers
             return magazineVM;
         }
 
+        public async Task<List<Document>> GetDocumentsByMagazineId(int magazineId)
+        {
+            var contributions = await _context.Contributions
+                .Include(c => c.Documents)
+                .Where(c => c.MagazineId == magazineId)
+                .ToListAsync();
+
+            var documents = new List<Document>();
+            foreach (var contribution in contributions)
+            {
+                documents.AddRange(contribution.Documents);
+            }
+
+            return documents;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadAllDocuments(int magazineId)
+        {
+            // Get all Documents for this Magazine
+            var documents = await GetDocumentsByMagazineId(magazineId);
+
+            // Create a new zip archive in memory
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var document in documents)
+                    {
+                        // Get the Document's file path
+                        var path = Path.Combine("Documents", document.Contribution.UserId, document.DocumentUrl);
+
+                        // Get the Document's file name
+                        var fileName = Path.GetFileName(path);
+
+                        // Add the Document to the zip archive
+                        var zipEntry = archive.CreateEntry(fileName);
+
+                        // Copy the Document's contents to the zip entry
+                        using (var originalFileStream = System.IO.File.OpenRead(path))
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            await originalFileStream.CopyToAsync(zipEntryStream);
+                        }
+                    }
+                }
+
+                // Return the zip archive as a download
+                return File(memoryStream.ToArray(), "application/zip", "Documents.zip");
+            }
+        }
+
+
+
         #region API CALLS
 
         [HttpGet]
@@ -192,9 +259,39 @@ namespace MagazineCMS.Areas.Manager.Controllers
             List<Magazine> closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
             List<Magazine> openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
 
+            foreach (var magazine in magazineList)
+            {
+                magazine.ContributionCount = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id).Count();
+
+                // Get all Contributions for this Magazine
+                var contributions = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id);
+
+                // Initialize a counter for the Documents
+                int documentCount = 0;
+
+                // For each Contribution, get all Documents and add their count to the counter
+                foreach (var contribution in contributions)
+                {
+                    documentCount += _unitOfWork.Document.GetAll(d => d.ContributionId == contribution.Id).Count();
+                }
+
+                // Add the Document count to the Magazine
+                magazine.DocumentCount = documentCount;
+            }
+
             return Json(new { data = magazineList, closedMagazines, openMagazines });
         }
 
+
+        [HttpGet]
+        public IActionResult GetSemester()
+        {
+            List<Semester> semestersList = _unitOfWork.Semester.GetAll().ToList();
+            List<Semester> closedSemester = semestersList.Where(m => m.EndDate <= DateTime.Now).ToList();
+            List<Semester> openSemester = semestersList.Where(m => m.EndDate > DateTime.Now).ToList();
+
+            return Json(new { data = semestersList, closedSemester, openSemester });
+        }
 
         [HttpDelete, ActionName("deleteMagazine")]
         public IActionResult DeletePOST(int? id)
@@ -226,9 +323,23 @@ namespace MagazineCMS.Areas.Manager.Controllers
         }
 
 
-
-
-
+        [HttpPost]
+        public IActionResult UpdateContributionStatus(int[] contributionIds)
+        {
+            if (contributionIds == null || contributionIds.Length == 0)
+            {
+                return BadRequest(new { success = false, message = "No contribution selected" });
+            }
+            var selectedContributions = _unitOfWork.Contribution.GetAll(c => contributionIds.Contains(c.Id));
+            foreach (var contribution in selectedContributions)
+            {
+                contribution.Status = SD.Status_Public;
+                _unitOfWork.Contribution.Update(contribution);
+            }
+            _unitOfWork.Save();
+            TempData["Success"] = "Contributions public successfully";
+            return Ok();
+        }
 
         #endregion
     }
