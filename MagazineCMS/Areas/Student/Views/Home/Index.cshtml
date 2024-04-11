@@ -4,14 +4,10 @@
     Layout = "_Layout";
 }
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MagazineCMS.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
-</head>
+<div class="container-fluild mx-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
 
 <div class="container-fluild mx-4">
  @*    <nav aria-label="breadcrumb">
@@ -31,6 +27,7 @@
             @foreach (var magazine in Model.Item1)
             {
                 <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+
                     <div class="card shadow" style="width: 18rem;">
                         <div>
                             <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
@@ -48,6 +45,7 @@
                                 <span class="badge badge-primary">@magazine.Faculty.Name</span>
                                 <span class="badge badge-info">@magazine.Semester.Name</span>
                                 }
+
                             </div>
                         </div>
                         <div class="card-body">
@@ -73,6 +71,7 @@
             @foreach (var magazine in Model.Item2)
             {
                 <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+
                     <div class="card shadow" style="width: 18rem;">
                         <div>
                             <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
@@ -82,6 +81,7 @@
                                 {
                                     <span class="badge badge-primary">@magazine.Faculty.Name</span>
                                     <span class="badge badge-info">@magazine.Semester.Name</span>
+
                                 }
                             </div>
                         </div>

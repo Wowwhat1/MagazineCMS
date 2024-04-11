@@ -4,5 +4,6 @@
     {
         void SubmitContributionNotification(int facultyId, string userId, string magazineId, string contributionId);
         void ContributionStatusNotification(string recipientUserId, string userId, string magazineId, string contributionId);
+        void SendContributionReminders();
     }
 }
