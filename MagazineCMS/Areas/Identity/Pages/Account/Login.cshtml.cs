@@ -132,11 +132,11 @@ namespace MagazineCMS.Areas.Identity.Pages.Account
                     }
                     if (await _userManager.IsInRoleAsync(user, SD.Role_Coordinator))
                     {
-                        return RedirectToAction("Index", "Home", new { area = "Coordinator" });
+                        return RedirectToAction("Index", "Dashboard", new { area = "Coordinator" });
                     }
                     if (await _userManager.IsInRoleAsync(user, SD.Role_Student))
                     {
-                        return RedirectToAction("Index", "Home", new { area = "Student" });
+                        return RedirectToAction("Index", "Dashboard", new { area = "Student" });
                     }
                     else
                     {

@@ -1,7 +1,101 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Tuple<List<Magazine>, List<Magazine>, string>
 @{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
-<div>Test</div>
+
+<div class="container-fluild mx-4">
+
+    <h1 class="h2 mb-2 text-gray-800">
+        List @Model.Item3 Magazine
+    </h1>
+
+    <!-- Search form -->
+    <form id="searchForm" class="form-inline justify-content-end">
+        <div class="btn-group">
+            <input type="text" class="form-control" id="keyword" placeholder="Search magazine...">
+        </div>
+        <button type="submit" class="p-1 ml-2 btn btn-sm btn-info">Search</button>
+    </form>
+
+
+    @if (Model.Item1.Any())
+    {
+        <div class="d-flex flex-wrap" style="gap: 2rem;">
+            @foreach (var magazine in Model.Item1)
+            {
+                <a href="@Url.Action("Details",  new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+
+                    <div class="card shadow" style="width: 18rem;">
+                        <div>
+                            <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
+                            <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                                @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
+                                {
+                                    <span class="badge badge-warning">Near Closing</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Opening</span>
+                                }
+                                @if (magazine.Faculty != null)
+                                {
+                                    <span class="badge badge-primary">@magazine.Faculty.Name</span>
+                                    <span class="badge badge-info">@magazine.Semester.Name</span>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title " style="height: 3rem; overflow: hidden; text-overflow: ellipsis;" title="@magazine.Name">@magazine.Name</h5>
+                            <p class="card-text" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
+                            <div class="card-text d-flex">
+                                <p class="text-success"><i class="fa fa-calendar" style="color: black;"></i> &nbsp; @magazine.StartDate.ToShortDateString()</p>
+                                <p>&nbsp; to &nbsp;</p>
+                                <p class="text-danger">@magazine.EndDate.ToShortDateString()</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+
+    <hr />
+
+    @if (Model.Item2.Any())
+    {
+        <div class="d-flex flex-wrap" style="gap: 2rem;">
+            @foreach (var magazine in Model.Item2)
+            {
+                <a href="@Url.Action("Details", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+
+                    <div class="card shadow" style="width: 18rem;">
+                        <div>
+                            <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
+                            <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                                <span class="badge badge-danger">Closing</span>
+                                @if (magazine.Faculty != null)
+                                {
+                                    <span class="badge badge-primary">@magazine.Faculty.Name</span>
+                                    <span class="badge badge-info">@magazine.Semester.Name</span>
+
+                                }
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title " style="height: 3rem; overflow: hidden; text-overflow: ellipsis;" title="@magazine.Name">@magazine.Name</h5>
+                            <p class="card-text" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
+                            <div class="card-text d-flex">
+                                <p class="text-success"><i class="fa fa-calendar" style="color: black;"></i> &nbsp; @magazine.StartDate.ToShortDateString()</p>
+                                <p>&nbsp; to &nbsp;</p>
+                                <p class="text-danger">@magazine.EndDate.ToShortDateString()</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+</div>
