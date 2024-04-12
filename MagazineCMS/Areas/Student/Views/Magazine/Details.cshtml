@@ -52,6 +52,11 @@
             <div class="card-body">
                 @if (DateTime.Now < Model.Item1.EndDate)
                 {
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" name="Title" required>
+                    </div>
+
                     <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
                         <div class="form-group">
                             <label for="documents">Upload Document(s)</label>

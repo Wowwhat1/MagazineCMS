@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
+builder.Services.AddTransient<MagazineCMS.Services.IEmailSender, MagazineCMS.Services.EmailSender>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
         .AddJsonOptions(options =>

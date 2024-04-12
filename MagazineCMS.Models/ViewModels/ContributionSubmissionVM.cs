@@ -11,6 +11,10 @@ namespace MagazineCMS.Models.ViewModels
 {
     public class ContributionSubmissionVM
     {
+        [Required(ErrorMessage = "Please enter the contribution title.")]
+        [Display(Name = "Title")]
+        public required string Title { get; set; }
+
         [Required(ErrorMessage = "Please select at least one file.")]
         [Display(Name = "Files")]
         [ValidateNever]
