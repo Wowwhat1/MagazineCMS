@@ -5,7 +5,7 @@ using MDriven.MDrivenServer;
 
 namespace MagazineCMS.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, IEmailSender
     {
         public Task SendEmailAsync(string subject, string message, IEnumerable<string> coordinatorEmails)
         {
@@ -31,6 +31,11 @@ namespace MagazineCMS.Services
             }
 
             return client.SendMailAsync(mailMessage);
+        }
+
+        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            throw new NotImplementedException();
         }
     }
 }
