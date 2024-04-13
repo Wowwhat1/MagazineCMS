@@ -52,17 +52,6 @@
                     <h5 class="card-title">@Model.Title</h5>
                     <p class="card-text">Submitted by: @($"{Model.User.Firstname} {Model.User.Lastname}")</p>
                     <p class="card-text">Magazine: @Model.Magazine.Name</p>
-                    <p class="card-text">
-                        Status:
-                        @if (Model.Status == SD.Status_Approved)
-                        {
-                            <span class="badge badge-success">@Model.Status</span>
-                        }
-                        else if (Model.Status == SD.Status_Rejected)
-                        {
-                            <span class="badge badge-danger">@Model.Status</span>
-                        }
-                    </p>
                     <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
                     <p class="card-text">Descriptions: @Model.Magazine.Description</p>
                     @if (Model.Documents != null && Model.Documents.Any())
@@ -118,17 +107,6 @@
             {
                 <div class="card shadow mt-4">
                     <div class="card-body">
-                        <p>
-                            Status:
-                            @if (Model.Status == SD.Status_Approved)
-                            {
-                                <span class="badge badge-success">@Model.Status</span>
-                            }
-                            else if (Model.Status == SD.Status_Rejected)
-                            {
-                                <span class="badge badge-danger">@Model.Status</span>
-                            }
-                        </p>
                         <h3>Annotate:</h3>
                         <ul>
                             @foreach (var document in Model.Documents)
@@ -194,24 +172,6 @@
 
         <!-- Right side for Feedback and Status update -->
         <div class="col-lg-4">
-            <!-- Form cập nhật trạng thái -->
-            <div class="card shadow">
-                <div class="card-body">
-                    <h3>Update Status</h3>
-                    <form asp-action="UpdateStatus" asp-controller="Contribution" method="post">
-                        <div class="form-group">
-                            <label for="status">New Status:</label>
-                            <select class="form-control" id="status" name="status">
-                                <option value="@SD.Status_Approved">Approved</option>
-                                <option value="@SD.Status_Rejected">Rejected</option>
-                            </select>
-                        </div>
-                        <input type="hidden" name="contributionId" value="@Model.Id" />
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </form>
-                </div>
-            </div>
-
             <div class="card shadow mt-4">
                 <div class="card-body">
                     <h3>Add Feedback</h3>
