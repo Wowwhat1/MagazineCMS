@@ -94,11 +94,11 @@
                             <div class="d-flex ">
                                 @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
                                 {
-                                    <span class="d-inline-block mb-2 text-white badge badge-warning">Near Closing</span>
+                                    <strong class="d-inline-block mb-2 text-white badge badge-warning">Near Closing</strong>
                                 }
                                 else
                                 {
-                                    <span class="d-inline-block mb-2 text-white badge badge-success">Opening</span>
+                                    <strong class="d-inline-block mb-2 text-white badge badge-success">Opening</strong>
                                 }
                                 @if (magazine.Faculty != null)
                                 {
