@@ -84,7 +84,7 @@ namespace MagazineCMS.Areas.Student.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model, string title, int magazineId)
+        public async Task<IActionResult> SubmitContribution(ContributionSubmissionVM model, int magazineId)
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace MagazineCMS.Areas.Student.Controllers
             {
                 var userId = GetCurrentUserId();
                 var userEmail = GetCurrentUserEmail();
-                var contribution = CreateContribution(model, title, magazineId, userId);
+                var contribution = CreateContribution(model, magazineId, userId);
                 SaveContributionAndDocuments(model.Files, contribution);
                 var magazineTitle = GetMagazineTitle(magazineId);
                 var coordinatorEmails = await GetCoordinatorEmailsAsync();
@@ -123,11 +123,11 @@ namespace MagazineCMS.Areas.Student.Controllers
             return User.Identity.Name;
         }
 
-        private Contribution CreateContribution(ContributionSubmissionVM model, string title ,int magazineId, string userId)
+        private Contribution CreateContribution(ContributionSubmissionVM model, int magazineId, string userId)
         {
             var contribution = new Contribution
             {
-                Title = title ?? "Untitled",
+                Title = model.Title ?? "Untitled",
                 Status = "Pending",
                 SubmissionDate = DateTime.Now,
                 UserId = userId,
