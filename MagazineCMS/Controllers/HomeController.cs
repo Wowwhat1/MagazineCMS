@@ -18,6 +18,7 @@ namespace MagazineCMS.Controllers
             _unitOfWork = unitOfWork;
             _userManager = userManager;
 
+
         }
         public IActionResult Index()
         {
@@ -67,7 +68,6 @@ namespace MagazineCMS.Controllers
             return View(tuple);
         }
 
-
         public IActionResult GetContribution()
         {
             var contributions = _unitOfWork.Contribution.GetAll(includeProperties: "User, Magazine").ToList();
@@ -105,6 +105,51 @@ namespace MagazineCMS.Controllers
             }
 
             return View(new Tuple<List<Contribution>, List<Contribution>>(openContributions, closeContributions));
+        }
+        
+        [HttpPost]
+        public IActionResult Index(string keyword)
+        {
+            List<Magazine> searchResult;
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                // Search for magazines containing the keyword in their names
+                searchResult = _unitOfWork.Magazine.GetAll()
+                    .Where(m => m.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                // If the keyword is empty, return all magazines
+                searchResult = _unitOfWork.Magazine.GetAll().ToList();
+            }
+
+            // Separate the search results into open and closed magazines
+            var openMagazines = searchResult.Where(m => m.EndDate > DateTime.Now).ToList();
+            var closedMagazines = searchResult.Where(m => m.EndDate <= DateTime.Now).ToList();
+
+            // Get the faculty name if the user is authenticated
+            string facultyName = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                string userEmail = User.Identity.Name;
+                int userFaculty = _unitOfWork.User.Get(x => x.Email == userEmail)?.FacultyId ?? 0;
+                facultyName = userFaculty != 0 ? _unitOfWork.Faculty.Get(x => x.Id == userFaculty)?.Name ?? "" : "";
+            }
+            else
+            {
+                // Filter magazines for non-authenticated users based on search string
+                List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(
+                     filter: x => (string.IsNullOrEmpty(keyword) || x.Name.Contains(keyword)),
+                     includeProperties: "Faculty,Semester").ToList();
+
+                closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
+                openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
+            }
+
+            // Return the search results
+            return View("Index", new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
         }
     }
 }

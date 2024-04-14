@@ -33,18 +33,18 @@ namespace MagazineCMS.DataAccess.DBInitializer
 
         public void Initialize()
         {
-            //// Fake firstNames and LastNames
-            //List<string> firstNames = new List<string> { "A", "B", "C", "D", "E" };
-            //List<string> lastNames = new List<string> { "Nguyen", "Tran", "Le", "Pham", "Hoang" };
+           /* // Fake firstNames and LastNames
+            List<string> firstNames = new List<string> { "A", "B", "C", "D", "E" };
+            List<string> lastNames = new List<string> { "Nguyen", "Tran", "Le", "Pham", "Hoang" };
 
-            //// Create roles if that invalid
-            //if (!_roleManager.RoleExistsAsync(SD.Role_Student).GetAwaiter().GetResult())
-            //{
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Student)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Coordinator)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-            //    _roleManager.CreateAsync(new IdentityRole(SD.Role_Manager)).GetAwaiter().GetResult();
-            //}
+            // Create roles if that invalid
+            if (!_roleManager.RoleExistsAsync(SD.Role_Student).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Student)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Coordinator)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Manager)).GetAwaiter().GetResult();
+            }*/
 
             //// Loop for create accounts
             //// Create accounts for Computing follow Id from 1 to 100
@@ -313,7 +313,7 @@ namespace MagazineCMS.DataAccess.DBInitializer
                 _db.Semesters.AddRange(semesters);
                 _db.SaveChanges();
             }
-            
+
             if (!_db.Magazines.Any())
             {
                 // create some magazines
