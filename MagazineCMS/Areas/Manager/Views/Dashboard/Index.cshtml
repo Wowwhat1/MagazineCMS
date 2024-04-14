@@ -1,9 +1,10 @@
-﻿@model IEnumerable<dynamic>
+﻿@model MagazineCMS.Models.ViewModels.DashboardVM
 
 @{
-    var labels = Model.Select(m => m.FacultyName).ToArray();
-    var data = Model.Select(m => m.Count).ToArray();
+    var labels = Model.Contributions.Select(m => m.FacultyName).ToArray();
+    var data = Model.Contributions.Select(m => m.Count).ToArray();
 }
+
 
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -15,7 +16,7 @@
     <!-- Row -->
     <div class="row">
 
-        <!-- User card -->
+        <!-- Contribution card -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -35,7 +36,36 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-pencil fa-2x text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-file-text fa-2x text-primary" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="font-weight-bold text-info text-uppercase mb-1">
+                                Students
+                            </div>
+                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                
+                                <script>
+                                    var userData = @Html.Raw(Json.Serialize(Model.Users.Select(m => m.Count).ToArray()));
+                                    var userSum = userData.reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    document.write(userSum);
+                                </script>
+
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-graduation-cap fa-2x text-info" aria-hidden="true"></i>
                         </div>
                     </div>
                 </div>

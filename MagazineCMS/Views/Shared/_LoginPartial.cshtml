@@ -19,7 +19,7 @@
                 }
                 else
                 { *@
-                    <i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i>
+                <i class="fa fa-user fa-lg" aria-hidden="true"></i>
                 @* } *@
 
             </a>
@@ -32,7 +32,7 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 <a id="manage" class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> <p style="padding-left: 10px; padding-top: 15px;">Logout</p>
+                    <i class="fas fa-sign-out-alt fa-lg"></i> <p style="padding-left: 10px; padding-top: 15px;">Logout</p>
                 </a>
             </div>
         </li>
