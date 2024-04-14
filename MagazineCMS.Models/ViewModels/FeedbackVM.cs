@@ -9,8 +9,14 @@ namespace MagazineCMS.Models.ViewModels
 {
     public class FeedbackVM
     {
+        public FeedbackVM()
+        {
+            Status = "Pending"; // Giá trị mặc định là "Pending"
+        }
         [Required(ErrorMessage = "Please provide feedback comment.")]
         public string Comment { get; set; }
         public int ContributionId { get; set; }
+        [Required(ErrorMessage = "Please select a status.")]
+        public string Status { get; set; }
     }
 }

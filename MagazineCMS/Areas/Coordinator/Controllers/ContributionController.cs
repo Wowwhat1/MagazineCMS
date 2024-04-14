@@ -83,20 +83,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             return View(contribution);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateStatus(string status, int contributionId)
-        {
-            var contribution = _unitOfWork.Contribution.Get(c => c.Id == contributionId);
-            if (contribution == null)
-            {
-                return NotFound();
-            }
-
-            contribution.Status = status;
-            _unitOfWork.Save();
-
-            return RedirectToAction("Details", new { id = contributionId });
-        }
+        
 
         
         public IActionResult DownloadDocument(int documentId)
@@ -153,7 +140,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             }
         }
 
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -168,10 +155,32 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                     Comment = feedbackVM.Comment,
                     FeedbackDate = DateTime.Now,
                     ContributionId = feedbackVM.ContributionId,
-                    UserId = userId
+                    UserId = userId,
+                    Status = feedbackVM.Status // Lưu trạng thái của feedback từ trường Status trong FeedbackVM
                 };
 
                 _unitOfWork.Feedback.Add(feedback);
+
+                // Nếu feedback được chọn là "Approved", cập nhật trạng thái của đóng góp thành "Approved"
+                if (feedbackVM.Status == "Approved")
+                {
+                    var contribution = _unitOfWork.Contribution.Get(c => c.Id == feedback.ContributionId);
+                    if (contribution != null)
+                    {
+                        contribution.Status = "Approved";
+                        _unitOfWork.Contribution.Update(contribution);
+                    }
+                }
+                else if (feedbackVM.Status == "Rejected")
+                {
+                    var contribution = _unitOfWork.Contribution.Get(c => c.Id == feedback.ContributionId);
+                    if (contribution != null)
+                    {
+                        contribution.Status = "Rejected";
+                        _unitOfWork.Contribution.Update(contribution);
+                    }
+                }
+
                 _unitOfWork.Save();
 
                 TempData["Success"] = "Feedback added successfully.";
@@ -183,6 +192,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
 
             return RedirectToAction("Details", new { id = feedbackVM.ContributionId });
         }
+
         public IActionResult ViewFeedbacks(int contributionId)
         {
             var feedbacks = _unitOfWork.Feedback.GetAll(f => f.ContributionId == contributionId, includeProperties: "User");
