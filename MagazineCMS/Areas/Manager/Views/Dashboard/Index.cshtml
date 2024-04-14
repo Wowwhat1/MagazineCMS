@@ -1,37 +1,141 @@
-﻿@model IEnumerable<dynamic>
+﻿@model MagazineCMS.Models.ViewModels.DashboardVM
 
 @{
-    var labels = Model.Select(m => m.FacultyName).ToArray();
-    var data = Model.Select(m => m.Count).ToArray();
+    var labels = Model.Contributions.Select(m => m.FacultyName).ToArray();
+    var data = Model.Contributions.Select(m => m.Count).ToArray();
 }
 
-<canvas id="contributionChart"></canvas>
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('contributionChart').getContext('2d');
-        var contributionChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @Html.Raw(Json.Serialize(labels)),
-                datasets: [{
-                    label: 'Count of Contributions',
-                    data: @Html.Raw(Json.Serialize(data)),
-                    backgroundColor: '#00b4d8',
-                    borderColor: '#03045e',
-                    borderRadius: 5,
-                    barThickness: 120,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        @* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download</a> *@
+    </div>
+
+    <!-- Row -->
+    <div class="row">
+
+        <!-- Contribution card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="font-weight-bold text-primary text-uppercase mb-1">
+                                Contributions
+                            </div>
+                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                <script>
+                                    var data = @Html.Raw(Json.Serialize(data));
+                                    var sum = data.reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    document.write(sum);
+                                </script>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-file-text fa-2x text-primary" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="font-weight-bold text-info text-uppercase mb-1">
+                                Students
+                            </div>
+                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                
+                                <script>
+                                    var userData = @Html.Raw(Json.Serialize(Model.Users.Select(m => m.Count).ToArray()));
+                                    var userSum = userData.reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    document.write(userSum);
+                                </script>
+
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-graduation-cap fa-2x text-info" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-sm-flex mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Chart contributions count in each Magazine</h1>
+    </div>
+
+    <div class="row mx-2">
+        <canvas id="contributionChart"></canvas>
+
+        @section Scripts {
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                var ctx = document.getElementById('contributionChart').getContext('2d');
+                var contributionChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: @Html.Raw(Json.Serialize(labels)),
+                        datasets: [{
+                            label: 'Count of Contributions',
+                            data: @Html.Raw(Json.Serialize(data)),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            hoverBackgroundColor: 'rgba(75, 192, 192, 0.4)',
+                            hoverBorderColor: 'rgba(75, 192, 192, 1)',
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 90,
+                                    minRotation: 90
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }
-            }
-        });
-    </script>
-}
+                });
+            </script>
+        }
+
+    </div>
+
+</div>
+
+<script src="~/js/magazine.js"></script>

@@ -124,6 +124,7 @@
                             }
                         </ul>
 
+
                         <p>
                             Graded by:
 
@@ -179,6 +180,14 @@
                         <div class="form-group">
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" id="comment" name="Comment" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select class="form-control" id="status" name="Status" required>
+                                <option value="">-- Select Status --</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
                         </div>
                         <input type="hidden" name="contributionId" value="@Model.Id" />
                         <button type="submit" class="btn btn-primary">Submit</button>

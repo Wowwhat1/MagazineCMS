@@ -370,3 +370,18 @@ body {
         white-space: nowrap;
     }
 }
+
+
+/*----------------Home page------------------*/
+.background-screen {
+    background-image: url('../image/PageScreen.jpg');
+
+    max-width: 1400px;
+    height: 700px;
+}
+
+.body-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

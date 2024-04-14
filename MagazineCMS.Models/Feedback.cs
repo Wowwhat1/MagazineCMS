@@ -17,6 +17,7 @@ namespace MagazineCMS.Models
         public string Comment { get; set; }
         [Required]
         public DateTime FeedbackDate { get; set; }
+        public string Status { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey("UserId")]
