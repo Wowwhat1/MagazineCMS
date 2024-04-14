@@ -36,6 +36,5 @@ namespace MagazineCMS.Models
         public int ContributionCount { get; set; }
         [NotMapped]
         public int DocumentCount { get; set; }
-
     }
 }
