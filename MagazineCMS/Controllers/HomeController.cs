@@ -151,5 +151,22 @@ namespace MagazineCMS.Controllers
             // Return the search results
             return View("Index", new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
         }
+
+        public IActionResult Contribution(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Contribution contribution = _unitOfWork.Contribution.Get(c => c.Id == id, includeProperties: "Documents,User");
+            if (contribution == null || contribution.Status != SD.Status_Public)
+            {
+                return NotFound();
+            }
+            Magazine magazine = _unitOfWork.Magazine.Get(m => m.Id == contribution.MagazineId, includeProperties: "Semester,Faculty");
+
+            return View(new Tuple<Contribution, Magazine>(contribution, magazine));
+        }
     }
 }
