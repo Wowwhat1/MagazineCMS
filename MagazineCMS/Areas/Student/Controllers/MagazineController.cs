@@ -155,7 +155,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 var document = new Document
                 {
                     Type = "Uploaded",
-                    DocumentUrl = file.FileName,
+                    DocumentUrl = Path.Combine(contributionFolderPath, file.FileName),
                     ContributionId = contribution.Id
                 };
 
