@@ -279,7 +279,7 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 magazine.DocumentCount = documentCount;
             }
 
-            return Json(new { data = magazineList, closedMagazines, openMagazines });
+            return Json(new { data = magazineList, closedMagazines, openMagazines }); 
         }
 
 

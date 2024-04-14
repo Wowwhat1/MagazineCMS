@@ -35,7 +35,26 @@ namespace MagazineCMS.Services
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            throw new NotImplementedException();
+            var mail = "chienhcgcd210012@fpt.edu.vn";
+            var password = "frac mgwm udmc lhqc";
+
+            var client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                EnableSsl = true,
+                Credentials = new NetworkCredential(mail, password)
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(mail),
+                Subject = subject,
+                Body = htmlMessage,
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(email);
+
+            return client.SendMailAsync(mailMessage);
         }
     }
 }
