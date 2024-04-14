@@ -54,6 +54,13 @@
                 {
                     <form method="post" enctype="multipart/form-data" id="contributionForm" action="@Url.Action("SubmitContribution", "Magazine")">
                         <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="Title" required>
+                        </div>
+
+                        <input type="hidden" name="magazineId" value="@Model.Item1.Id">
+
+                        <div class="form-group">
                             <label for="documents">Upload Document(s)</label>
                             <input type="file" class="form-control-file" id="documents" name="Files" multiple required>
                         </div>

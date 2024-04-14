@@ -1,103 +1,28 @@
-﻿@model Tuple<Semester, int, int, int, List<Magazine>>
+﻿@model Tuple<Magazine, int, int, int, List<Magazine>>
 
 @{
-    string startDate = Model.Item1.StartDate.ToString("dd/MM/yyyy");
-    string endDate = Model.Item1.EndDate.ToString("dd/MM/yyyy");
+    string startDate = Model.Item1.Semester.StartDate.ToString("dd/MM/yyyy");
+    string endDate = Model.Item1.Semester.EndDate.ToString("dd/MM/yyyy");
 }
 
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
 
+    <div class="col-12 col-sm-6 col-lg-3">
+        @Html.DropDownList("MagazineId", (SelectList)ViewBag.MagazineSelectList, "Select a magazine", new { @class = "custom-select mb-4 w-100", id = "magazineSelect" })
+    </div>
+
+    <div id="dashboardCard">
+        @Html.Partial("_DashboardCard", new Tuple<Magazine, int, int, int>(Model.Item1, Model.Item2, Model.Item3, Model.Item4))
+    </div>
     <!-- Row -->
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="font-weight-bold text-primary text-uppercase mb-1">
-                                @Model.Item1.Name
-                            </div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">@startDate to @endDate</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-calendar fa-2x text-primary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="font-weight-bold text-success text-uppercase mb-1">
-                                Contribution Approved
-                            </div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">@Model.Item2 contributions approved</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-check fa-2x text-success"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Contribution
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">@Model.Item3 pending contributions</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-pencil fa-2x text-warning"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="font-weight-bold text-danger text-uppercase mb-1">
-                                Contribution Rejected
-                            </div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">@Model.Item4 contributions rejected</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-times fa-2x text-danger"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="d-sm-flex mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Opening Magazines</h1>
+        <h1 class="h3 mb-0 text-gray-800">List Magazines</h1>
     </div>
+    <!-- Row -->
     <!-- Row -->
     <div class="row mx-2">
         @if (Model.Item5.Any())
@@ -110,7 +35,11 @@
                             <div>
                                 <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
                                 <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
-                                    @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
+                                    @if (magazine.EndDate < DateTime.Now)
+                                    {
+                                        <span class="badge badge-danger">Closing</span>
+                                    }
+                                    else if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
                                     {
                                         <span class="badge badge-warning">Near Closing</span>
                                     }
@@ -138,3 +67,21 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#magazineSelect').change(function () {
+                var magazineId = $(this).val();
+                $.ajax({
+                    url: '/Coordinator/Dashboard/GetCardInfo/'+magazineId,
+                    success: function (data) {
+                        // Update the card info with the returned data
+                        $('#dashboardCard').html(data);
+                        
+                    }
+                });
+            });
+        });
+    </script>
+}

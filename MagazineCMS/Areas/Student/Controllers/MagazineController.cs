@@ -127,7 +127,7 @@ namespace MagazineCMS.Areas.Student.Controllers
         {
             var contribution = new Contribution
             {
-                Title = model.Files.FirstOrDefault()?.FileName ?? "Untitled",
+                Title = model.Title ?? "Untitled",
                 Status = "Pending",
                 SubmissionDate = DateTime.Now,
                 UserId = userId,
