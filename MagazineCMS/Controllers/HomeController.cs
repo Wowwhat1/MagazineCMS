@@ -54,7 +54,7 @@ namespace MagazineCMS.Controllers
             return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Magazine(int id)
         {
             var magazine = _unitOfWork.Magazine.Get(x => x.Id == id, includeProperties: "Faculty,Semester");
 

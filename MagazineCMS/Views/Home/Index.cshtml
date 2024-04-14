@@ -115,7 +115,7 @@
                                 @magazine.EndDate.ToShortDateString()
                             </div>
                             <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                            <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
+                            <a href="@Url.Action("Magazine", "Home", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                                 @magazine.EndDate.ToShortDateString()
                             </div>
                             <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                            <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
+                            <a href="@Url.Action("Magazine", "Home", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
                         </div>
                     </div>
                 </div>
