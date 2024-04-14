@@ -82,7 +82,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 var document = new Document
                 {
                     Type = "Uploaded",
-                    DocumentUrl = fileName,
+                    DocumentUrl = filePath,
                     ContributionId = contributionId
                 };
 
