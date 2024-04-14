@@ -7,8 +7,8 @@
     <div class="modal-content" style="padding-left: 20px;">
         <form method="post" enctype="multipart/form-data">
             <div style="align-items: center;">
-                <div class="modal-header" >
-                    <h2 class="modal-title" >Add Magazine</h2>
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Magazine</h2>
                 </div>
 
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -28,7 +28,7 @@
                                 <div>
                                     <textarea id="tiny" asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder=""
                                               style="width: 400px; height: 180px;">
-                                        <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
+                                    <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
                                     </textarea>
                                 </div>
                             </div>
@@ -44,17 +44,17 @@
                                         asp-for="@Model.Magazine.FacultyId" asp-items="@Model.FacultyList" class="form-select border-1">
                                     <option disabled selected>--Select Faculty--</option>
                                 </select>
-                    </div>
-                </div>
+                            </div>
+                        </div>
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Semester</h5>
-                    <div>
+                            <div>
                                 <select style="width: 248px; height: 38px; border-radius: 5px; border-color:darkgrey" id="SemesterId"
                                         asp-for="@Model.Magazine.SemesterId" asp-items="@Model.SemesterList" class="form-select border-1">
                                     <option disabled selected>--Select Semester--</option>
                                 </select>
-                    </div>
-                </div>
+                            </div>
+                        </div>
 
                         <div class="row" style="padding-top: 10px;">
                             <table id="" class="table table-bordered table-hover table-striped" width="90%" cellspacing="0">
@@ -71,25 +71,25 @@
                                     </tr>
                                 </tbody>
                             </table>
-            </div>
+                        </div>
 
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Open date</h5>
                             <div style="width: 248px;">
                                 <input asp-for="@Model.Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
                                 <span asp-validation-for="@Model.Magazine.StartDate" class="text-danger"></span>
-                    </div>
-                </div>
+                            </div>
+                        </div>
                         <div class="row" style="padding-top: 10px;">
                             <h5 style="width: 140px;">Close date</h5>
                             <div style="width: 248px;">
                                 <input asp-for="@Model.Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
                                 <span asp-validation-for="@Model.Magazine.EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-                    
+
 
                     <div class="col mb-3 justify-content-end" style="padding-top: 10px;">
                         <div class="row" style="display: block; padding-left: 20px;">
@@ -99,7 +99,7 @@
                             </button>
                         </div>
                     </div>
-            </div>
+                </div>
 
 
         </form>

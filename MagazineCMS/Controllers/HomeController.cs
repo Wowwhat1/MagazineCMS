@@ -1,5 +1,6 @@
 ﻿using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
+using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

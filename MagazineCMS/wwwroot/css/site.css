@@ -136,6 +136,7 @@ body {
         margin: auto;
         background: white;
         border-radius: 5px;
+        box-shadow: 4px 8px 21px 6px #000000;
     }
 
     .title-main {
@@ -203,6 +204,7 @@ body {
         margin: auto;
         background: white;
         border-radius: 5px;
+        box-shadow: 4px 8px 21px 6px #000000;
     }
 
     .term-and-conditions {
@@ -232,6 +234,7 @@ body {
         margin: auto;
         background: white;
         border-radius: 5px;
+        box-shadow: 4px 8px 21px 6px #000000;
     }
 
     .title-main {

@@ -1,9 +1,5 @@
 ﻿@model List<Magazine>
 
-@{
-    var magazineVM = new MagazineCMS.Models.ViewModels.MagazineVM();
-}
-
 <div class="container-fluild mx-4">
     <h1 class="h3 mb-2 text-gray-800">Magazine Management</h1>
 
@@ -16,6 +12,12 @@
                 data-toggle="modal" data-target="#exampleModal">
                     <i class="fa fa-download" aria-hidden="true"></i>  Download Contribution
                 </a>
+
+                @* <a class="btn btn-primary" style="margin-right: 10px;"
+                   data-toggle="modal" data-target="#createModal">
+                    <i class="fa fa-download" aria-hidden="true"></i>  Create Magazine
+                </a> *@
+
                 <a asp-controller="ManageMagazine" asp-action="Create" class="btn btn-primary">
                     <i class="fa fa-plus" aria-hidden="true"></i>  Create New Magazine
                 </a>
@@ -89,11 +91,6 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="card-body">
-                            <div class="">
-                                @Html.Partial("Create", magazineVM)
-                            </div>
-                        </div>
 
                     </div>
                     <div class="modal-footer">
