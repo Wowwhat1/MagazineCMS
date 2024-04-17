@@ -8,7 +8,7 @@
 }
 
 <div id="accordion" class="mx-4">
-    <a href="@Url.Action("Index", "Magazine")">← Back to Magazine List</a>
+    <a href="/Student/Magazine/">← Back to Magazine List</a>
     <h1 class="h4 text-primary font-weight-bold my-2">@Model.Item1.Name</h1>
     <div class="card">
         <div class="card-header" id="headingOne">
@@ -35,7 +35,10 @@
                     <br />
                     Due date : @Model.Item1.EndDate.ToString("dddd, dd/MM/yyyy HH:mm")
                     <br />
-                    Time remaining : @($"{days} days {hours} hours {minutes} mins")
+                    @if (DateTime.Now < Model.Item1.EndDate)
+                    {
+                        <text>Time remaining : @($"{days} days {hours} hours {minutes} mins")</text>
+                    }
                 </div>
             </div>
         </div>
