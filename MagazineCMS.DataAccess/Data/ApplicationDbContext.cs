@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,10 +24,17 @@ namespace MagazineCMS.DataAccess.Data
         public DbSet<Contribution> Contributions { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuidlder)
         {
+            modelBuidlder.Entity<Comment>()
+                .HasMany(c => c.Replies)
+                .WithOne(c => c.Parent)
+                .HasForeignKey(c => c.ParentId) // Use the foreign key property name
+                .OnDelete(DeleteBehavior.Restrict); // Specify that cascade delete is restricted
+
             base.OnModelCreating(modelBuidlder);
 
             modelBuidlder.Entity<Faculty>().HasData(

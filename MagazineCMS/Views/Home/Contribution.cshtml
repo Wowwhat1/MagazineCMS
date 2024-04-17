@@ -1,0 +1,149 @@
+﻿@model ValueTuple<Contribution, Magazine, User, Faculty, DateTime, Semester>
+@{
+    ViewData["Title"] = "Contribution";
+    var contribution = Model.Item1;
+    var magazine = Model.Item2;
+    var user = Model.Item3;
+    var faculty = Model.Item4;
+    var date = contribution.SubmissionDate.ToString("d MMM yyyy");
+    var semester = Model.Item6;
+}
+
+<div class="">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="position-relative mb-3 text-gray-800">
+                    <div class="bg-white border border-top-0 p-4">
+                        <div class="mb-3">
+                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">@faculty.Name</a>
+                            <a class="text-body" href="">@date</a>
+                        </div>
+                        <h3 class="mb-3 text-secondary text-uppercase font-weight-bold">@contribution.Title</h3>
+                        <p>
+                            @magazine.Description
+                        </p>
+                        @foreach (var item in contribution.Documents)
+                        {
+                            <a href="@item.DocumentUrl">View document</a>
+                        }
+                    </div>
+                    <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                        <div class="d-flex align-items-center">
+                            <img class="rounded-circle mr-2" src="@user.AvatarUrl" width="25" height="25" alt="">
+                            <span>@user.Firstname @user.Lastname</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="ml-3"><i class="fa fa-comment mr-2"></i>123</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">3 Comments</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4">
+                        <div class="media mb-4">
+                            <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                            <div class="media-body">
+                                <h6><a class="text-secondary font-weight-bold" href="">John Doe</a> <small><i>01 Jan 2045</i></small></h6>
+                                <p>
+                                    Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
+                                    accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.
+                                </p>
+                                <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                            </div>
+                        </div>
+                        <div class="media">
+                            <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                            <div class="media-body">
+                                <h6><a class="text-secondary font-weight-bold" href="">John Doe</a> <small><i>01 Jan 2045</i></small></h6>
+                                <p>
+                                    Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
+                                    accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.
+                                </p>
+                                <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                                <div class="media mt-4">
+                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <div class="media-body">
+                                        <h6><a class="text-secondary font-weight-bold" href="">John Doe</a> <small><i>01 Jan 2045</i></small></h6>
+                                        <p>
+                                            Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor
+                                            labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed
+                                            eirmod ipsum.
+                                        </p>
+                                        <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Leave a comment</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4">
+                        <input type="hidden" name="contributionId" value="@contribution.Id" />
+                        <form method="post" action="AddComment">
+                            <div class="form-group">
+                                <label for="content">Message *</label>
+                                <textarea id="content" name="content" cols="30" rows="5" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mb-0">
+                                <button type="submit" class="btn btn-primary font-weight-semi-bold py-2 px-3">Leave a comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Trending News</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-3">
+                        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                    <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                    <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-3">
+                        <div class="d-flex flex-wrap m-n1">
+                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@magazine.Name</a>
+                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@faculty.Name</a>
+                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@semester.Name</a> 
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

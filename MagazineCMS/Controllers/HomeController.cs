@@ -1,5 +1,6 @@
 ﻿using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
+using MagazineCMS.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -68,6 +69,32 @@ namespace MagazineCMS.Controllers
             return View(tuple);
         }
 
+        public IActionResult Contribution(int id)
+        {
+            var contribution = _unitOfWork.Contribution.Get(filter: c => c.Id == id, includeProperties: "Documents");
+            if (contribution == null)
+            {
+                return NotFound(); // Return a 404 Not Found error if the contribution is not found
+            }
+
+            // Retrieve the magazine associated with the contribution
+            var magazine = _unitOfWork.Magazine.Get(m => m.Id == contribution.MagazineId);
+
+            // Retrieve the faculty associated with the magazine
+            var faculty = _unitOfWork.Faculty.Get(f => f.Id == magazine.FacultyId);
+
+            // Retrieve the user associated with the contribution
+            var user = _unitOfWork.User.Get(u => u.Id == contribution.UserId);
+
+            // Retrieve the semester associated with the contribution
+            var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
+
+            // Return a tuple containing the contribution, feedback, faculty, and semester end date
+            var model = (contribution, magazine, user, faculty, semester.EndDate, semester);
+
+            return View(model); // Pass the tuple to the ContributionDetails view
+        }
+
         public IActionResult GetContribution()
         {
             var contributions = _unitOfWork.Contribution.GetAll(includeProperties: "User, Magazine").ToList();
@@ -106,7 +133,48 @@ namespace MagazineCMS.Controllers
 
             return View(new Tuple<List<Contribution>, List<Contribution>>(openContributions, closeContributions));
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int contributionId, string content)
+        {
+            try
+            {
+                string userId = null;
+
+                // Check if the user is authenticated
+                if (User.Identity.IsAuthenticated)
+                {
+                    // If authenticated, get the user ID from the authentication system
+                    var user = await _userManager.GetUserAsync(User);
+                    userId = user.Id;
+                }
+                else
+                {
+                    userId = "Anonymous";
+                }
+
+                // Create a new Comment object
+                var newComment = new Comment
+                {
+                    Content = content,
+                    PostedAt = DateTime.Now,
+                    ContributionId = contributionId,
+                    UserId = userId
+                };
+
+                // Add the comment to the database
+                _unitOfWork.Comment.Add(newComment);
+                await _unitOfWork.SaveAsync();
+
+                return RedirectToAction("Contribution", "Home", new { id = contributionId });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                return RedirectToAction("Contribution", "Home", new { id = contributionId, error = ex.Message });
+            }
+        }
+
         [HttpPost]
         public IActionResult Index(string keyword)
         {

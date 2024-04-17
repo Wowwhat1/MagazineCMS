@@ -125,12 +125,15 @@ namespace MagazineCMS.Areas.Student.Controllers
 
         private Contribution CreateContribution(ContributionSubmissionVM model, int magazineId, string userId)
         {
+            var user = _unitOfWork.User.Get(u => u.Id == userId);
+
             var contribution = new Contribution
             {
                 Title = model.Title ?? "Untitled",
                 Status = "Pending",
                 SubmissionDate = DateTime.Now,
                 UserId = userId,
+                User = user,
                 MagazineId = magazineId
             };
 
