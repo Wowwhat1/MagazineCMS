@@ -8,10 +8,14 @@ using System.Threading.Tasks;
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MagazineCMS.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
+    [Authorize(Roles = SD.Role_Manager + "," + SD.Role_Admin)]
+
     public class FacultyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

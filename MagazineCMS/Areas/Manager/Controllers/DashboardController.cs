@@ -2,6 +2,8 @@
 using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;
+using MagazineCMS.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
+    [Authorize(Roles = SD.Role_Manager + "," + SD.Role_Admin)]
+
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;

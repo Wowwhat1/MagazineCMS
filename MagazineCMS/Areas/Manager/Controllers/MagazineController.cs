@@ -4,6 +4,7 @@ using MagazineCMS.DataAccess.Repository.IRepository;
 using MagazineCMS.Models;
 using MagazineCMS.Models.ViewModels;
 using MagazineCMS.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,12 +14,14 @@ using System.IO.Compression;
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class ManageMagazineController : Controller
+    [Authorize(Roles = SD.Role_Manager + "," + SD.Role_Admin)]
+
+    public class MagazineController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
 
-        public ManageMagazineController(IUnitOfWork unitOfWork, ApplicationDbContext context)
+        public MagazineController(IUnitOfWork unitOfWork, ApplicationDbContext context)
         {
             _unitOfWork = unitOfWork;
             _context = context;

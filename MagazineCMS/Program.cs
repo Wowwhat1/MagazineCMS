@@ -68,9 +68,28 @@ app.MapRazorPages();
 SeedDatabase();
 
 app.MapControllerRoute(
+    name: "Admin_Faculty",
+    pattern: "Admin/Faculty/{action}/{id?}",
+    defaults: new { area = "Manager", controller = "Faculty", action = "Index" });
+
+app.MapControllerRoute(
+    name: "Admin_Magazine",
+    pattern: "Admin/Magazine/{action}/{id?}",
+    defaults: new { area = "Manager", controller = "Magazine", action = "Index" });
+
+app.MapControllerRoute(
+    name: "Admin_Semester",
+    pattern: "Admin/Semester/{action}/{id?}",
+    defaults: new { area = "Manager", controller = "Semester", action = "Index" });
+
+app.MapControllerRoute(
     name: "areaRoute",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "notification",
+    pattern: "{controller=Notification}/{action=Index}/{id?}"
+    );
 
 app.MapControllerRoute(
     name: "default",
