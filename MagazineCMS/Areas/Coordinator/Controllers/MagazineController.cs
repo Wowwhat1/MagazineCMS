@@ -167,7 +167,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 TempData["Error"] = "Invalid model state. Please check your inputs.";
             }
 
-            return RedirectToAction("Details", new { id = feedbackVM.ContributionId });
+            return RedirectToAction("ContributionDetails", new { id = feedbackVM.ContributionId });
         }
 
         public IActionResult ViewFeedbacks(int contributionId)

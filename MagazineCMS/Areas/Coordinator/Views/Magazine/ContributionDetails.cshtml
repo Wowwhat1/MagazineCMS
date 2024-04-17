@@ -84,7 +84,7 @@
                                                         <!-- Hiển thị tên tệp và tạo liên kết để tải xuống -->
                                                         @if (!string.IsNullOrEmpty(document.DocumentUrl))
                                                         {
-                                                            <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
+                                                            <a href="@Url.Action("DownloadDocument", "Magazine", new { documentId = document.Id })" target="_blank">
                                                                 @System.IO.Path.GetFileName(document.DocumentUrl)
                                                             </a>
                                                         }
@@ -144,7 +144,7 @@
             <div class="card shadow mt-4">
                 <div class="card-body">
                     <h3>Add Feedback</h3>
-                    <form asp-action="AddFeedback" asp-controller="Contribution" method="post">
+                    <form asp-action="AddFeedback" asp-controller="Magazine" method="post">
                         <div class="form-group">
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" id="comment" name="Comment" rows="3" required></textarea>
@@ -169,7 +169,7 @@
         <script>
             function viewDocument(documentId) {
                 $('#viewDocumentModal').modal('show');
-                $('#documentViewer').attr('src', '@Url.Action("ViewDocument", "Contribution")?documentId=' + documentId);
+                $('#documentViewer').attr('src', '@Url.Action("ViewDocument", "Magazine")?documentId=' + documentId);
             }
 
             $(document).ready(function () {
@@ -177,23 +177,6 @@
                     e.preventDefault();
                     var documentId = $(this).data('document-id');
                     $('#documentIdToDelete').val(documentId);
-                    $('#deleteFileModal').modal('show');
-                });
-
-                $('#deleteFileForm').submit(function (e) {
-                    e.preventDefault();
-                    var documentId = $('#documentIdToDelete').val();
-                    $.post('@Url.Action("DeleteDocument", "Contribution")', { documentId: documentId })
-                        .done(function (data) {
-                            if (data.success) {
-                                location.reload();
-                            } else {
-                                alert('An error occurred while deleting the file.');
-                            }
-                        })
-                        .fail(function () {
-                            alert('An error occurred while deleting the file.');
-                        });
                 });
             });
 
