@@ -10,7 +10,7 @@ function loadDataTable() {
         "ajax": { url: '/manager/managemagazine/getall' },
         "columns": [
             { "data": "name", "width": "25%", "className": "table-cell" },
-            { "data": "description", "width": "25%", "className": "table-cell" },
+            { "data": "description", "width": "20%", "className": "table-cell" },
             {
                 "data": "startDate",
                 "width": "12%",
@@ -94,7 +94,7 @@ function loadDataTable() {
     });
 
     //CSS to shorten data when it's too long
-    var css = '.table-cell { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }',
+    var css = '.table-cell { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }',
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
 

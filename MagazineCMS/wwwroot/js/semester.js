@@ -33,11 +33,9 @@ function loadDataTable() {
                     return `
                         <div class="text-center">
                             <a onclick=editSemester('${data.id}') class="btn btn-warning btn-icon-split" data-toggle="modal" data-target="#modalCenter">
-                                <span class="icon text-white-50"><i class="fa fa-pencil""></i></span>
                                 <span class="text">Edit</span>
                             </a> 
                             <a onclick=deleteSemester('${data.id}') class="btn btn-danger btn-icon-split">
-                                <span class="icon text-white-50"><i class="fa fa-trash""></i></span>
                                 <span class="text">Delete</span>
                             </a> 
                         </div>

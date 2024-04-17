@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="~/lib/startbootstrap-admin/css/sb-admin-2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link href="/lib/startbootstrap-admin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body id="page-top">
 
@@ -34,7 +35,7 @@
                 {
                     <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Student" asp-controller="Dashboard" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
-                            <i class="fas fa-laugh-wink"></i>
+                            <i class="fa fa-cube fa-2x" aria-hidden="true"></i>
                         </div>
                         <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
                     </a>
@@ -43,7 +44,7 @@
                 {
                     <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Manager" asp-controller="Dashboard" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
-                            <i class="fas fa-laugh-wink"></i>
+                            <i class="fa fa-cube fa-2x" aria-hidden="true"></i>
                         </div>
                         <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
                     </a>
@@ -52,7 +53,7 @@
                 {
                     <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
-                            <i class="fas fa-laugh-wink"></i>
+                            <i class="fa fa-cube fa-2x" aria-hidden="true"></i>
                         </div>
                         <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
                     </a>
@@ -61,7 +62,7 @@
                 {
                     <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Coordinator" asp-controller="Dashboard" asp-action="Index">
                         <div class="sidebar-brand-icon rotate-n-15">
-                            <i class="fas fa-laugh-wink"></i>
+                            <i class="fa fa-cube fa-2x" aria-hidden="true"></i>
                         </div>
                         <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 20px;">Magazine CMS</div>
                     </a>
@@ -88,6 +89,14 @@
                     <partial name="_SidebarCoordinatorPartial" />
                 }
 
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
+
             </ul>
         }
         <!-- End of Sidebar -->
@@ -103,7 +112,7 @@
                     {
                         <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-area="Guest" asp-controller="Home" asp-action="Index" style="text-decoration: none;">
                             <div class="sidebar-brand-icon rotate-n-15">
-                                <i class="fas fa-laugh-wink"></i>
+                                <i class="fa fa-cube fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="sidebar-brand-text mx-3" style="font-weight: bold; font-size: 22px;">Magazine CMS</div>
                         </a>
@@ -131,60 +140,60 @@
                 </nav>
 
                 <div class="content">
-                    <main role="main" class="pb-3">
+                    <main role="main" class="pb-3 body-content">
                         <partial name="_AlertPartial" />
                         @RenderBody()
                     </main>
                 </div>
 
-            </div>
 
+                <!-- Footer -->
+                @if (!Context.Request.Path.Value.Contains("Identity/Account/Login"))
+                {
+                    <footer class="sticky-footer bg-white">
+                        <div class="my-auto" style="margin-left: 35%;">
+                            <div class="copyright my-auto">
+                                <table>
+                                    <tr class="title-main-footer">
+                                        <th style="padding-left: 20px;">
+                                            Contact:
+                                        </th>
+                                        <th>
+                                            Admin
+                                        </th>
+                                        <th>
+                                            Manager
+                                        </th>
+                                    </tr>
+                                    <tr class="marginal-text-footer">
+                                        <th>
 
-            <!-- Footer -->
-            @if (!Context.Request.Path.Value.Contains("Identity/Account/Login"))
-            {
-                <footer class="sticky-footer bg-white">
-                    <div style="margin-left: 35%;">
-                        <div class="copyright">
-                            <table>
-                                <tr class="title-main-footer">
-                                    <th style="padding-left: 20px;">
-                                        Contact:
-                                    </th>
-                                    <th>
-                                        Admin
-                                    </th>
-                                    <th>
-                                        Manager
-                                    </th>
-                                </tr>
-                                <tr class="marginal-text-footer">
-                                    <th>
+                                        </th>
+                                        <th>
+                                            Phone: 012 1102 2201
+                                        </th>
+                                        <th>
+                                            Phone: 012 2234 4953
+                                        </th>
+                                    </tr>
+                                    <tr class="marginal-text-footer">
+                                        <th>
 
-                                    </th>
-                                    <th>
-                                        Phone: 012 1102 2201
-                                    </th>
-                                    <th>
-                                        Phone: 012 2234 4953
-                                    </th>
-                                </tr>
-                                <tr class="marginal-text-footer">
-                                    <th>
-
-                                    </th>
-                                    <th>
-                                        Email: <a href="mailto:admin@gmail.com" style="text-decoration: none">admin@gmail.com</a>
-                                    </th>
-                                    <th>
-                                        Email: <a href="mailto:manager@gmail.com" style="text-decoration: none">manager@gmail.com</a>
-                                    </th>
-                                </tr>
-                            </table>
+                                        </th>
+                                        <th>
+                                            Email: <a href="mailto:admin@gmail.com" style="text-decoration: none">admin@gmail.com</a>
+                                        </th>
+                                        <th>
+                                            Email: <a href="mailto:manager@gmail.com" style="text-decoration: none">manager@gmail.com</a>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </footer>
-            }
+                    </footer>
+                }
+
+            </div>
         </div>
     </div>
 </body>
