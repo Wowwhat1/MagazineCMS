@@ -87,14 +87,14 @@ app.MapControllerRoute(
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
-    name: "notification",
-    pattern: "{controller=Notification}/{action=Index}/{id?}"
-    );
-
-app.MapControllerRoute(
     name: "default",
     pattern: "{action=Index}/{id?}",
     defaults: new { controller = "Home" });
+
+app.MapControllerRoute(
+    name: "notification",
+    pattern: "{controller=Notification}/{action=Index}/{id?}"
+    );
 
 app.Run();
 
