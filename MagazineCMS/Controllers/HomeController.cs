@@ -24,36 +24,9 @@ namespace MagazineCMS.Controllers
         }
         public IActionResult Index()
         {
-            List<Magazine> openMagazines;
-            List<Magazine> closedMagazines;
-            string facultyName = "";
+            var magazines = _unitOfWork.Magazine.GetAllMagazineWithPublicContributions();
 
-            if (User.Identity.IsAuthenticated)
-            {
-                string userEmail = User.Identity.Name;
-                int userFaculty = _unitOfWork.User.Get(x => x.Email == userEmail)?.FacultyId ?? 0;
-
-                if (userFaculty != 0)
-                {
-                    facultyName = _unitOfWork.Faculty.Get(x => x.Id == userFaculty)?.Name ?? "";
-                    List<Magazine> magazineList = _unitOfWork.Magazine.GetAll(filter: x => x.FacultyId == userFaculty, includeProperties: "Faculty,Semester").ToList();
-
-                    closedMagazines = magazineList.Where(m => m.EndDate <= DateTime.Now).ToList();
-                    openMagazines = magazineList.Where(m => m.EndDate > DateTime.Now).ToList();
-                }
-                else
-                {
-
-                    return RedirectToAction("Error", "Home");
-                }
-            }
-            else
-            {
-                openMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate > DateTime.Now).ToList();
-                closedMagazines = _unitOfWork.Magazine.GetAll().Where(m => m.EndDate <= DateTime.Now).ToList();
-            }
-
-            return View(new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
+            return View(magazines);
         }
 
         public IActionResult Magazine(int id)

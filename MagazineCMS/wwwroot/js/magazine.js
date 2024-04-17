@@ -116,7 +116,7 @@ function download(magazineId) {
 
 function updateMagazine(magazineId) {
     console.log(magazineId);
-    location.href = "https://localhost:7276/Manager/ManageMagazine/updateMagazine/" + magazineId;
+    location.href = "https://localhost:7276/Manager/Magazine/updateMagazine/" + magazineId;
 }
 
 function deleteMagazine(magazineId) {

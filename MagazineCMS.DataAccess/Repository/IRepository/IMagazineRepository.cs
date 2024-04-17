@@ -12,5 +12,7 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     {
         void Update(Magazine obj);
 
+        IEnumerable<Magazine> GetAllMagazineWithPublicContributions();
+
     }
 }
