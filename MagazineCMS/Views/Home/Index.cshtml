@@ -32,49 +32,7 @@
         </div>
     </div>
 
- @*    @if (Model.Item1.Any())
-    {
-        <div class="d-flex flex-wrap" style="gap: 2rem;">
-            @foreach (var magazine in Model.Item1)
-            {
-                <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
-
-                    <div class="card shadow" style="width: 18rem;">
-                        <div>
-                            <img src="~/image/magazine/mountains.jpg" class="card-img-top position-relative" alt="...">
-                            <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
-                                @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
-                                {
-                                    <span class="badge badge-warning">Near Closing</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-success">Opening</span>
-                                }
-                                @if (magazine.Faculty != null)
-                                {
-                                    <span class="badge badge-primary">@magazine.Faculty.Name</span>
-                                    <span class="badge badge-info">@magazine.Semester.Name</span>
-                                }
-
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title " style="height: 3rem; overflow: hidden; text-overflow: ellipsis;" title="@magazine.Name">@magazine.Name</h5>
-                            <p class="card-text" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                            <div class="card-text d-flex">
-                                <p class="text-success"><i class="fa fa-calendar" style="color: black;"></i> &nbsp; @magazine.StartDate.ToShortDateString()</p>
-                                <p>&nbsp; to &nbsp;</p>
-                                <p class="text-danger">@magazine.EndDate.ToShortDateString()</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </a>
-            }
-        </div>
-    } *@
-
+ 
     @if (Model.Item1.Any())
     {
         <div class="row mb-2">
@@ -100,7 +58,7 @@
                                 }
                             </div>
                             <h3 class="mb-0">
-                                <a class="text-dark" href="@Url.Action("Details", "Magazine", new { id = magazine.Id })">@magazine.Name</a>
+                                <a class="text-dark" href="@Url.Action("Magazine", "Home", new { id = magazine.Id })">@magazine.Name</a>
                             </h3>
                             <div class="mb-1 text-muted">
                                 <i class="fa fa-calendar text-success"></i> &nbsp;@magazine.StartDate.ToShortDateString()
@@ -108,7 +66,7 @@
                                 @magazine.EndDate.ToShortDateString()
                             </div>
                             <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                            <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
+                            <a href="@Url.Action("Magazine", "Home", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -117,11 +75,10 @@
     }
 </div>
 
-    
+   
+<hr />
 
-    <hr />
-
-    <div class="card-body">
+<div class="card-body">
         <h2>Closed Magazine List</h2>
         @if (Model.Item2.Any())
         {
@@ -141,7 +98,7 @@
                                     }
                                 </div>
                                 <h3 class="mb-0">
-                                    <a class="text-dark" href="@Url.Action("Details", new { id = magazine.Id })">@magazine.Name</a>
+                                    <a class="text-dark" href="@Url.Action("Magazine", new { id = magazine.Id })">@magazine.Name</a>
                                 </h3>
                                 <div class="mb-1 text-muted">
                                     <i class="fa fa-calendar text-success"></i> &nbsp;@magazine.StartDate.ToShortDateString()
@@ -149,16 +106,169 @@
                                     @magazine.EndDate.ToShortDateString()
                                 </div>
                                 <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                                <a href="@Url.Action("Details", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
+                                <a href="@Url.Action("Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
                             </div>
                         </div>
                     </div>
                 }
             </div>
         }
-    </div>
-    
-
 </div>
 
-    
+<div class="container-fluid pt-5 mb-3">
+    <div class="container">
+        <div class="section-title">
+            <h4 class="m-0 text-uppercase font-weight-bold">Featured News</h4>
+        </div>
+        <div class="owl-carousel news-carousel carousel-item-4 position-relative owl-loaded owl-drag">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(-2308px, 0px, 0px); transition: all 1s ease 0s; width: 3751px;">
+                    <div class="owl-item cloned" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="/image/magazine/computer-magazine-spring-2024.jpg" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item active" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned active" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned active" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned active" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div><div class="owl-item cloned" style="width: 258.5px; margin-right: 30px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            <img class="img-fluid h-100" src="" style="object-fit: cover;">
+                            <div class="overlay">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">Business</a>
+                                    <a class="text-white" href=""><small>Jan 01, 2045</small></a>
+                                </div>
+                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="owl-nav"><div class="owl-prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div><div class="owl-next"><i class="fa fa-angle-right" aria-hidden="true"></i></div></div><div class="owl-dots disabled"></div>
+        </div>
+    </div>
+</div>
