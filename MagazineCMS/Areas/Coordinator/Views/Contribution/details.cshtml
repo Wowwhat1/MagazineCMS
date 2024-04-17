@@ -27,29 +27,36 @@
     <div class="row">
         <!-- Left content -->
         <div class="col-lg-8">
-            <!-- Phần hiển thị thông tin chi tiết của đóng góp -->
-            <nav aria-label="breadcrumb">
-                <!-- Breadcrumb -->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Contribution")">Contributions</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Details</li>
-                </ol>
-            </nav>
 
             <!-- Tiêu đề của đóng góp -->
             <h1 class="h2 mb-2 text-gray-800">
                 Contribution Details
             </h1>
-            <h1>@Model.Title</h1>
-            <!-- Hiển thị trạng thái và ngày nộp -->
+            <h2>Title: @Model.Title</h2>
 
-            <p>Submission Date: @Model.SubmissionDate</p>
 
             <!-- Hiển thị thông tin của đóng góp -->
             <div class="card shadow mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">@Model.Title</h5>
+                    @{
+                        string statusBadge = "";
+                        switch (Model.Status)
+                        {
+                            case "Pending":
+                                statusBadge = "badge bg-warning text-dark";
+                                break;
+                            case "Approved":
+                                statusBadge = "badge bg-success";
+                                break;
+                            case "Rejected":
+                                statusBadge = "badge bg-danger";
+                                break;
+                            default:
+                                statusBadge = "badge bg-primary";
+                                break;
+                        }
+                    }
+                    <span class="@statusBadge text-gray-1000">Status: @Model.Status</span>
                     <p class="card-text">Submitted by: @($"{Model.User.Firstname} {Model.User.Lastname}")</p>
                     <p class="card-text">Magazine: @Model.Magazine.Name</p>
                     <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
@@ -63,7 +70,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Tên</th>
+                                                <th scope="col">Name</th>
                                                 <th scope="col">File</th>
                                                 <th scope="col">View</th>
                                             </tr>
@@ -96,9 +103,6 @@
                         </div>
                     }
 
-                    <!-- Nút quay lại danh sách -->
-                    <a asp-action="Index" asp-controller="Contribution" class="btn btn-secondary">Back to List</a>
-
                 </div>
             </div>
 
@@ -107,43 +111,6 @@
             {
                 <div class="card shadow mt-4">
                     <div class="card-body">
-                        <h3>Annotate:</h3>
-                        <ul>
-                            @foreach (var document in Model.Documents)
-                            {
-                                <li>
-                                    <!-- Hiển thị chỉ tên cuối của tệp và tạo liên kết để tải xuống -->
-                                    @if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                    {
-                                        <span>@Model.User.Firstname @Model.User.Lastname:</span>
-                                        <a href="@Url.Action("DownloadDocument", "Contribution", new { documentId = document.Id })" target="_blank">
-                                            @System.IO.Path.GetFileName(document.DocumentUrl)
-                                        </a>
-                                    }
-                                </li>
-                            }
-                        </ul>
-
-
-                        <p>
-                            Graded by:
-
-                            @if (Model.Feedbacks != null && Model.Feedbacks.Any())
-                            {
-                                @foreach (var feedback in Model.Feedbacks)
-                                {
-
-                                    <span>@feedback.User.UserName</span>
-
-                                    <br />
-
-                                }
-                            }
-                            else
-                            {
-                            <p>No graded.</p>
-                            }
-                        </p>
                         <h3>Feedbacks</h3>
 
                         @if (Model.Feedbacks != null && Model.Feedbacks.Any())
@@ -153,6 +120,7 @@
                                 {
                                     <li class="list-group-item">
                                         <div style="white-space: pre-line;">
+                                            <span class="font-weight-bold">Feedback by:</span> <span>@feedback.User.UserName</span><br />
                                             <span class="font-weight-bold">Comment:</span> <span>@feedback.Comment</span><br />
                                             <span class="float-right">@feedback.FeedbackDate.ToString("HH:mm dd/MM/yyyy")</span>
 
