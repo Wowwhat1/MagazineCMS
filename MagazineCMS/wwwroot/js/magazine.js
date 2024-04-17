@@ -7,7 +7,7 @@ $(document).ready(function () {
 //Display table magazine
 function loadDataTable() {
     dataTable = $('#magazine-table').DataTable({
-        "ajax": { url: '/manager/managemagazine/getall' },
+        "ajax": { url: '/manager/magazine/getall' },
         "columns": [
             { "data": "name", "width": "25%", "className": "table-cell" },
             { "data": "description", "width": "20%", "className": "table-cell" },
@@ -53,7 +53,7 @@ function loadDataTable() {
 
     /*Table data contribution download of magazine*/
     dataTable = $('#contribution-magazine-table').DataTable({
-        "ajax": { url: '/manager/managemagazine/getall' },
+        "ajax": { url: '/manager/magazine/getall' },
         "columns": [
             { "data": "name", "width": "25%", "className": "table-cell" },
             { "data": "semester.name", "width": "15%", "className": "table-cell" },
@@ -80,7 +80,7 @@ function loadDataTable() {
         $('#SemesterId').change(function () {
             var semesterId = $(this).val();
             $.ajax({
-                url: '/manager/managemagazine/getsemester',
+                url: '/manager/magazine/getsemester',
                 type: 'GET',
                 success: function (data) {
                     var semester = data.data.find(s => s.id == semesterId);
@@ -110,7 +110,7 @@ function loadDataTable() {
 }
 
 function download(magazineId) {
-    window.location.href = '/manager/managemagazine/downloadalldocuments?magazineId=' + magazineId;
+    window.location.href = '/manager/magazine/downloadalldocuments?magazineId=' + magazineId;
 }
 
 
@@ -133,7 +133,7 @@ function deleteMagazine(magazineId) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request on confirmation
-            fetch(`/manager/managemagazine/deleteMagazine/${magazineId}`, {
+            fetch(`/manager/magazine/deleteMagazine/${magazineId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
