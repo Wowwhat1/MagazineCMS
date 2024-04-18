@@ -9,7 +9,7 @@ $(document).ready(function () {
 function loadDataTable() {
     var i = 1;
     dataTable = $('#faculty-table').DataTable({
-        "ajax": { url: '/admin/faculty/getall' },
+        "ajax": { url: '/manager/faculty/getall' },
         "columns": [
             {
                 "data": "null", "width": "5%", "render": function () { return i++; }
@@ -55,7 +55,7 @@ function createFaculty() {
 function editFaculty(id) {
     // Get the faculty data by id using an AJAX request
     $.ajax({
-        url: '/admin/faculty/getbyid/' + id,
+        url: '/manager/faculty/getbyid/' + id,
         type: 'GET',
         success: function (response) {
             var data = response.data;
@@ -88,7 +88,7 @@ function deleteFaculty(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request on confirmation
-            fetch(`/admin/faculty/deletebyid/${id}`, {
+            fetch(`/manager/faculty/deletebyid/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
