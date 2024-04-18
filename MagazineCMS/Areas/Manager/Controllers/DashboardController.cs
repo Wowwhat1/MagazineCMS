@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    [Authorize(Roles = SD.Role_Manager + "," + SD.Role_Admin)]
+    [Authorize(Roles = SD.Role_Manager)]
 
     public class DashboardController : Controller
     {

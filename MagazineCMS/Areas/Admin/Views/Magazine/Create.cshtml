@@ -1,0 +1,112 @@
+﻿@model MagazineCMS.Models.ViewModels.MagazineVM
+@{
+    ViewData["Title"] = "Add Topic";
+}
+
+<div class="form-signin">
+    <div class="modal-content" style="padding-left: 20px;">
+        <form method="post" enctype="multipart/form-data">
+            <div style="align-items: center;">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Magazine</h2>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            <div class="row" style="padding-top: 10px;">
+                                <h5 style="padding-left: 10px;">Magazine</h5>
+                                <div>
+                                    <input asp-for="@Model.Magazine.Name" class="form-control" aria-required="true" placeholder=""
+                                           style="width: 400px; height: 38px; padding-top: 20px;" />
+                                    <span asp-validation-for="@Model.Magazine.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 10px;">
+                                <h5 style="padding-left: 10px;">Description</h5>
+                                <div>
+                                    <textarea id="tiny" asp-for="@Model.Magazine.Description" class="form-control" aria-required="true" placeholder=""
+                                              style="width: 400px; height: 180px;">
+                                    <span asp-validation-for="@Model.Magazine.Description" class="text-danger"></span>
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col">
+                        <div class="row" style="padding-top: 10px;">
+                            <h5 style="width: 140px;">Faculty</h5>
+                            <div>
+                                <select style="width: 248px; height: 38px; border-radius: 5px; border-color:darkgrey;"
+                                        asp-for="@Model.Magazine.FacultyId" asp-items="@Model.FacultyList" class="form-select border-1">
+                                    <option disabled selected>--Select Faculty--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 10px;">
+                            <h5 style="width: 140px;">Semester</h5>
+                            <div>
+                                <select style="width: 248px; height: 38px; border-radius: 5px; border-color:darkgrey" id="SemesterId"
+                                        asp-for="@Model.Magazine.SemesterId" asp-items="@Model.SemesterList" class="form-select border-1">
+                                    <option disabled selected>--Select Semester--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 10px;">
+                            <table id="" class="table table-bordered table-hover table-striped" width="90%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 12px; text-align: center;">Start Date</th>
+                                        <th style="font-size: 12px; text-align: center;">End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="startDate"></td>
+                                        <td id="endDate"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="row" style="padding-top: 10px;">
+                            <h5 style="width: 140px;">Open date</h5>
+                            <div style="width: 248px;">
+                                <input asp-for="@Model.Magazine.StartDate" class="form-control" aria-required="true" placeholder="" />
+                                <span asp-validation-for="@Model.Magazine.StartDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 10px;">
+                            <h5 style="width: 140px;">Close date</h5>
+                            <div style="width: 248px;">
+                                <input asp-for="@Model.Magazine.EndDate" class="form-control" aria-required="true" placeholder="" />
+                                <span asp-validation-for="@Model.Magazine.EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col mb-3 justify-content-end" style="padding-top: 10px;">
+                        <div class="row" style="display: block; padding-left: 20px;">
+                            <button id="create-magazine" type="submit" class="btn btn-lg btn-primary">Create Magazine</button>
+                            <button type="button" class="btn btn-lg btn-secondary">
+                                <a asp-area="Admin" asp-controller="Magazine" asp-action="Index" style="color: white;">Close</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/magazine-admin.js"></script>
+}

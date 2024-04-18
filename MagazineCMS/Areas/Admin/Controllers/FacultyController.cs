@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Authorization;
 
-namespace MagazineCMS.Areas.Manager.Controllers
+namespace MagazineCMS.Areas.Admin.Controllers
 {
-    [Area("Manager")]
-    [Authorize(Roles = SD.Role_Manager)]
+    [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
 
     public class FacultyController : Controller
     {

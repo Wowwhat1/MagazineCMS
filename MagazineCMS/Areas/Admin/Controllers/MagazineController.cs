@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 
-namespace MagazineCMS.Areas.Manager.Controllers
+namespace MagazineCMS.Areas.Admin.Controllers
 {
-    [Area("Manager")]
-    [Authorize(Roles = SD.Role_Manager)]
+    [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
 
     public class MagazineController : Controller
     {

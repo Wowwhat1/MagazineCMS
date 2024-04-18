@@ -1,39 +1,41 @@
-//const { reload } = require("browser-sync");
+﻿var dataTable;
+var i = 1;
 
-var dataTable;
 $(document).ready(function () {
     loadDataTable();
 });
 
-
 function loadDataTable() {
-    var i = 1;
-    dataTable = $('#faculty-table').DataTable({
-        "ajax": { url: '/admin/faculty/getall' },
+    dataTable = $('#semester-table').DataTable({
+        "ajax": { url: '/admin/semester/getall' },
         "columns": [
             {
                 "data": "null", "width": "5%", "render": function () { return i++; }
             },
-            { "data": "faculty.name", "width": "15%" },
+            { "data": "name", "width": "15%" },
             {
-                "data": "magazineCount",
-                "width": "15%",
-                "className": "table-cell"
+                "data": "startDate", "width": "15%",
+                "render": function (data) {
+                    var date = new Date(data);
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                }
             },
             {
-                "data": "userCount",
-                "width": "15%",
-                "className": "table-cell"
+                "data": "endDate", "width": "15%",
+                "render": function (data) {
+                    var date = new Date(data);
+                    return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                }
             },
             {
-                data: { id: "faculty.id"},
+                data: { id: "id", lockoutEnd: "lockoutEnd" },
                 "render": function (data) {
                     return `
                         <div class="text-center">
-                            <a onclick=editFaculty('${data.faculty.id}') class="btn btn-warning btn-icon-split" data-toggle="modal" data-target="#modalCenter">
+                            <a onclick=editSemester('${data.id}') class="btn btn-warning btn-icon-split" data-toggle="modal" data-target="#modalCenter">
                                 <span class="text">Edit</span>
                             </a> 
-                            <a onclick=deleteFaculty('${data.faculty.id}') class="btn btn-danger btn-icon-split">
+                            <a onclick=deleteSemester('${data.id}') class="btn btn-danger btn-icon-split">
                                 <span class="text">Delete</span>
                             </a> 
                         </div>
@@ -45,28 +47,28 @@ function loadDataTable() {
     });
 }
 
-function createFaculty() {
+function createSemester() {
     // Reset the form
-    $('#facultyForm').trigger('reset');
-    $('#facultyFormTitle').text('Create Faculty');
+    $('#semesterForm').trigger('reset');
+    $('#semesterFormTitle').text('Create Semester');
     $('#modalCenter').modal('show');
 }
 
-function editFaculty(id) {
-    // Get the faculty data by id using an AJAX request
+function editSemester(id) {
+    // Get the semester data by id using an AJAX request
     $.ajax({
-        url: '/admin/faculty/getbyid/' + id,
+        url: '/admin/semester/getbyid/' + id,
         type: 'GET',
         success: function (response) {
             var data = response.data;
 
-            $('#facultyId').val(data.faculty.id);
-            $('#facultyName').val(data.faculty.name);
-            /*$('#facultyMagazineCount').val(data.magazineCount);
-            $('#facultyUserCount').val(data.userCount);*/
+            $('#semesterId').val(data.id);
+            $('#semesterName').val(data.name);
+            $('#semesterStartDate').val(data.startDate);
+            $('#semesterEndDate').val(data.endDate);
 
             // Show the edit modal
-            $('#facultyFormTitle').text('Edit Faculty');
+            $('#semesterFormTitle').text('Edit Semester');
             $('#modalCenter').modal('show');
         },
         error: function (xhr, status, error) {
@@ -76,10 +78,10 @@ function editFaculty(id) {
     });
 }
 
-function deleteFaculty(id) {
+function deleteSemester(id) {
     Swal.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this faculty!",
+        text: "You won't be able to revert this semester!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -88,7 +90,7 @@ function deleteFaculty(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Send DELETE request on confirmation
-            fetch(`/admin/faculty/deletebyid/${id}`, {
+            fetch(`/admin/semester/deletebyid/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -120,9 +122,6 @@ function deleteFaculty(id) {
                         'error'
                     );
                 });
-
-                //dataTable.ajax.reload();
         }
     });
 }
-
