@@ -3,10 +3,16 @@
     src: url('Poppins-Regular.ttf');
 }
 
-@media (min-width: 768px) {
+@media only screen and (min-width: 300px) {
   html {
-    font-size: 16px;
+    font-size: 11px;
   }
+}
+
+@media only screen and (min-width: 700px) {
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -49,342 +55,381 @@ body {
 }
 
 /*-----------------Footer---------------------*/
-/*.footer-form {
-    background: #bde0fe;
-    bottom: 0px;
-    position: absolute;
-    width: 100%;
-    z-index: 1;
-}*/
-.title-main-footer {
-    font-weight: normal;
-    font-size: 13px;
-    color: black;
-}
 
-    .title-main-footer th {
-        padding-left: 18px;
-        padding-top: 2px;
-    }
 
-.marginal-text-footer {
-    font-weight: normal;
-    font-size: 11px;
-    color: black;
-}
+@media only screen and (min-width: 300px) {
 
-    .marginal-text-footer th {
-        padding-left: 18px;
+    .title-main-footer {
+        font-weight: normal;
+        font-size: 10px;
         color: black;
     }
 
-/*----------------Add account------------------*/
-.form-create-account {
-    width: 100%;
-    max-width: 2400px;
-    padding: 20px;
-    margin: auto;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+        .title-main-footer th {
+            padding-left: 15px;
+            padding-top: 2px;
+        }
 
-.bold-black-text {
-    font-weight: bold;
-    color: black;
-    font-size: 15px;
-}
-
-#register-account {
-    background-color: #020058;
-    border-color: #020058;
-}
-
-    #register-account:hover {
-        background-color: #00B4D8;
-        border-color: #00B4D8;
+    .marginal-text-footer {
+        font-weight: normal;
+        font-size: 8px;
+        color: black;
     }
 
-#close-form {
-    background-color: #000000;
-    border-color: #000000;
+        .marginal-text-footer th {
+            padding-left: 15px;
+            color: black;
+        }
+
 }
 
-    #close-form:hover {
-        background-color: #808080;
-        border-color: #808080;
+@media only screen and (min-width: 700px) {
+
+    .title-main-footer {
+        font-weight: normal;
+        font-size: 13px;
+        color: black;
     }
-  
-/*----------------Login form------------------*/
-* {
-    font-family: 'Poppins', sans-serif;
-    font-weight: normal;
-}
 
-.body-background-img {
-    background-image: url("../image/office-bgr.jpeg");
-}
+        .title-main-footer th {
+            padding-left: 18px;
+            padding-top: 2px;
+        }
 
-@media only screen and (min-width: 451px) {
-    .container {
-        padding-top: 20px;
+    .marginal-text-footer {
+        font-weight: normal;
+        font-size: 11px;
+        color: black;
     }
-    .form-signin {
+
+        .marginal-text-footer th {
+            padding-left: 18px;
+            color: black;
+        }
+}
+
+    /*----------------Add account------------------*/
+    .form-create-account {
         width: 100%;
-        max-width: 480px;
-        padding: 15px;
+        max-width: 2400px;
+        padding: 20px;
         margin: auto;
         background: white;
         border-radius: 5px;
-        box-shadow: 4px 8px 21px 6px #000000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    .title-main {
+    .bold-black-text {
         font-weight: bold;
-        font-size: 20px;
-    }
-
-    .marginal-text {
-        font-weight: bold;
+        color: black;
         font-size: 15px;
-        color: #888888;
     }
 
-    .text-link {
-        font-weight: bold;
-        font-size: 15px;
-        color: #1A17CA;
-        text-decoration: none;
-    }
-
-    .bold-white-text {
-        font-weight: bold;
-        color: white;
-        font-size: 20px;
-    }
-
-    .input-form {
-        width: 100%;
-        height: 32px;
-        border-radius: 5px;
-    }
-
-    .space-hold {
-        padding-top: 20px;
-        padding-left: 65px;
-        padding-right: 65px;
-    }
-    .marginal-space {
-        padding-top: 12px;
-        padding-left: 65px;
-    }
-
-    .center {
-        text-align: center !important;
-    }
-
-    .deep-blue-btn {
-        width: 40%;
-        height: 32px;
-        border-radius: 5px;
+    #register-account {
         background-color: #020058;
+        border-color: #020058;
     }
 
-        .deep-blue-btn:hover {
+        #register-account:hover {
             background-color: #00B4D8;
+            border-color: #00B4D8;
+        }
+
+    #close-form {
+        background-color: #000000;
+        border-color: #000000;
+    }
+
+        #close-form:hover {
+            background-color: #808080;
+            border-color: #808080;
+        }
+
+    /*----------------Login form------------------*/
+    * {
+        font-family: 'Poppins', sans-serif;
+        font-weight: normal;
+    }
+
+    .body-background-img {
+        background-image: url("../image/office-bgr.jpeg");
+    }
+
+    @media only screen and (min-width: 451px) {
+        .container {
+            padding-top: 20px;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 480px;
+            padding: 15px;
+            margin: auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 4px 8px 21px 6px #000000;
+        }
+
+        .title-main {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .marginal-text {
+            font-weight: bold;
+            font-size: 15px;
+            color: #888888;
+        }
+
+        .text-link {
+            font-weight: bold;
+            font-size: 15px;
+            color: #1A17CA;
+            text-decoration: none;
+        }
+
+        .bold-white-text {
+            font-weight: bold;
+            color: white;
+            font-size: 20px;
+        }
+
+        .input-form {
+            width: 100%;
+            height: 32px;
+            border-radius: 5px;
+        }
+
+        .space-hold {
+            padding-top: 20px;
+            padding-left: 65px;
+            padding-right: 65px;
+        }
+
+        .marginal-space {
+            padding-top: 12px;
+            padding-left: 65px;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .deep-blue-btn {
+            width: 40%;
+            height: 32px;
+            border-radius: 5px;
+            background-color: #020058;
+        }
+
+            .deep-blue-btn:hover {
+                background-color: #00B4D8;
+            }
+
+
+        /*----------------Form-regis------------------*/
+
+        .form-register {
+            width: 100%;
+            max-width: 450px;
+            padding: 15px;
+            margin: auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 4px 8px 21px 6px #000000;
+        }
+
+        .term-and-conditions {
+            color: #1a17ca;
+        }
+
+        #errorMessage {
+            color: red;
+            display: none;
+        }
+
+        .register-space-hold {
+            padding-top: 20px;
+        }
+    }
+
+    @media only screen and (max-width: 450px) {
+        .container {
+            margin-top: 100px;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 450px;
+            padding: 15px;
+            margin: auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 4px 8px 21px 6px #000000;
+        }
+
+        .title-main {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .marginal-text {
+            font-weight: bold;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .text-link {
+            font-weight: bold;
+            font-size: 12px;
+            color: #1A17CA;
+            text-decoration: none;
+        }
+
+        .bold-white-text {
+            font-weight: bold;
+            color: white;
+            font-size: 15px;
+        }
+
+        .input-form {
+            width: 100%;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        .space-hold {
+            padding-top: 14px;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .marginal-space {
+            padding-top: 7px;
+            padding-left: 25px;
+        }
+
+        .center {
+            text-align: center !important;
+        }
+
+        .deep-blue-btn {
+            width: 40%;
+            height: 30px;
+            border-radius: 5px;
+            background-color: #020058;
+        }
+
+            .deep-blue-btn:hover {
+                background-color: #00B4D8;
+            }
+
+        /*----------------Edit user form------------------*/
+
+
+        body {
+            margin-top: 20px;
+            background-color: #f2f6fc;
+            color: #69707a;
+        }
+
+        .img-account-profile {
+            height: 10rem;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+        }
+
+            .card .card-header {
+                font-weight: 500;
+            }
+
+        .card-header:first-child {
+            border-radius: 0.35rem 0.35rem 0 0;
+        }
+
+        .card-header {
+            padding: 1rem 1.35rem;
+            margin-bottom: 0;
+            background-color: rgba(33, 40, 50, 0.03);
+            border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+        }
+
+        .form-control, .dataTable-input {
+            display: block;
+            width: 100%;
+            padding: 0.875rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1;
+            color: #69707a;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #c5ccd6;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0.35rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .nav-borders .nav-link.active {
+            color: #0061f2;
+            border-bottom-color: #0061f2;
+        }
+
+        .nav-borders .nav-link {
+            color: #69707a;
+            border-bottom-width: 0.125rem;
+            border-bottom-style: solid;
+            border-bottom-color: transparent;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 1rem;
+            margin-right: 1rem;
         }
 
 
-    /*----------------Form-regis------------------*/
-
-    .form-register {
-        width: 100%;
-        max-width: 450px;
-        padding: 15px;
-        margin: auto;
-        background: white;
-        border-radius: 5px;
-        box-shadow: 4px 8px 21px 6px #000000;
-    }
-
-    .term-and-conditions {
-        color: #1a17ca;
-    }
-
-    #errorMessage {
-        color: red;
-        display: none;
-    }
-
-    .register-space-hold {
-        padding-top: 20px;
-    }
-
-}
-
-@media only screen and (max-width: 450px) {
-    .container {
-        margin-top: 100px;
-    }
-
-    .form-signin {
-        width: 100%;
-        max-width: 450px;
-        padding: 15px;
-        margin: auto;
-        background: white;
-        border-radius: 5px;
-        box-shadow: 4px 8px 21px 6px #000000;
-    }
-
-    .title-main {
-        font-weight: bold;
-        font-size: 15px;
-    }
-
-    .marginal-text {
-        font-weight: bold;
-        font-size: 12px;
-        color: #888888;
-    }
-
-    .text-link {
-        font-weight: bold;
-        font-size: 12px;
-        color: #1A17CA;
-        text-decoration: none;
-    }
-
-    .bold-white-text {
-        font-weight: bold;
-        color: white;
-        font-size: 15px;
-    }
-
-    .input-form {
-        width: 100%;
-        height: 30px;
-        border-radius: 5px;
-    }
-
-    .space-hold {
-        padding-top: 14px;
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-
-    .marginal-space {
-        padding-top: 7px;
-        padding-left: 25px;
-    }
-
-    .center {
-        text-align: center !important;
-    }
-
-    .deep-blue-btn {
-        width: 40%;
-        height: 30px;
-        border-radius: 5px;
-        background-color: #020058;
-    }
-
-        .deep-blue-btn:hover {
-            background-color: #00B4D8;
+        .table-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-
-    /*----------------Edit user form------------------*/
-
-
-    body {
-        margin-top: 20px;
-        background-color: #f2f6fc;
-        color: #69707a;
     }
 
-    .img-account-profile {
-        height: 10rem;
-    }
 
-    .rounded-circle {
-        border-radius: 50% !important;
-    }
+    /*----------------Home page------------------*/
+    
 
-    .card {
-        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
-    }
-
-        .card .card-header {
-            font-weight: 500;
-        }
-
-    .card-header:first-child {
-        border-radius: 0.35rem 0.35rem 0 0;
-    }
-
-    .card-header {
-        padding: 1rem 1.35rem;
-        margin-bottom: 0;
-        background-color: rgba(33, 40, 50, 0.03);
-        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
-    }
-
-    .form-control, .dataTable-input {
-        display: block;
+@media only screen and (min-width: 300px) {
+    .background-screen {
+        background-image: url('../image/PageScreen.jpg');
         width: 100%;
-        padding: 0.875rem 2rem;
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1;
-        color: #69707a;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #c5ccd6;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border-radius: 0.35rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        height: auto;
+        object-fit: contain;
     }
+}
 
-    .nav-borders .nav-link.active {
-        color: #0061f2;
-        border-bottom-color: #0061f2;
-    }
-
-    .nav-borders .nav-link {
-        color: #69707a;
-        border-bottom-width: 0.125rem;
-        border-bottom-style: solid;
-        border-bottom-color: transparent;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
-
-
-    .table-cell {
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+@media only screen and (min-width: 700px) {
+    .background-screen {
+        background-image: url('../image/PageScreen.jpg');
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 }
 
 
-/*----------------Home page------------------*/
-.background-screen {
-    background-image: url('../image/PageScreen.jpg');
-
-    max-width: 1400px;
-    height: 700px;
-}
-
-.body-content {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+    .body-content {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }

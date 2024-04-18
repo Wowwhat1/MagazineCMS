@@ -10,7 +10,7 @@ function loadDataTable() {
         "ajax": { url: '/manager/managemagazine/getall' },
         "columns": [
             { "data": "name", "width": "25%", "className": "table-cell" },
-            { "data": "description", "width": "20%", "className": "table-cell" },
+            { "data": "description", "width": "17%", "className": "table-cell" },
             {
                 "data": "startDate",
                 "width": "12%",
@@ -29,17 +29,17 @@ function loadDataTable() {
                     return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
                 }
             },
-            { "data": "faculty.name", "width": "15%", "className": "table-cell" },
-            { "data": "semester.name", "width": "15%", "className": "table-cell" },
+            { "data": "faculty.name", "width": "12%", "className": "table-cell" },
+            { "data": "semester.name", "width": "12%", "className": "table-cell" },
             {
                 data: { id: "id" },
                 "render": function (data) {
                         return `
                         <div class="text-center">
-                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:80px;">
+                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:70px;">
                                 <i class="bi bi-lock-fill"></i>  Edit
                             </button> 
-                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:80px;">
+                            <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:70px;">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </div>
