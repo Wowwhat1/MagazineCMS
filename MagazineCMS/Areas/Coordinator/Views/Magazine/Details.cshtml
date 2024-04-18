@@ -85,7 +85,7 @@
                                                     statusBadge = "badge bg-danger";
                                                     break;
                                                 default:
-                                                    statusBadge = "badge bg-primary";
+                                                    statusBadge = "badge bg-primary text-white";
                                                     break;
                                             }
                                         }
@@ -93,7 +93,7 @@
                                     </td>
                                     <td>
                                         <!-- Details button -->
-                                        <a class="btn btn-primary" href="@Url.Action("Details", "Contribution", new { id = contribution.Id })">Details</a>
+                                        <a class="btn btn-primary" href="@Url.Action("ContributionDetails", "Magazine", new { id = contribution.Id })">Details</a>
                                     </td>
                                 </tr>
                             }
