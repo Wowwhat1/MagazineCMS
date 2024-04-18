@@ -1,12 +1,16 @@
-﻿@model List<Magazine>
+﻿@model Tuple<List<Magazine>, List<Semester>, List<Faculty>, List<Contribution>>
 
 
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
+    var magazines = Model.Item1;
+    var semesters = Model.Item2;
+    var faculties = Model.Item3;
+    var contributions = Model.Item4;
 
-    var featuredMagazine = Model[0];
-    var remainingMagazines = Model.GetRange(1, Model.Count - 1);
+    var featuredMagazine = Model.Item1[0];
+    var remainingMagazines = Model.Item1.GetRange(1, Model.Item1.Count - 1);
     var halfCount = remainingMagazines.Count / 2;
     var listLeftMagazine = remainingMagazines.GetRange(0, halfCount);
     var listRightMagazine = remainingMagazines.GetRange(halfCount, halfCount);
@@ -139,10 +143,51 @@
                     </div>
                 </div>
             </div>
-            <!-- Side widget-->
-            <div class="card mb-4">
-                <div class="card-header">Side Widget</div>
-                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+            <!-- Tags -->
+            <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                </div>
+                <div class="bg-white border border-top-0 p-3">
+                    <div class="d-flex flex-wrap m-n1">
+                        @foreach (var semester in semesters)
+                        {
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">@semester.Name</a>
+                        }
+                        @foreach (var faculty in faculties)
+                        {
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">@faculty.Name</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- Contributions -->
+            <div class="mb-3">
+                <div class="section-title mb-0">
+                    <h4 class="m-0 text-uppercase font-weight-bold">New Contribution</h4>
+                </div>
+                <div class="bg-white border border-top-0 p-3">
+                    @foreach (var contribution in contributions)
+                    {
+                        <div class="d-flex align-items-center bg-white mb-3" style="">
+                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center card border-left-primary">
+                                <div class="mb-2 mt-1">
+                                    <a class="badge badge-primary font-weight-semi-bold p-1 mr-2" href="contribution/@contribution.Id">@contribution.Magazine.Faculty.Name</a>
+                                </div>
+                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="contribution/@contribution.Id">@contribution.Title</a>
+                                <div class="d-flex justify-content-between bg-white p-2">
+                                    <div class="d-flex align-items-center">
+                                        <img class="rounded-circle mr-2" src="@contribution.User.AvatarUrl" width="25" height="25" alt="avt">
+                                        <span><small>@contribution.User.Firstname @contribution.User.Lastname</small></span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span><small>@contribution.SubmissionDate.ToString("d MMM yyyy")</small></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
