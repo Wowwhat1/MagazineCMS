@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MagazineCMS.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    [Authorize(Roles = SD.Role_Manager)]
+    [Authorize(Roles = SD.Role_Manager+","+SD.Role_Admin)]
     public class SemesterController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +15,7 @@ namespace MagazineCMS.Areas.Manager.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        public IActionResult Index (int? id)
+        public IActionResult Index(int? id)
         {
             if (id == null || id == 0)
             {

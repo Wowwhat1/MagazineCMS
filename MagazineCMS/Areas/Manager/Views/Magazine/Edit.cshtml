@@ -2,7 +2,7 @@
 
 <div class="form-signin">
     <div class="modal-content" style="padding-left: 20px;">
-        <form asp-controller="ManageMagazine" asp-action="Edit" method="post" enctype="multipart/form-data">
+        <form asp-controller="Magazine" asp-action="Edit" method="post" enctype="multipart/form-data">
             <input asp-for="Magazine.Id" type="hidden" value="@Model.Magazine.Id"/>
             <div style="align-items: center;">
                 <div class="modal-header">
@@ -77,7 +77,7 @@
                         <div class="row" style="display: block; padding-left: 20px;">
                             <button id="update-magazine" type="submit" class="btn btn-lg btn-primary">Update Magazine</button>
                             <button type="button" class="btn btn-lg btn-secondary">
-                                <a asp-area="Manager" asp-controller="ManageMagazine" asp-action="Index" style="color: white;">Back</a>
+                                <a asp-area="Manager" asp-controller="Magazine" asp-action="Index" style="color: white;">Back</a>
                             </button>
                         </div>
                     </div>

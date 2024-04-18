@@ -19,7 +19,7 @@
         <div class="d-flex flex-wrap" style="gap: 2rem;">
             @foreach (var magazine in Model.Item1)
             {
-                <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+                <a href="Magazine/Details/@magazine.Id" class="text-black-50" style="text-decoration: none;">
                     <div class="card shadow" style="width: 18rem;">
                         <div>
                             <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">
@@ -58,7 +58,7 @@
         <div class="d-flex flex-wrap" style="gap: 2rem;">
             @foreach (var magazine in Model.Item2)
             {
-                <a href="@Url.Action("Details", "Magazine", new { id = magazine.Id })" class="text-black-50" style="text-decoration: none;">
+                <a href="Magazine/Details/@magazine.Id" class="text-black-50" style="text-decoration: none;">
                     <div class="card shadow" style="width: 18rem;">
                         <div>
                             <img src="~/image/magazine/computer-magazine-spring-2024.jpg" class="card-img-top position-relative" alt="...">

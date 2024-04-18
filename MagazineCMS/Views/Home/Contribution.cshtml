@@ -1,9 +1,12 @@
-﻿@model Tuple<Contribution, Magazine>
+﻿@model ValueTuple<Contribution, Magazine, User, Faculty, DateTime, Semester>
 @{
     ViewData["Title"] = "Contribution";
     var contribution = Model.Item1;
     var magazine = Model.Item2;
+    var user = Model.Item3;
+    var faculty = Model.Item4;
     var date = contribution.SubmissionDate.ToString("d MMM yyyy");
+    var semester = Model.Item6;
 }
 
 <div class="">
@@ -14,7 +17,7 @@
                 <div class="position-relative mb-3 text-gray-800">
                     <div class="bg-white border border-top-0 p-4">
                         <div class="mb-3">
-                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">@magazine.Faculty.Name</a>
+                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">@faculty.Name</a>
                             <a class="text-body" href="">@date</a>
                         </div>
                         <h3 class="mb-3 text-secondary text-uppercase font-weight-bold">@contribution.Title</h3>
@@ -28,8 +31,8 @@
                     </div>
                     <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
                         <div class="d-flex align-items-center">
-                            <img class="rounded-circle mr-2" src="@contribution.User.AvatarUrl" width="25" height="25" alt="">
-                            <span>@contribution.User.Firstname @contribution.User.Lastname</span>
+                            <img class="rounded-circle mr-2" src="@user.AvatarUrl" width="25" height="25" alt="">
+                            <span>@user.Firstname @user.Lastname</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="ml-3"><i class="fa fa-comment mr-2"></i>123</span>
@@ -86,31 +89,14 @@
                         <h4 class="m-0 text-uppercase font-weight-bold">Leave a comment</h4>
                     </div>
                     <div class="bg-white border border-top-0 p-4">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-sm-6">
+                        <input type="hidden" name="contributionId" value="@contribution.Id" />
+                        <form method="post" action="AddComment">
                                     <div class="form-group">
-                                        <label for="name">Name *</label>
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="email">Email *</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="website">Website</label>
-                                <input type="url" class="form-control" id="website">
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message *</label>
-<textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                <label for="content">Message *</label>
+                                <textarea id="content" name="content" cols="30" rows="5" class="form-control"></textarea>
                             </div>
                             <div class="form-group mb-0">
-                                <input type="submit" value="Leave a comment" class="btn btn-primary font-weight-semi-bold py-2 px-3">
+                                <button type="submit" class="btn btn-primary font-weight-semi-bold py-2 px-3">Leave a comment</button>
                             </div>
                         </form>
                     </div>
@@ -142,7 +128,7 @@
                             </div>
                         </div>
                     </div>
-                </div
+                </div>
 
                 <div class="mb-3">
                     <div class="section-title mb-0">
@@ -151,8 +137,8 @@
                     <div class="bg-white border border-top-0 p-3">
                         <div class="d-flex flex-wrap m-n1">
                             <a href="" class="btn btn-sm btn-outline-secondary m-1">@magazine.Name</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@magazine.Faculty.Name</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@magazine.Semester.Name</a> 
+                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@faculty.Name</a>
+                            <a href="" class="btn btn-sm btn-outline-secondary m-1">@semester.Name</a> 
                         </div>
                     </div>
                 </div>

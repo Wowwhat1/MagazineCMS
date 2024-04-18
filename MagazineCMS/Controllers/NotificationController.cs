@@ -146,6 +146,7 @@ namespace MagazineCMS.Controllers
             _unitOfWork.Save();
             return Json(new { success = true, message = "Notification marked as read" });
         }
+
         #endregion
     }
 }

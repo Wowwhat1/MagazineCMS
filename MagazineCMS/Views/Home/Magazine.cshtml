@@ -58,7 +58,9 @@
                                 <td>@contribution.User.Firstname
                                     @contribution.User.Lastname
                                 </td>
-
+                                <td>
+                                    <a href="@Url.Action("Contribution", "Home", new { id = contribution.Id })" class="btn btn-primary">Details</a>
+                                </td>
                             </tr>
                         }
                     </tbody>

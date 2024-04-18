@@ -1,27 +1,19 @@
-@model Tuple<List<Magazine>, List<Magazine>, string>
+﻿@model List<Magazine>
 
 
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
+
+    var featuredMagazine = Model[0];
+    var remainingMagazines = Model.GetRange(1, Model.Count - 1);
+    var halfCount = remainingMagazines.Count / 2;
+    var listLeftMagazine = remainingMagazines.GetRange(0, halfCount);
+    var listRightMagazine = remainingMagazines.GetRange(halfCount, halfCount);
 }
 
 
 <div class="container-fluild mx-4">
-    
-    <div class="jumbotron p-3 p-md-5 text-white rounded background-screen">
-        <div class="col-md-6 px-0">
-            <h1 class="display-4 font-italic">Magazine CMS</h1>
-            <p class="lead my-3">
-                "Embrace challenges, let determination, courage, and perseverance guide you. Every setback is a setup for a comeback. Believe in yourself, turn aspirations into achievements. Stay resilient, focused, and passionate. Dare to dream, dare to achieve."
-            </p>
-        </div>
-    </div>
-
-    <h1 class="h2 mb-2 text-gray-800">
-        List @Model.Item3 Magazine
-    </h1>
-
     <!-- Search form -->
     <div class="row">
         <div class="col-md-6">
@@ -31,97 +23,131 @@
             </form>
         </div>
     </div>
-
-    <div class="card-body">
-        <h2>Closed Magazine List</h2>
-        @if (Model.Item1.Any())
-        {
-            <div class="row mb-2">
-                @foreach (var magazine in Model.Item1)
-                {
-                    <div class="col-md-6">
-                        <div class="card flex-md-row mb-4 align-items-center box-shadow h-md-250">
-                            <img class="card-img-left flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail" src="~/image/magazine/mountains.jpg" data-holder-rendered="true" style="width: 200px; min-height: 300px;object-fit:none;object-position:center;" />
-                            <div class="card-body d-flex flex-column align-items-start">
-                                <div class="d-flex ">
-                                    @if ((magazine.EndDate - DateTime.Now).TotalDays < 2)
-                                    {
-                                        <strong class="d-inline-block mb-2 text-white badge badge-warning">Near Closing</strong>
-                                    }
-                                    else
-                                    {
-                                        <strong class="d-inline-block mb-2 text-white badge badge-success">Opening</strong>
-                                    }
-                                    @if (magazine.Faculty != null)
-                                    {
-                                        <strong class="d-inline-block ml-1 mb-2 badge bg-primary text-white me-1">@magazine.Faculty.Name</strong>
-                                        <strong class="d-inline-block ml-1 mb-2 badge bg-info text-white">@magazine.Semester.Name</strong>
-                                    }
-                                </div>
-                                <h3 class="mb-0">
-                                    <a class="text-dark" href="@Url.Action("Magazine", new { id = magazine.Id })">@magazine.Name</a>
-                                </h3>
-                                <div class="mb-1 text-muted">
-                                    <i class="fa fa-calendar text-success"></i> &nbsp;@magazine.StartDate.ToShortDateString()
-                                    <span class="mx-2">&mdash;</span>
-                                    @magazine.EndDate.ToShortDateString()
-                                </div>
-                                <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                                <a href="@Url.Action("Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-    
-
-
-    <hr />
-
-    <div class="card-body">
-        <h2>Closed Magazine List</h2>
-        @if (Model.Item2.Any())
-        {
-            <div class="row mb-2">
-                @foreach (var magazine in Model.Item2)
-                {
-                    <div class="col-md-6">
-                        <div class="card flex-md-row mb-4 align-items-center box-shadow h-md-250">
-                            <img class="card-img-left flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail" src="~/image/magazine/mountains.jpg" data-holder-rendered="true" style="width: 200px; min-height: 300px;object-fit:none;object-position:center;" />
-                            <div class="card-body d-flex flex-column align-items-start">
-                                <div class="d-flex ">
-                                    <strong class="d-inline-block mb-2 text-white badge badge-danger">Closing</strong>
-                                    @if (magazine.Faculty != null)
-                                    {
-                                        <strong class="d-inline-block ml-1 mb-2 badge bg-primary text-white me-1">@magazine.Faculty.Name</strong>
-                                        <strong class="d-inline-block ml-1 mb-2 badge bg-info text-white">@magazine.Semester.Name</strong>
-                                    }
-                                </div>
-                                <h3 class="mb-0">
-                                    <a class="text-dark" href="@Url.Action("Magazine", new { id = magazine.Id })">@magazine.Name</a>
-                                </h3>
-                                <div class="mb-1 text-muted">
-                                    <i class="fa fa-calendar text-success"></i> &nbsp;@magazine.StartDate.ToShortDateString()
-                                    <span class="mx-2">&mdash;</span>
-                                    @magazine.EndDate.ToShortDateString()
-                                </div>
-                                <p class="card-text mb-auto" style="height: 6.25rem; overflow: hidden; text-overflow: ellipsis;">@magazine.Description</p>
-                                <a href="@Url.Action("Magazine", new { id = magazine.Id })" class="btn btn-sm btn-outline-primary">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-
 </div>
 
+<hr />
+
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url('../image/PageScreen.jpg'); height: 500px;">
+    <div class="col-md-6 px-0">
+        <h1 class="display-4 font-italic">Magazine CMS</h1>
+        <p class="lead my-3">Embrace challenges, let determination, courage, and perseverance guide you. Every setback is a setup for a comeback. Believe in yourself, turn aspirations into achievements. Stay resilient, focused, and passionate. Dare to dream, dare to achieve.</p>
+    </div>
+</div>
+
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <a href="Magazine/@featuredMagazine.Id"><img class="card-img-top img-fluid position-relative" src="~/image/magazine/computer-magazine-spring-2024.jpg" alt="..." style="max-width: 850px; max-height: 350px;" /></a>
+                <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                    <span class="badge badge-primary">@featuredMagazine.Faculty.Name</span>
+                </div>
+                <div class="card-body">
+                    <div class="small text-muted">@featuredMagazine.StartDate.ToString("d MMM yyyy")</div>
+                    <h2 class="card-title">@featuredMagazine.Name</h2>
+                    <p class="card-text">@featuredMagazine.Description</p>
+                    <a class="btn btn-primary" href="Magazine/@featuredMagazine.Id">Read more →</a>
+                </div>
+            </div>
+            <!-- Nested row for non-featured blog posts-->
+            <div class="row">
+                <div class="col-lg-6">
+                    @foreach(var magazine in listLeftMagazine) 
+                    {
+                        <!-- Blog post-->
+                        <div class="card mb-4">
+                            <a href="Magazine/@magazine.Id"><img class="card-img-top position-relative" src="~/image/magazine/computer-magazine-spring-2024.jpg" alt="..." /></a>
+                            <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                                <span class="badge badge-primary">@magazine.Faculty.Name</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="small text-muted">@magazine.StartDate.ToString("d MMM yyyy")</div>
+                                <h2 class="card-title h4">@magazine.Name</h2>
+                                <p class="card-text">@magazine.Description</p>
+                                <a class="btn btn-primary" href="Magazine/@magazine.Id">Read more →</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-lg-6">
+                    @foreach (var magazine in listRightMagazine)
+                    {
+                        <!-- Blog post-->
+                        <div class="card mb-4">
+                            <a href="Magazine/@magazine.Id"><img class="card-img-top position-relative" src="~/image/magazine/computer-magazine-spring-2024.jpg" alt="..." /></a>
+                            <div class="position-absolute" style="left: 0.5rem; top: 0.5rem">
+                                <span class="badge badge-primary">@magazine.Faculty.Name</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="small text-muted">@magazine.StartDate.ToString("d MMM yyyy")</div>
+                                <h2 class="card-title h4">@magazine.Name</h2>
+                                <p class="card-text">@magazine.Description</p>
+                                <a class="btn btn-primary" href="Magazine/@magazine.Id">Read more →</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            @* <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0" />
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                </ul>
+            </nav> *@
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Search</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Web Design</a></li>
+                                <li><a href="#!">HTML</a></li>
+                                <li><a href="#!">Freebies</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">JavaScript</a></li>
+                                <li><a href="#!">CSS</a></li>
+                                <li><a href="#!">Tutorials</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+            </div>
+        </div>
+    </div>
     
 
-    
-    
+</div>
 
     

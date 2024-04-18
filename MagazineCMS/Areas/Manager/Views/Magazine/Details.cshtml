@@ -159,7 +159,7 @@
         function updateContributionStatus(contributionIds) {
             // Perform AJAX request to update contribution status
             $.ajax({
-                url: '@Url.Action("UpdateContributionStatus", "ManageMagazine")',
+                url: '@Url.Action("UpdateContributionStatus", "Magazine")',
                 type: 'POST',
                 data: { contributionIds: contributionIds },
                 success: function (data) {
