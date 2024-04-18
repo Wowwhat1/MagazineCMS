@@ -60,9 +60,8 @@ namespace MagazineCMS.Areas.Admin.Controllers
                 }
                 _unitOfWork.Save();
 
-                return View(semester);
             }
-            return View(semester);
+            return RedirectToAction("Index", "Semester");
         }
 
         [HttpDelete]

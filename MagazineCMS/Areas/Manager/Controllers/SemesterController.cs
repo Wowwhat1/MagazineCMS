@@ -55,9 +55,8 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 }
                 _unitOfWork.Save();
 
-                return View(new Semester());
             }
-            return View(new Semester());
+            return RedirectToAction("Index", "Semester");
         }
 
         [HttpDelete]

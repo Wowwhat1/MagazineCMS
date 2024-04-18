@@ -102,7 +102,7 @@ namespace MagazineCMS.Areas.Admin.Controllers
                 }).ToList();
 
             }
-            return View(new Faculty());
+            return RedirectToAction("Index", "Faculty");
         }
 
         [HttpDelete]
