@@ -15,14 +15,9 @@ namespace MagazineCMS.Areas.Manager.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        public IActionResult Index(int? id)
+        public IActionResult Index()
         {
-            if (id == null || id == 0)
-            {
-                return View(new Semester());
-            }
-            Semester semester = _unitOfWork.Semester.Get(s => s.Id == id);
-            return View(semester);
+            return View(new Semester());
         }
 
 
@@ -60,9 +55,9 @@ namespace MagazineCMS.Areas.Manager.Controllers
                 }
                 _unitOfWork.Save();
 
-                return View(semester);
+                return View(new Semester());
             }
-            return View(semester);
+            return View(new Semester());
         }
 
         [HttpDelete]

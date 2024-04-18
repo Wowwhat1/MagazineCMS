@@ -50,6 +50,8 @@ function createFaculty() {
     $('#facultyForm').trigger('reset');
     $('#facultyFormTitle').text('Create Faculty');
     $('#modalCenter').modal('show');
+    $('#facultyId').val(0);
+    $('#facultyName').val(null);
 }
 
 function editFaculty(id) {

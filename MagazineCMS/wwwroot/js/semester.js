@@ -52,6 +52,10 @@ function createSemester() {
     $('#semesterForm').trigger('reset');
     $('#semesterFormTitle').text('Create Semester');
     $('#modalCenter').modal('show');
+    $('#semesterId').val(0);
+    $('#semesterName').val(null);
+    $('#semesterStartDate').val(null);
+    $('#semesterEndDate').val(null);
 }
 
 function editSemester(id) {
