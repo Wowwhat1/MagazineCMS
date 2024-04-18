@@ -23,9 +23,17 @@ namespace MagazineCMS.Controllers
         }
         public IActionResult Index()
         {
-            var magazines = _unitOfWork.Magazine.GetAllMagazineWithPublicContributions();
+            var magazines = _unitOfWork.Magazine.GetAllMagazineWithPublicContributions().ToList();
 
-            return View(magazines);
+            var semesters = _unitOfWork.Semester.GetAll().ToList();
+            var faculties = _unitOfWork.Faculty.GetAll().ToList();
+
+            var contributions = _unitOfWork.Contribution.GetAll(c => c.Status == SD.Status_Public, includeProperties:"Magazine.Faculty,User")
+                .OrderByDescending(c => c.SubmissionDate)
+                .Take(6)
+                .ToList();
+
+            return View(new Tuple<List<Magazine>, List<Semester>, List<Faculty>, List<Contribution>>(magazines, semesters, faculties, contributions));
         }
 
         public IActionResult Magazine(int id)

@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 function loadChartData() {
     $.ajax({
-        url: '/manager/faculty/getall',
+        url: '/admin/faculty/getall',
         type: 'GET',
         success: function (response) {
             const data = response.data;
@@ -175,7 +175,7 @@ var monthNames = [
 $(document).ready(function () {
 
     $.ajax({
-        url: '/manager/managemagazine/getall',
+        url: '/admin/magazine/getall',
         type: 'GET',
         success: function (response) {
             var data = response.data;
