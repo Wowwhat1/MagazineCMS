@@ -25,7 +25,7 @@
                     </script>
                 }
 
-                <button id="editBtn" class="btn btn-primary">Edit</button>
+                <button id="editBtn" class="btn btn-primary" @((Model.Item1.Status != "Pending") ? "disabled" : "")>Edit</button>
             </div>
 
             <div class="container mt-4">
