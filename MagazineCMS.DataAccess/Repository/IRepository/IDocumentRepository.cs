@@ -12,5 +12,6 @@ namespace MagazineCMS.DataAccess.Repository.IRepository
     {
         void Update(Document obj);
         Document GetFirstOrDefault(Expression<Func<Document, bool>> filter = null, string includeProperties = null);
+        Task<IEnumerable<Document>> GetDocumentsByContributionId(int contributionId);
     }
 }

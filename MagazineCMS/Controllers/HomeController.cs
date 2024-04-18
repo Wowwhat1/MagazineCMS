@@ -4,6 +4,7 @@ using MagazineCMS.Models.ViewModels;
 using MagazineCMS.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IO.Compression;
 using System.Security.Claims;
 
 namespace MagazineCMS.Controllers
@@ -19,8 +20,6 @@ namespace MagazineCMS.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
-
-
         }
         public IActionResult Index()
         {
@@ -193,6 +192,51 @@ namespace MagazineCMS.Controllers
             // Return the search results
             return View("Index", new Tuple<List<Magazine>, List<Magazine>, string>(openMagazines, closedMagazines, facultyName));
         }
+
+
+        //Download all contribution to zip file
+        [HttpGet]
+        public async Task<IActionResult> DownloadAllDocumentsInContribution(int contributionId)
+        {
+            // Get all Documents for this Contribution
+            var documents = await _unitOfWork.Document.GetDocumentsByContributionId(contributionId);
+
+            // Create a new zip archive in memory
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var document in documents)
+                    {
+                        // Get the Document's file path
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", document.DocumentUrl);
+
+                        // Check if the file exists
+                        if (!System.IO.File.Exists(path))
+                        {
+                            continue; // Skip this document if the file doesn't exist
+                        }
+
+                        // Get the Document's file name
+                        var fileName = Path.GetFileName(path);
+
+                        // Add the Document to the zip archive
+                        var zipEntry = archive.CreateEntry(fileName);
+
+                        // Copy the Document's contents to the zip entry
+                        using (var originalFileStream = System.IO.File.OpenRead(path))
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            await originalFileStream.CopyToAsync(zipEntryStream);
+                        }
+                    }
+                }
+
+                // Return the zip archive as a download
+                return File(memoryStream.ToArray(), "application/zip", $"Contribution_{contributionId}_Documents.zip");
+            }
+        }
+
 
     }
 }

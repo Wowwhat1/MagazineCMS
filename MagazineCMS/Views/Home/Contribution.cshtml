@@ -20,6 +20,9 @@
                             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="">@faculty.Name</a>
                             <a class="text-body" href="">@date</a>
                         </div>
+                        <a href="@Url.Action("DownloadAllDocumentsInContribution", "Home", new { contributionId = Model.Item1.Id })" class="btn btn-primary" style="margin-right: 10px; float: right;">
+                            <i class="fa fa-plus fa-1x"></i> Download
+                            </a>
                         <h3 class="mb-3 text-secondary text-uppercase font-weight-bold">@contribution.Title</h3>
                         <p>
                             @magazine.Description

@@ -20,6 +20,12 @@ namespace MagazineCMS.DataAccess.Repository
             _db = db;
         }
 
+        public async Task<IEnumerable<Document>> GetDocumentsByContributionId(int contributionId)
+        {
+            return await _db.Documents
+                .Where(d => d.ContributionId == contributionId)
+                .ToListAsync();
+        }
 
         public void Update(Document obj)
         {
