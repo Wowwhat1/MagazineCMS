@@ -64,7 +64,7 @@ namespace MagazineCMS.Areas.Student.Controllers
             var document = _unitOfWork.Document.Get(d => d.Id == documentId);
             if (document != null)
             {
-                var fileName = document.DocumentUrl; // Assume DocumentUrl contains only the file name, not the full path
+                var fileName = Path.GetFileName(document.DocumentUrl); 
 
                 // Get the current user's ID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
