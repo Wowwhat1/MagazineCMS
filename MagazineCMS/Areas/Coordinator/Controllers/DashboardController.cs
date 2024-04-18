@@ -32,7 +32,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
             var magazine = _unitOfWork.Magazine.Get(m => m.SemesterId == currentSemester.Id && m.FacultyId == facultyId, includeProperties: "Faculty,Semester");
 
             var contributions = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id).ToList();
-            var countContributionApproved = contributions.Count(c => c.Status == SD.Status_Approved);
+            var countContributionApproved = contributions.Count(c => c.Status == SD.Status_Approved || c.Status == SD.Status_Public);
             var countContributionPending = contributions.Count(c => c.Status == SD.Status_Pending);
             var countContributionRejected = contributions.Count(c => c.Status == SD.Status_Rejected);
 
