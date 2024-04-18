@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MagazineCMS.Models
 {
@@ -13,8 +14,11 @@ namespace MagazineCMS.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string UserId { get; set; }
+        [AllowNull]
+        public string? UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public User User { get; set; } // Navigation property to access user details
 
         [Required]
         [MaxLength(1000)]
@@ -24,6 +28,8 @@ namespace MagazineCMS.Models
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime PostedAt { get; set; }
+
+        public bool IsAnonymous { get; set; }
 
         [Required]
         public int ContributionId { get; set; }

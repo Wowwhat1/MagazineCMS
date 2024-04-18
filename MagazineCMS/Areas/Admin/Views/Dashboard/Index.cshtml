@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty User Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for highlighting charts */
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .chart-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+            .chart-container:hover {
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 0 0 3px blue;
+            }
+
+        h4 {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,22 +44,30 @@
         <hr />
         <div class="row">
             <div class="col-md-6">
-                <h4 class="center">Number of Users in Faculty</h4>
-                <canvas id="userChart" width="400" height="400"></canvas>
+                <div class="chart-container">
+                    <h4>Number of Users in Faculty</h4>
+                    <canvas id="userChart" width="400" height="400"></canvas>
+                </div>
             </div>
             <div class="col-md-6">
-                <h4 class="center">Number of Magazines in Faculty</h4>
-                <canvas id="magazineChart" width="400" height="400"></canvas>
+                <div class="chart-container">
+                    <h4>Number of Magazines in Faculty</h4>
+                    <canvas id="magazineChart" width="400" height="400"></canvas>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h4 class="center">Number of Users in each Role</h4>
-                <canvas id="polarUserChart" width="400" height="400"></canvas>
+                <div class="chart-container">
+                    <h4>Number of Users in each Role</h4>
+                    <canvas id="polarUserChart" width="400" height="800"></canvas>
+                </div>
             </div>
             <div class="col-md-6">
-                <h4 class="center">Number of Topics Published Each Month</h4>
-                <canvas id="topicChart" width="800" height="800"></canvas>
+                <div class="chart-container">
+                    <h4>Number of Topics Published Each Month</h4>
+                    <canvas id="topicChart" width="800" height="740"></canvas>
+                </div>
             </div>
         </div>
     </div>

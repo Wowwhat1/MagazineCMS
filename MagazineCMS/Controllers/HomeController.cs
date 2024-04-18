@@ -62,8 +62,11 @@ namespace MagazineCMS.Controllers
             // Retrieve the semester associated with the contribution
             var semester = _unitOfWork.Semester.Get(s => s.Id == magazine.SemesterId);
 
+            // Retrieve comments associated with the contribution
+            var comments = _unitOfWork.Comment.GetAll(c => c.ContributionId == id, includeProperties: "User");
+
             // Return a tuple containing the contribution, feedback, faculty, and semester end date
-            var model = (contribution, magazine, user, faculty, semester.EndDate, semester);
+            var model = (contribution, magazine, user, faculty, semester.EndDate, semester, comments);
 
             return View(model); // Pass the tuple to the ContributionDetails view
         }
@@ -112,28 +115,21 @@ namespace MagazineCMS.Controllers
         {
             try
             {
-                string userId = null;
-
-                // Check if the user is authenticated
-                if (User.Identity.IsAuthenticated)
-                {
-                    // If authenticated, get the user ID from the authentication system
-                    var user = await _userManager.GetUserAsync(User);
-                    userId = user.Id;
-                }
-                else
-                {
-                    userId = "Anonymous";
-                }
-
                 // Create a new Comment object
                 var newComment = new Comment
                 {
                     Content = content,
                     PostedAt = DateTime.Now,
                     ContributionId = contributionId,
-                    UserId = userId
+                    IsAnonymous = !User.Identity.IsAuthenticated // Set the flag based on user authentication status
                 };
+
+                // If authenticated, get the user ID from the authentication system
+                if (User.Identity.IsAuthenticated)
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    newComment.UserId = user.Id;
+                }
 
                 // Add the comment to the database
                 _unitOfWork.Comment.Add(newComment);

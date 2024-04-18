@@ -133,7 +133,6 @@ namespace MagazineCMS.Areas.Student.Controllers
                 Status = "Pending",
                 SubmissionDate = DateTime.Now,
                 UserId = userId,
-                User = user,
                 MagazineId = magazineId
             };
 

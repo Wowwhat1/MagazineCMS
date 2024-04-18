@@ -4,6 +4,7 @@ using MagazineCMS.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagazineCMS.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418093010_AllowUserIdNullInComment")]
+    partial class AllowUserIdNullInComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +51,7 @@ namespace MagazineCMS.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -101,7 +105,7 @@ namespace MagazineCMS.DataAccess.Migrations
                             Id = 1,
                             MagazineId = 1,
                             Status = "Pending",
-                            SubmissionDate = new DateTime(2024, 4, 18, 16, 33, 59, 705, DateTimeKind.Local).AddTicks(294),
+                            SubmissionDate = new DateTime(2024, 4, 18, 16, 30, 10, 28, DateTimeKind.Local).AddTicks(6989),
                             Title = "The Future of AI",
                             UserId = "StudentID1"
                         });
@@ -257,21 +261,21 @@ namespace MagazineCMS.DataAccess.Migrations
                         {
                             Id = 1,
                             Description = "Welcome to the Spring 2024 issue of Cutting-Edge Tech, your ultimate guide to the latest innovations and developments in the world of computing. In this edition, we delve into the forefront of technology, exploring groundbreaking advancements that are shaping the future of computing.",
-                            EndDate = new DateTime(2024, 4, 25, 16, 33, 59, 705, DateTimeKind.Local).AddTicks(270),
+                            EndDate = new DateTime(2024, 4, 25, 16, 30, 10, 28, DateTimeKind.Local).AddTicks(6962),
                             FacultyId = 2,
                             Name = "Computing Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 4, 11, 16, 33, 59, 705, DateTimeKind.Local).AddTicks(260)
+                            StartDate = new DateTime(2024, 4, 11, 16, 30, 10, 28, DateTimeKind.Local).AddTicks(6952)
                         },
                         new
                         {
                             Id = 2,
                             Description = "Welcome",
-                            EndDate = new DateTime(2024, 4, 25, 16, 33, 59, 705, DateTimeKind.Local).AddTicks(272),
+                            EndDate = new DateTime(2024, 4, 25, 16, 30, 10, 28, DateTimeKind.Local).AddTicks(6965),
                             FacultyId = 3,
                             Name = "Business Magazine - Spring 2024",
                             SemesterId = 1,
-                            StartDate = new DateTime(2024, 4, 11, 16, 33, 59, 705, DateTimeKind.Local).AddTicks(271)
+                            StartDate = new DateTime(2024, 4, 11, 16, 30, 10, 28, DateTimeKind.Local).AddTicks(6964)
                         });
                 });
 
@@ -614,7 +618,9 @@ namespace MagazineCMS.DataAccess.Migrations
 
                     b.HasOne("MagazineCMS.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contribution");
 
