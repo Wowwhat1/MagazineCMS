@@ -69,7 +69,7 @@ namespace MagazineCMS.Areas.Manager.Controllers
             var facultiesWithMagazineCount = faculties.Select(faculty => new
             {
                 Faculty = faculty,
-                MagazineCount = _unitOfWork.Magazine.GetAll(m => m.Id == faculty.Id).ToList().Count,
+                MagazineCount = _unitOfWork.Magazine.GetAll(m => m.FacultyId == faculty.Id).ToList().Count,
                 UserCount = _unitOfWork.User.GetAll(u => u.FacultyId == faculty.Id).ToList().Count
             }).ToList();
             return Json(new { data = facultiesWithMagazineCount });
