@@ -35,14 +35,5 @@ namespace MagazineCMS.Models
         public int ContributionId { get; set; }
 
         public Contribution Contribution { get; set; }
-
-        // Renamed the navigation property to avoid the naming conflict
-        public Comment Parent { get; set; }
-
-        // Renamed the foreign key property to match the navigation property
-        [ForeignKey("Parent")]
-        public int? ParentId { get; set; }
-
-        public ICollection<Comment> Replies { get; set; }
     }
 }

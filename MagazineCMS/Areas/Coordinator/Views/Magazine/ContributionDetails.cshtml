@@ -52,15 +52,18 @@
                                 statusBadge = "badge bg-danger";
                                 break;
                             default:
-                                statusBadge = "badge bg-primary";
+                                statusBadge = "badge bg-primary text-white";
                                 break;
                         }
                     }
-                    <span class="@statusBadge text-gray-1000">Status: @Model.Status</span>
-                    <p class="card-text">Submitted by: @($"{Model.User.Firstname} {Model.User.Lastname}")</p>
-                    <p class="card-text">Magazine: @Model.Magazine.Name</p>
-                    <p class="card-text">Submission Date: @Model.SubmissionDate.ToShortDateString()</p>
-                    <p class="card-text">Descriptions: @Model.Magazine.Description</p>
+                    <p class="card-text"> <strong>Status:</strong> <span class="@statusBadge text-gray-1000" style="padding: 5px 5px 5px 5px;">@Model.Status</span></p>
+                    <div class="card-text"><h4 style="font-weight: bold; font-size: 19px;">Submitted by:</h4> <p style="padding-left: 10px;">@($"{Model.User.Firstname} {Model.User.Lastname}")</p></div>
+                    <hr />
+                    <div class="card-text"><h4 style="font-weight: bold; font-size: 19px;">Magazine:</h4> <p style="padding-left: 10px;">@Model.Magazine.Name</p></div>
+                    <hr />
+                    <div class="card-text"><h4 style="font-weight: bold; font-size: 19px;">Submission Date:</h4> <p style="background-color: lightgreen; padding: 10px 10px 10px 10px;">@Model.SubmissionDate.ToShortDateString()</p></div>
+                    <hr />
+                    <div class="card-text"><h4 style="font-weight: bold; font-size: 19px;">Descriptions:</h4> @Model.Magazine.Description</div>
                     @if (Model.Documents != null && Model.Documents.Any())
                     {
                         <div class="card shadow mt-4">

@@ -29,7 +29,7 @@ namespace MagazineCMS.Areas.Coordinator.Controllers
                 var semesters = _unitOfWork.Semester.GetAll(s => s.EndDate <= currentDate ).ToList();
                 currentSemester = semesters[semesters.Count -1];
             }
-            var magazine = _unitOfWork.Magazine.Get(m => m.SemesterId == currentSemester.Id && m.FacultyId == facultyId, includeProperties: "Faculty,Semester");
+            var magazine = _unitOfWork.Magazine.GetAll(m => m.FacultyId == facultyId, includeProperties: "Faculty,Semester").OrderByDescending(m=> m.EndDate).ToList()[0];
 
             var contributions = _unitOfWork.Contribution.GetAll(c => c.MagazineId == magazine.Id).ToList();
             var countContributionApproved = contributions.Count(c => c.Status == SD.Status_Approved || c.Status == SD.Status_Public);

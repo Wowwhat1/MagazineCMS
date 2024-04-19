@@ -102,7 +102,7 @@ namespace MagazineCMS.Areas.Student.Controllers
                 var coordinatorEmails = await GetCoordinatorEmailsAsync();
                 var userFacultyId = _unitOfWork.User.Get(u => u.Email == userEmail).FacultyId;
                 await SendContributionEmailToCoordinatorsAsync(userEmail, magazineTitle, coordinatorEmails);
-                _notificationSender.SubmitContributionNotification(userFacultyId, userId, magazineId.ToString(), model.ContributionId.ToString());
+                _notificationSender.SubmitContributionNotification(userFacultyId, userId, magazineId.ToString(), contribution.Id.ToString());
                 TempData["Success"] = "Contribution submitted successfully.";
             }
             catch (Exception ex)

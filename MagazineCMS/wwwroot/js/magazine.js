@@ -9,11 +9,11 @@ function loadDataTable() {
     dataTable = $('#magazine-table').DataTable({
         "ajax": { url: '/manager/magazine/getall' },
         "columns": [
-            { "data": "name", "width": "25%", "className": "table-cell" },
+            { "data": "name", "width": "15%", "className": "table-cell" },
             { "data": "description", "width": "17%", "className": "table-cell" },
             {
                 "data": "startDate",
-                "width": "12%",
+                "width": "10%",
                 "className": "table-cell",
                 "render": function (data) {
                     var date = new Date(data);
@@ -22,21 +22,24 @@ function loadDataTable() {
             },
             {
                 "data": "endDate",
-                "width": "12%",
+                "width": "10%",
                 "className": "table-cell",
                 "render": function (data) {
                     var date = new Date(data);
                     return date.toLocaleString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
                 }
             },
-            { "data": "faculty.name", "width": "12%", "className": "table-cell" },
+            { "data": "faculty.name", "width": "7%", "className": "table-cell" },
             { "data": "semester.name", "width": "12%", "className": "table-cell" },
             {
                 data: { id: "id" },
                 "render": function (data) {
                         return `
                         <div class="text-center">
-                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:70px;">
+                            <button onclick="detailMagazine('${data.id}')" class="btn btn-primary text-white" style="cursor:pointer; width:30px;">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                            </button> 
+                            <button onclick="updateMagazine('${data.id}')" class="btn btn-warning text-white" style="cursor:pointer; width:60px;">
                                 <i class="bi bi-lock-fill"></i>  Edit
                             </button> 
                             <button onclick=deleteMagazine('${data.id}') class="btn btn-danger text-white" style="cursor:pointer; width:70px;">
@@ -94,9 +97,10 @@ function loadDataTable() {
     });
 
     //CSS to shorten data when it's too long
-    var css = '.table-cell { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }',
+    var css = '.table-cell { max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px;}',
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style');
+
 
     head.appendChild(style);
 
@@ -117,6 +121,11 @@ function download(magazineId) {
 function updateMagazine(magazineId) {
     console.log(magazineId);
     location.href = "https://localhost:7276/Manager/Magazine/updateMagazine/" + magazineId;
+}
+
+function detailMagazine(magazineId) {
+    console.log(magazineId);
+    location.href = "https://localhost:7276/Manager/Magazine/Details/" + magazineId;
 }
 
 function deleteMagazine(magazineId) {

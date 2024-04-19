@@ -23,7 +23,7 @@ namespace MagazineCMS.Controllers
         }
         public IActionResult Index()
         {
-            var magazines = _unitOfWork.Magazine.GetAllMagazineWithPublicContributions().ToList();
+            var magazines = _unitOfWork.Magazine.GetAllMagazineWithPublicContributions();
 
             var semesters = _unitOfWork.Semester.GetAll().ToList();
             var faculties = _unitOfWork.Faculty.GetAll().ToList();
@@ -33,7 +33,7 @@ namespace MagazineCMS.Controllers
                 .Take(6)
                 .ToList();
 
-            return View(new Tuple<List<Magazine>, List<Semester>, List<Faculty>, List<Contribution>>(magazines, semesters, faculties, contributions));
+            return View(new Tuple<List<Magazine>, List<Semester>, List<Faculty>, List<Contribution>>(magazines.ToList(), semesters, faculties, contributions));
         }
 
         public IActionResult Magazine(int id)

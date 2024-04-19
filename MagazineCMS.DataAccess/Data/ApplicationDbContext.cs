@@ -29,11 +29,6 @@ namespace MagazineCMS.DataAccess.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuidlder)
         {
-            modelBuidlder.Entity<Comment>()
-                .HasMany(c => c.Replies)
-                .WithOne(c => c.Parent)
-                .HasForeignKey(c => c.ParentId) // Use the foreign key property name
-                .OnDelete(DeleteBehavior.Restrict); // Specify that cascade delete is restricted
 
             base.OnModelCreating(modelBuidlder);
 

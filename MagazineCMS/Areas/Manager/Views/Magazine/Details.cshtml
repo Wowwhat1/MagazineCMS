@@ -66,7 +66,6 @@
                                 <th>Title</th>
                                 <th>Submission Date</th>
                                 <th>Status</th>
-                                <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,10 +106,6 @@
                                             }
                                         }
                                         <span class="@statusBadge text-gray-800">@contribution.Status</span>
-                                    </td>
-                                    <td>
-                                        <!-- Details button -->
-                                        <a class="btn btn-primary" href="@Url.Action("ContributionDetails", "Contribution", new { id = contribution.Id })">Details</a>
                                     </td>
                                 </tr>
                             }

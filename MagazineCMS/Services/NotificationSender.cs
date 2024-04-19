@@ -25,7 +25,7 @@ namespace MagazineCMS.Services
                 if (oldNotification != null && !oldNotification.UserIds.Contains(userId) && (DateTime.Now - oldNotification.CreatedAt).TotalHours < 1)
                 {
                     oldNotification.UserIds.Add(userId);
-                    oldNotification.Url = "/Coordinator/"+magazineId;
+                    oldNotification.Url = "/Coordinator/Magazine/ContributionDetails/"+contributionId;
                     oldNotification.CreatedAt = DateTime.Now;
                     oldNotification.IsRead = false;
                     _unitOfWork.Notification.Update(oldNotification);
@@ -39,7 +39,7 @@ namespace MagazineCMS.Services
                         SenderUserName = "",
                         Content = "submits a new contribution",
                         Type = SD.Noti_Type_SubmitSingle,
-                        Url = "/Coordinator/"+magazineId+""+contributionId,
+                        Url = "/Coordinator/Magazine/ContributionDetails/" + contributionId,
                         CreatedAt = DateTime.Now,
                         IsRead = false,
                     };
