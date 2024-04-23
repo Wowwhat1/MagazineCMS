@@ -240,7 +240,54 @@ namespace MagazineCMS.Controllers
                 return File(memoryStream.ToArray(), "application/zip", $"Contribution_{contributionId}_Documents.zip");
             }
         }
+        public IActionResult ViewDocument(int documentId)
+        {
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(document.DocumentUrl);
+                var fileName = Path.GetFileName(document.DocumentUrl);
+                var fileExtension = Path.GetExtension(document.DocumentUrl).ToLower();
+                var fileType = GetMimeType(fileExtension);
 
+                return File(fileBytes, fileType);
+            }
+            return NotFound();
+        }
+
+        private string GetMimeType(string fileExtension)
+        {
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    return "application/pdf";
+                case ".docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".png":
+                    return "image/png";
+                case ".jpg":
+                    return "image/jpeg";
+                default:
+                    return "application/octet-stream";
+            }
+        }
+        public IActionResult DownloadDocument(int documentId)
+        {
+            var document = _unitOfWork.Document.Get(d => d.Id == documentId);
+            if (document != null)
+            {
+                var filePath = document.DocumentUrl;
+
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    var fileName = Path.GetFileName(filePath);
+                    return File(fileBytes, "application/octet-stream", fileName);
+                }
+            }
+            return NotFound();
+        }
 
     }
 }
