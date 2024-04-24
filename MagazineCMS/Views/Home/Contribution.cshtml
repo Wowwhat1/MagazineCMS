@@ -9,6 +9,25 @@
     var semester = Model.Item6;
 }
 
+<div class="modal fade" id="viewDocumentModal" tabindex="-1" role="dialog" aria-labelledby="viewDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDocumentModalLabel">View Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" id="documentViewer" style="width: 100%; height: 700px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="">
     <div class="container">
         <div class="row">
@@ -27,7 +46,32 @@
                         <p>
                             @magazine.Description
                         </p>
-                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>View Document</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var document in Model.Item1.Documents)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                            {
+                                                <a href="@Url.Action("DownloadDocument", "Home", new { documentId = document.Id })" target="_blank">
+                                                    @System.IO.Path.GetFileName(document.DocumentUrl)
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="#" class="view-document-link" data-document-url="@Url.Action("ViewDocument", "Home", new { documentId = document.Id })">View</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                     <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
                         <div class="d-flex align-items-center">
@@ -131,3 +175,20 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.view-document-link').click(function (e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+                var documentUrl = $(this).data('document-url'); // Lấy đường dẫn của tài liệu từ thuộc tính dữ liệu
+
+                // Thiết lập đường dẫn của iframe trong khung modal
+                $('#documentViewer').attr('src', documentUrl);
+
+                // Mở khung modal
+                $('#viewDocumentModal').modal('show');
+            });
+        });
+    </script>
+}
